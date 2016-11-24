@@ -35,4 +35,10 @@ class AuthController extends Controller {
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
 
+
+    public function Index()
+    {
+        return view('auth.login');
+    }
+
 }

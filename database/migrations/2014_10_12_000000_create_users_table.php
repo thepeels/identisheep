@@ -3,6 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class CreateUsersTable extends Migration {
 
 	/**
@@ -17,6 +18,9 @@ class CreateUsersTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('email')->unique();
+            $table->string('oauth_email',255);
+            $table->boolean('both_emails',FALSE);
+            $table->boolean('superuser',FALSE);
 			$table->string('password', 60);
 			$table->rememberToken();
 			$table->timestamps();
