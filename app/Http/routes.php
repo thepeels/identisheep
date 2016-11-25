@@ -20,3 +20,6 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 Route::get('login','Auth\AuthController@index');
+
+Route::controller('sheep','SheepController');
+Route::get('list','SheepController@index');

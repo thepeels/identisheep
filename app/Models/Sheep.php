@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Sheep Class
  * User: John
  * Date: 23/11/2016
  * Time: 12:59
@@ -8,6 +8,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Redirect;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Sheep extends Model
 {
@@ -38,7 +41,7 @@ class Sheep extends Model
         'colour_tag',
         'colour_tag_1',
         'colour_tag_2'
-        ];
+    ];
 
     /**
      * @param integer
@@ -51,5 +54,29 @@ class Sheep extends Model
         return $this->belongsTo('User');
     }
 
+    public function details($id)
+    {
+        $details = $this->where('id', $id);
+        return $details;
+    }
+
+    public static function getById($id)
+    {
+        $ewe = Sheep::where('id', $id)->first();
+        return $ewe;
+    }
+
+    public static function getByTag($flock, $tag)
+    {
+        try {
+            $ewe = Sheep::where('e_flock', $flock)
+                ->where('e_tag', $tag)
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return (NULL);
+        }
+
+        return $ewe;
+    }
 
 }

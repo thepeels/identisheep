@@ -1,0 +1,25 @@
+@extends('app')
+@section('title')
+    <title>{!! $title !!}</title>
+@stop
+@section('content')
+
+    <div style="width:60%;margin-left:20%;">
+        <h4>{!! $title !!}</h4>
+        {!!Form::open(array('url' => '/sheep/seek','class'=>'form-inline'))!!}
+
+        {!!Form::label('text','UK 0')!!}
+        {!!Form::input('text','flock',NULL,['class'=>'newclass input-xs','placeholder'=>' Flock Number'])!!}
+        {!!Form::input('int','tag',NULL,['class'=>'newclass input-xs','placeholder'=>' Tag Number'])!!}
+
+        {!!Form::submit('Find Sheep',['class'=>'btn btn-info btn-xs'])!!}<br>
+        <?if (null !=(Session::get('find_error'))){
+            echo (Session::pull('find_error'));
+        } ?>
+        {!!$errors->first('flock','<small style="color:#f00">:message</small>')!!}<br>
+        {!!$errors->first('e_tag','<small style="color:#f00">:message</small>')!!}<br>
+
+        {!!Form::close()!!}<br>
+    </div>
+
+@stop
