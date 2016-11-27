@@ -11,9 +11,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Redirect;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Sheep extends Model
 {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -42,6 +45,7 @@ class Sheep extends Model
         'colour_tag_1',
         'colour_tag_2'
     ];
+    protected $dates = ['deleted_at'];
 
     /**
      * @param integer

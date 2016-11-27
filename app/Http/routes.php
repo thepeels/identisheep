@@ -22,4 +22,8 @@ Route::controllers([
 Route::get('login','Auth\AuthController@index');
 
 Route::controller('sheep','SheepController');
+
+Route::controller('batch','BatchController');
+
 Route::get('list','SheepController@index');
+

@@ -37,10 +37,13 @@
 					<li><a href="/sheep/seek">Find Sheep</a></li>
 					<li><a href="/list">List</a></li>
 					<li><a href="/sheep/batch">Add Batch</a></li>
+					<li><a href="/batch/batchops">Batch operations</a></li>
+
 
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/sheep/offlist">Off List</a></li>
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>

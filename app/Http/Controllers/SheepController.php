@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class SheepController extends Controller {
-
+    /**
+     * SheepController constructor.
+     *
+     * cause to be Auth filtered before use
+     */
     public function __construct(){
         $this->middleware('auth');
     }
@@ -20,8 +24,7 @@ class SheepController extends Controller {
 	 */
 	public function index()
 	{   $user = Auth::user()->id;
-        //dd($user);
-		$ewes = Sheep::where('user_id','=',$user)
+		$ewes = Sheep::where('user_id',$user)
             ->orderBy('e_flock')
             ->get();
         return view('sheeplist')->with([
@@ -29,7 +32,18 @@ class SheepController extends Controller {
             'title'=>'All Sheep'
             ]);
 	}
-
+    public function getOfflist()
+    {
+        $user = Auth::user()->id;
+        $ewes = Sheep::onlyTrashed()
+            ->where('user_id',$user)
+            ->orderBy('e_flock')
+            ->get();
+        return view('sheeplist')->with([
+            'sheep'=>$ewes,
+            'title'=>'Sheep Moved Off'
+        ]);
+    }
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -78,9 +92,8 @@ class SheepController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
-     * @param  string $e_flock
-	 * @return Redirect
+	 * @param  none
+	 * @return Response
 	 */
 	public function postChangetags()
 	{
@@ -143,12 +156,12 @@ class SheepController extends Controller {
                 return Redirect::to('sheep/seek')->withInput();
             }
         return View::make('sheepedit')->with([
-            'id'        =>$ewe->id,
-            'title'     => 'Edit Sheep Tag Data',
-            'e_flock'   =>$ewe->e_flock,
-            'e_tag'     =>$ewe->e_tag,
+            'id'            =>$ewe->id,
+            'title'         => 'Edit Sheep Tag Data',
+            'e_flock'       =>$ewe->e_flock,
+            'e_tag'         =>$ewe->e_tag,
             'original_e_flock'=>$ewe->original_e_flock,
-            'colour_flock' => $ewe->colour_flock,
+            'colour_flock'  => $ewe->colour_flock,
         ]);
     }
     /**
