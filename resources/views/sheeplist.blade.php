@@ -7,7 +7,7 @@
  */ ?>
 @extends('app')
 @section('title')
-    <title>{{$title}}</title>
+    <title>{!! $title !!}</title>
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
@@ -21,8 +21,10 @@
             <th>Old Tags</th>
             <th>Older Tags</th>
             <th>Move on</th>
+            @if(Request::url() !== 'http://flock/list')
             <th>Move Off</th>
             <th>How moved off</th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -48,13 +50,14 @@
                 <td>
                     {{$date_on}}
                 </td>
+                @if(Request::url() !== 'http://flock/list')
                 <td>
                     {{$date_off}}
                 </td>
                 <td>
                     {{$ewe->off_how}}
                 </td>
-                @if(Request::url() === 'http://flock/list')
+                @else
                 <td>
                     <a href="sheep/edit/{{$ewe->id}}"
                        class="btn btn-default btn-xs"
