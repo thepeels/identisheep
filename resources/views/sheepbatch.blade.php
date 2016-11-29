@@ -4,7 +4,7 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        <h4>{!! $title !!}</h4>
+        <h4>{!! $title !!} - Movement of sheep onto holding</h4>
         <h5>(A continuous series of tags with no spaces.)</h5>
         <h5>Start a new batch after any spaces in the series.</h5>
         {!!Form::open(array('url' => '/sheep/batch','class'=>'form-inline'))!!}

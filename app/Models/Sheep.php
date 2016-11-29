@@ -43,7 +43,8 @@ class Sheep extends Model
         'original_e_tag',
         'colour_tag',
         'colour_tag_1',
-        'colour_tag_2'
+        'colour_tag_2',
+        'sex'
     ];
     protected $dates = ['deleted_at'];
 

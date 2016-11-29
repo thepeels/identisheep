@@ -23,25 +23,52 @@ class SheepController extends Controller {
 	 * @return Response
 	 */
 	public function index()
-	{   $user = Auth::user()->id;
-		$ewes = Sheep::where('user_id',$user)
+	{
+		$ewes = Sheep::where('user_id',$this->user())
+            ->where('sex','female')
             ->orderBy('e_flock')
             ->get();
         return view('sheeplist')->with([
             'sheep'=>$ewes,
-            'title'=>'All Sheep'
+            'title'=>'All Female Sheep'
+            ]);
+	}
+	public static function user(){
+        $user = Auth::user()->id;
+        return $user;
+    }
+	public function getTups()
+	{
+		$ewes = Sheep::where('user_id',$this->user())
+            ->where('sex','male')
+            ->orderBy('e_flock')
+            ->get();
+        return view('sheeplist')->with([
+            'sheep'=>$ewes,
+            'title'=>'Male Sheep'
             ]);
 	}
     public function getOfflist()
     {
-        $user = Auth::user()->id;
         $ewes = Sheep::onlyTrashed()
-            ->where('user_id',$user)
+            ->where('user_id',$this->user())
             ->orderBy('e_flock')
             ->get();
         return view('sheeplist')->with([
             'sheep'=>$ewes,
             'title'=>'Sheep Moved Off'
+        ]);
+    }
+    public function getDeadlist()
+    {
+        $ewes = Sheep::onlyTrashed()
+            ->where('user_id',$this->user())
+            ->where('off_how','like','died'.'%')
+            ->orderBy('e_flock')
+            ->get();
+        return view('sheeplist')->with([
+            'sheep'=>$ewes,
+            'title'=>'Dead List'
         ]);
     }
 	/**
@@ -51,7 +78,7 @@ class SheepController extends Controller {
 	 */
 	public function create()
 	{
-		//
+
 	}
 
 	/**
@@ -185,12 +212,12 @@ class SheepController extends Controller {
      */
     public function getBatch()
     {
-        $id = Auth::user()->id;
         return View::make('sheepbatch')->with([
-            'id'=>$id,
+            'id'=>$this->user(),
             'title' => 'Enter Batch of tags'
         ]);
     }
+
     /**
      * Post batch entry
      *
@@ -199,12 +226,12 @@ class SheepController extends Controller {
     public function postBatch()
     {
         $rules = [
-            'flock_number' => 'integer|required|min:100000|max:999999',
-            'start_tag' => 'integer|required',
-            'end_tag'   => 'integer|required',
-            'day'       => 'integer|required|min:1|max:31',
-            'month'     => 'integer|required|min:1|max:12',
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
             'year'      => 'integer|required|min:2009|max:2025',
+            'flock_number' => 'digits:6|required',
+            'start_tag' => 'digits_between:1,5|required',
+            'end_tag'   => 'digits_between:1,5|required'
         ];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
@@ -217,19 +244,20 @@ class SheepController extends Controller {
         $d              = Input::get('day');
         $m              = Input::get('month');
         $y              = Input::get('year');
-        $date_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         if ($start_tag < $end_tag){
             $i = $start_tag;
             while ($i <= $end_tag){
-                $ewe = new Sheep();
-                $ewe->user_id           = $id;
-                $ewe->e_flock           = 'UK0'.$flock_number;
+                $ewe = Sheep::firstOrNew([
+                    'e_flock'           =>  'UK0'.$flock_number,
+                    'e_tag'             =>  $i,
+                    'user_id'           =>  $id
+                ]);
                 $ewe->original_e_flock  = 'UK0'.$flock_number;
                 $ewe->colour_flock      = 'UK0'.$flock_number;
-                $ewe->e_tag             = $i;
                 $ewe->original_e_tag    = $i;
                 $ewe->colour_tag        = $i;
-                $ewe->move_on           = $date_on;
+                $ewe->move_on           = $move_on;
 
                 $ewe->save();
             $i++;
@@ -243,5 +271,109 @@ class SheepController extends Controller {
                 'year'          =>$y,
                 'flock_number'  =>$flock_number
             ]);
+    }
+    public function getAddewe()
+    {
+        return View::make('sheepaddewe')
+            ->with([
+                'title'     => 'Add a Ewe',
+                'id'        =>  $this->user(),
+                'sex'       => 'female'
+            ]);
+    }
+    public function getAddtup()
+    {
+        return View::make('sheepaddewe')
+            ->with([
+                'title'     => 'Add a Tup',
+                'id'        =>  $this->user(),
+                'sex'       => 'male'
+            ]);
+    }
+    public function postAddewe()
+    {
+        $rules = [
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
+            'year'      => 'integer|required|min:2009|max:2025',
+            'e_flock'   => 'digits:6|required',
+            'e_tag'     => 'numeric|required|between:1,99999',
+        ];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $e_flock        = Input::get('e_flock');
+        $e_flock_number = 'UK0'.$e_flock;
+        $e_tag          = Input::get('e_tag');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $ewe = Sheep::firstOrNew([
+            'e_flock'           =>  $e_flock_number,
+            'e_tag'             =>  $e_tag,
+            'user_id'           =>  $this->user()
+        ]);
+        $ewe->original_e_flock  =  $e_flock_number;
+        $ewe->colour_flock      =  $e_flock_number;
+        $ewe->e_tag             =  $e_tag;
+        $ewe->move_on           = $move_on;
+        $ewe->sex               = Input::get('sex');
+        $ewe->save();
+
+        return Redirect::back()->withInput(['e_flock'=>$e_flock,'sex'=>$ewe->sex]);
+    }
+
+
+    public function getDeath()
+    {
+        return View::make('sheepdeath')->with([
+            'title'     => 'Record a Death',
+            'id'        => $this->user(),
+
+        ]);
+    }
+    public function postDeath()
+    {
+        $rules = [
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
+            'year'      => 'integer|required|min:2009|max:2025',
+            'e_flock'   => 'digits:6|required',
+            'e_tag'     => 'numeric|required|between:1,99999',
+        ];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $e_flock        = Input::get('e_flock');
+        $e_flock_number = 'UK0'.$e_flock;
+        $e_tag          = Input::get('e_tag');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $how_died       = ' - '.Input::get('how_died');
+
+        $ewe = Sheep::firstOrNew([
+            'e_flock'           =>  $e_flock_number,
+            'e_tag'             =>  $e_tag,
+            'user_id'           =>  $this->user()
+        ]);
+        $ewe->original_e_flock  =  $e_flock_number;
+        $ewe->colour_flock      =  $e_flock_number;
+        $ewe->e_tag             =  $e_tag;
+        $ewe->move_off          = $move_off;
+        $ewe->off_how           = 'died'.$how_died;
+        $ewe->sex               = Input::get('sex');
+        $ewe->save();
+        $ewe->delete();
+
+        return View::make('sheepdeath')->with([
+            'title'     => 'Record a Death',
+            'id'        => $this->user(),
+
+        ]);
     }
 }

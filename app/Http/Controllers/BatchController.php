@@ -22,7 +22,8 @@ class BatchController extends Controller {
     public function getBatchops()
     {
         return View::make('batchops')->with([
-            'title' => 'Batch Operations'
+            'title' => 'Batch Operations',
+            'subtitle' => '- Sheep Off Holding'
         ]);
     }
     public function  postCsvload()
@@ -31,10 +32,11 @@ class BatchController extends Controller {
         $destination    = Input::get('destination');
         $user           = Auth::user()->id;
         $no_spaces = preg_replace('/\s+/', '', $file_raw);
-        $rawlist = str_replace(array("Â¶","\r\n", "\n\r", "\n", "\r"), ',', $no_spaces);
+        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $no_spaces);
         $rawlist = str_replace(array("l"), '1', $rawlist);
         $rawlist = str_replace(array("O"), '0', $rawlist);
         $ewelist = array_map('str_getcsv', file($rawlist));
+
         if(Input::get('check')) {
             $i = 0;
             foreach ($ewelist[1] as $ewe) {
@@ -60,7 +62,7 @@ class BatchController extends Controller {
                 $ewe->delete();
             }
         }
-
+        return Redirect::to('list');
     }
 
 }

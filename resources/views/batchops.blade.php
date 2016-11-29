@@ -13,9 +13,8 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        <h4>{{$title}}</h4>
+        <h4>{{$title}} {{$subtitle}}</h4>
         <fieldset>
-            <h5>Sheep Off Holding</h5>
         {!!Form::open(array('url' => "batch/csvload",'class' => '', 'files' => true))!!}
         <div class="form-group">
             {!! Form::label('name','Select .csv file') !!}

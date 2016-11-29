@@ -28,22 +28,40 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+				<a class="navbar-brand" href="#">Flock Records</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="/">Home</a></li>
-					<li><a href="/sheep/seek">Find Sheep</a></li>
-					<li><a href="/list">List</a></li>
-					<li><a href="/sheep/batch">Add Batch</a></li>
-					<li><a href="/batch/batchops">Batch operations</a></li>
-
-
+					<li><a href="/list">Ewes</a></li>
+					<li><a href="/sheep/tups">Tups</a></li>
+					<li><a href="/sheep/seek">Find a Sheep</a></li>
+					<li><a href="/sheep/addewe">Add a Ewe</a></li>
+					<li><a href="/sheep/addtup">Add a Tup</a></li>
+					<li><a href="/sheep/batch">Batch On</a></li>
+					<li><a href="/batch/batchops">Batch Off</a></li>
 				</ul>
+				<!--<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						Dropdown
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
+				</div>-->
+
+
 
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/sheep/death">Record Death</a></li>
 					<li><a href="/sheep/offlist">Off List</a></li>
+					<li><a href="/sheep/deadlist">Dead List</a></li>
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>

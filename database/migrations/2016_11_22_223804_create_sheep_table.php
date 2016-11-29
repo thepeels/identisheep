@@ -29,6 +29,7 @@ class CreateSheepTable extends Migration {
             $table->smallInteger('colour_tag');
             $table->smallInteger('colour_tag_1');
             $table->smallInteger('colour_tag_2');
+            $table->string('sex')->default('female');
             $table->timestamps();
             $table->softdeletes();
         });
