@@ -17,6 +17,7 @@
     {!!Form::open(array('url' => '/sheep/changetags','class'=>'form-inline'))!!}
 
     {!!Form::input('hidden','id',$id)!!}
+    {!!Form::label('text','UK 0')!!}
     {!!Form::input('text','e_flock',$e_flock,['class'=>'newclass input-xs','placeholder'=>' New Flock Number'])!!}
     {!!Form::input('text','e_tag',sprintf('%05d',$e_tag),['class'=>'newclass input-xs','placeholder'=>' New Number'])!!}
 

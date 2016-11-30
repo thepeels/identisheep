@@ -18,7 +18,10 @@ class BatchController extends Controller {
     public function __construct(){
         $this->middleware('auth');
     }
-
+    public static function user(){
+        $user = Auth::user()->id;
+        return $user;
+    }
     public function getBatchops()
     {
         return View::make('batchops')->with([
@@ -28,27 +31,42 @@ class BatchController extends Controller {
     }
     public function  postCsvload()
     {
+        $rules = [
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
+            'year'      => 'integer|required|min:2009|max:2025'
+        ];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
         $file_raw       = Input::file('file_raw');
         $destination    = Input::get('destination');
         $user           = Auth::user()->id;
-        $no_spaces = preg_replace('/\s+/', '', $file_raw);
-        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $no_spaces);
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        //$no_spaces = preg_replace('/\s+/', '', $file_raw);
+        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $file_raw);
         $rawlist = str_replace(array("l"), '1', $rawlist);
         $rawlist = str_replace(array("O"), '0', $rawlist);
         $ewelist = array_map('str_getcsv', file($rawlist));
 
         if(Input::get('check')) {
             $i = 0;
-            foreach ($ewelist[1] as $ewe) {
+            //dd($ewelist);
+            foreach ($ewelist[2] as $ewe) {
                 $i++;
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
                 echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
             }
+            exit();
         }
         if(Input::get('load')) {
-            foreach ($ewelist[1] as $ewe) {
-                $e_flock = 'UK0'.substr($ewe, -11, 6);
+            foreach ($ewelist[2] as $ewe) {
+                $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
                 $ewe = Sheep::firstOrNew([
                     'e_flock' => $e_flock,
@@ -56,7 +74,7 @@ class BatchController extends Controller {
                 $ewe->user_id           = $user;
                 $ewe->e_flock           = $e_flock;
                 $ewe->e_tag             = $e_tag;
-                $ewe->move_off          = '2016-11-20 00:00:00';
+                $ewe->move_off          = $move_off;
                 $ewe->off_how           = $destination;
                 $ewe->save();
                 $ewe->delete();
@@ -64,5 +82,150 @@ class BatchController extends Controller {
         }
         return Redirect::to('list');
     }
+    /**
+     * Load Batch entry form
+     *
+     * @param none
+     *
+     * @return view
+     */
+    public function getBatch()
+    {
+        return View::make('sheepbatch')->with([
+            'id'=>$this->user(),
+            'title' => 'Enter Batch of tags'
+        ]);
+    }
 
+    /**
+     * Post batch entry
+     *
+     *
+     */
+    public function postBatch()
+    {
+        $rules = [
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
+            'year'      => 'integer|required|min:2009|max:2025',
+            'flock_number' => 'digits:6|required',
+            'start_tag' => 'digits_between:1,5|required',
+            'end_tag'   => 'digits_between:1,5|required'
+        ];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $id             = Input::get('id');
+        $flock_number   = Input::get('flock_number');
+        $start_tag      = Input::get('start_tag');
+        $end_tag        = Input::get('end_tag');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $colour_of_tag  = Input::get('colour_of_tag');
+        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        if ($start_tag <= $end_tag){
+            $i = $start_tag;
+            while ($i <= $end_tag){
+                $ewe = Sheep::firstOrNew([
+                    'e_flock'           =>  $flock_number,
+                    'e_tag'             =>  $i,
+                    'user_id'           =>  $id
+                ]);
+                $ewe->original_e_flock  = $flock_number;
+                $ewe->colour_flock      = $flock_number;
+                $ewe->original_e_tag    = $i;
+                $ewe->colour_tag        = $i;
+                $ewe->move_on           = $move_on;
+                $ewe->colour_of_tag     = $colour_of_tag;
+
+                $ewe->save();
+                $i++;
+
+            }
+        }
+        return Redirect::back()->withInput(
+            [
+                'day'           =>$d,
+                'month'         =>$m,
+                'year'          =>$y,
+                'flock_number'  =>$flock_number,
+                'colour_of_tag' =>$colour_of_tag
+            ]);
+    }
+    /**
+     * Load Batch entry form
+     *
+     * @param none
+     *
+     * @return view
+     */
+    public function getBatchoff()
+    {
+        return View::make('sheepbatchoff')->with([
+            'id'=>$this->user(),
+            'title' => 'Enter Batch of tags'
+        ]);
+    }
+    /**
+     * Post batch entry
+     *
+     *
+     */
+    public function postBatchoff()
+    {
+        $rules = [
+            'day'       => 'digits:2|required|min:1|max:31',
+            'month'     => 'digits:2|required|min:1|max:12',
+            'year'      => 'integer|required|min:2009|max:2025',
+            'flock_number' => 'digits:6|required',
+            'start_tag' => 'digits_between:1,5|required',
+            'end_tag'   => 'digits_between:1,5|required',
+            'destination'=>'required'
+        ];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $id             = Input::get('id');
+        $flock_number   = Input::get('flock_number');
+        $start_tag      = Input::get('start_tag');
+        $end_tag        = Input::get('end_tag');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $colour_of_tag  = Input::get('colour_of_tag');
+        $off_how        = Input::get('destination');
+        $move_off        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        if ($start_tag <= $end_tag){
+            $i = $start_tag;
+            while ($i <= $end_tag){
+                $ewe = Sheep::firstOrNew([
+                    'e_flock'           =>  $flock_number,
+                    'e_tag'             =>  $i,
+                    'user_id'           =>  $id
+                ]);
+                $ewe->original_e_flock  = $flock_number;
+                $ewe->colour_flock      = $flock_number;
+                $ewe->original_e_tag    = $i;
+                $ewe->colour_tag        = $i;
+                $ewe->move_off           = $move_off;
+                $ewe->colour_of_tag     = $colour_of_tag;
+                $ewe->off_how           = $off_how;
+                $ewe->save();
+                $ewe->delete();
+                $i++;
+
+            }
+        }
+        return Redirect::back()->withInput(
+            [
+                'day'           =>$d,
+                'month'         =>$m,
+                'year'          =>$y,
+                'flock_number'  =>$flock_number,
+                'colour_of_tag' =>$colour_of_tag
+            ]);
+    }
 }

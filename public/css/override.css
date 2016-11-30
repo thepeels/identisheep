@@ -1,1 +1,8 @@
 tr {height:10px;}
+div.scrollable-container{position: relative;}
+div.scrolling-area{height: 800px;overflow: auto;}
+.floatingHeader {
+    position: fixed;
+    top: 50px;
+    visibility: hidden;
+}

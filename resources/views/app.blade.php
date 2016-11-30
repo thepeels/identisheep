@@ -8,6 +8,7 @@
 	@yield('title')
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+	<link href="/css/override.css" rel="stylesheet">
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,11 +48,17 @@
 							<li><a href="/sheep/addtup">Add a Tup</a></li>
 						</ul>
 					</li>
-					<li><a href="/sheep/batch">Batch On</a></li>
+					<li><a href="/batch/batch">Batch On</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/batch/batchops">Batch Off</a></li>
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch Off<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/batch/batchops">.csv Batch Off</a></li>
+							<li><a href="/batch/batchoff">Batch Off</a></li>
+						</ul>
+					</li>
 					<li><a href="/sheep/death">Record Death</a></li>
 					<li><a href="/sheep/offlist">Off List</a></li>
 					<li><a href="/sheep/deadlist">Dead List</a></li>

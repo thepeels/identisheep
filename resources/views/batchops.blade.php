@@ -17,6 +17,14 @@
         <fieldset>
         {!!Form::open(array('url' => "batch/csvload",'class' => '', 'files' => true))!!}
         <div class="form-group">
+            {!!Form::label('text','Movement Date') !!}
+            {!!Form::input('int','day',date('d'),['class'=>'newclass input-xs','placeholder'=>'DD','size' => '1']) !!}
+            {!!Form::input('int','month',date('m'),['class'=>'newclass input-xs','placeholder'=>'MM','size' => '1']) !!}
+            {!!Form::input('int','year',date('Y'),['class'=>'newclass input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br>
+            {!!$errors->first('day','<small style="color:#f00">:message</small>')!!}
+            {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
+            {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
+
             {!! Form::label('name','Select .csv file') !!}
             {!! Form::file('file_raw') !!}<br>
             {!! Form::label('text','Destination Holding') !!}

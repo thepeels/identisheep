@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Sheep;
 use Auth,View,Input,Redirect,Validator,Session;
+use Illuminate\Pagination\Paginator;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -26,11 +27,11 @@ class SheepController extends Controller {
 	{
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','female')
-            ->orderBy('e_flock')
-            ->get();
+            ->paginate(20);
         return view('sheeplist')->with([
             'sheep'=>$ewes,
-            'title'=>'All Female Sheep'
+            'title'=>'All Female Sheep',
+            'count'=>Sheep::where('user_id',$this->user())->count()
             ]);
 	}
 	public static function user(){
@@ -133,7 +134,9 @@ class SheepController extends Controller {
         }
         $ewe->e_flock = Input::get('e_flock');
         $ewe->save();
-        return Redirect::to('list');
+        return View::make('sheepfinder')->with([
+            'title'     => 'Find another sheep',
+            'e_flock'   => $ewe->e_flock]);
 	}
 
 	/**
@@ -177,15 +180,15 @@ class SheepController extends Controller {
     {
         $flock = Input::get('flock');
         $tag    =Input::get('tag');
-        $flock = 'UK0'.$flock;
-        $ewe = Sheep::getByTag($flock, $tag);
+        $e_flock = $flock;
+        $ewe = Sheep::getByTag($e_flock, $tag);
             if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
                 return Redirect::to('sheep/seek')->withInput();
             }
         return View::make('sheepedit')->with([
             'id'            =>$ewe->id,
             'title'         => 'Edit Sheep Tag Data',
-            'e_flock'       =>$ewe->e_flock,
+            'e_flock'       =>$e_flock,
             'e_tag'         =>$ewe->e_tag,
             'original_e_flock'=>$ewe->original_e_flock,
             'colour_flock'  => $ewe->colour_flock,
@@ -244,20 +247,22 @@ class SheepController extends Controller {
         $d              = Input::get('day');
         $m              = Input::get('month');
         $y              = Input::get('year');
+        $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         if ($start_tag < $end_tag){
             $i = $start_tag;
             while ($i <= $end_tag){
                 $ewe = Sheep::firstOrNew([
-                    'e_flock'           =>  'UK0'.$flock_number,
+                    'e_flock'           =>  $flock_number,
                     'e_tag'             =>  $i,
                     'user_id'           =>  $id
                 ]);
-                $ewe->original_e_flock  = 'UK0'.$flock_number;
-                $ewe->colour_flock      = 'UK0'.$flock_number;
+                $ewe->original_e_flock  = $flock_number;
+                $ewe->colour_flock      = $flock_number;
                 $ewe->original_e_tag    = $i;
                 $ewe->colour_tag        = $i;
                 $ewe->move_on           = $move_on;
+                $ewe->colour_of_tag     = $colour_of_tag;
 
                 $ewe->save();
             $i++;
@@ -269,7 +274,8 @@ class SheepController extends Controller {
                 'day'           =>$d,
                 'month'         =>$m,
                 'year'          =>$y,
-                'flock_number'  =>$flock_number
+                'flock_number'  =>$flock_number,
+                'colour_of_tag' =>$colour_of_tag
             ]);
     }
     public function getAddewe()
@@ -304,7 +310,7 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $e_flock        = Input::get('e_flock');
-        $e_flock_number = 'UK0'.$e_flock;
+        $e_flock_number = $e_flock;
         $e_tag          = Input::get('e_tag');
         $d              = Input::get('day');
         $m              = Input::get('month');
@@ -348,7 +354,7 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $e_flock        = Input::get('e_flock');
-        $e_flock_number = 'UK0'.$e_flock;
+        $e_flock_number = $e_flock;
         $e_tag          = Input::get('e_tag');
         $d              = Input::get('day');
         $m              = Input::get('month');
