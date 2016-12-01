@@ -31,12 +31,9 @@ class BatchController extends Controller {
     }
     public function  postCsvload()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025'
-        ];
-        $validation = Validator::make(Input::all(), $rules);
+        $rules1 = Sheep::$rules['dates'];
+        $rules2 = Sheep::$rules['where_to'];
+        $validation = Validator::make(Input::all(), $rules1 + $rules2);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
@@ -82,6 +79,62 @@ class BatchController extends Controller {
         }
         return Redirect::to('list');
     }
+    public function getBatchopson()
+    {
+        return View::make('batchopson')->with([
+            'title' => 'Batch Operations',
+            'subtitle' => '- Sheep Onto Holding'
+        ]);
+    }
+    public function  postCsvloadon()
+    {
+        $rules = Sheep::$rules['dates'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $file_raw       = Input::file('file_raw');
+        //$destination    = Input::get('destination');
+        $user           = Auth::user()->id;
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        //$no_spaces = preg_replace('/\s+/', '', $file_raw);
+        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $file_raw);
+        $rawlist = str_replace(array("l"), '1', $rawlist);
+        $rawlist = str_replace(array("O"), '0', $rawlist);
+        $ewelist = array_map('str_getcsv', file($rawlist));
+
+        if(Input::get('check')) {
+            $i = 0;
+            //dd($ewelist);
+            foreach ($ewelist[2] as $ewe) {
+                $i++;
+                $e_flock = substr($ewe, -11, 6);
+                $e_tag = substr($ewe,-5);
+                echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+            }
+            exit();
+        }
+        if(Input::get('load')) {
+            foreach ($ewelist[2] as $ewe) {
+                $e_flock = substr($ewe, -11, 6);
+                $e_tag = substr($ewe,-5);
+                $ewe = Sheep::firstOrNew([
+                    'e_flock' => $e_flock,
+                    'e_tag' => $e_tag]);
+                $ewe->user_id           = $user;
+                $ewe->e_flock           = $e_flock;
+                $ewe->e_tag             = $e_tag;
+                $ewe->move_on         = $move_on;
+                //$ewe->off_how           = $destination;
+                $ewe->save();
+                //$ewe->delete();
+            }
+        }
+        return Redirect::to('list');
+    }
     /**
      * Load Batch entry form
      *
@@ -104,14 +157,7 @@ class BatchController extends Controller {
      */
     public function postBatch()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
-            'flock_number' => 'digits:6|required',
-            'start_tag' => 'digits_between:1,5|required',
-            'end_tag'   => 'digits_between:1,5|required'
-        ];
+        $rules = Sheep::$rules['batch'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
@@ -175,16 +221,9 @@ class BatchController extends Controller {
      */
     public function postBatchoff()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
-            'flock_number' => 'digits:6|required',
-            'start_tag' => 'digits_between:1,5|required',
-            'end_tag'   => 'digits_between:1,5|required',
-            'destination'=>'required'
-        ];
-        $validation = Validator::make(Input::all(), $rules);
+        $rules1 = Sheep::$rules['batch'];
+        $rules2 = Sheep::$rules['where_to'];
+        $validation = Validator::make(Input::all(), $rules1 + $rules2);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }

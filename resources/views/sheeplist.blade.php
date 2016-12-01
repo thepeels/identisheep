@@ -41,10 +41,10 @@
                     {{$ewe->id}}
                 </td>
                 <td>
-                    UK0{{$ewe->e_flock}} {{sprintf('%05d',$ewe->e_tag)}}
+                    UK0 {{$ewe->e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->e_tag)}}
                 </td>
                 <td>
-                    {{$ewe->original_e_flock}} {{sprintf('%05d',$ewe->original_e_tag)}}  - -  {{$ewe->colour_of_tag}}
+                    {{$ewe->original_e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->original_e_tag) .' - - ' . $ewe->colour_of_tag}}
                 </td>
                 <td>
                     {{sprintf('%05d',$ewe->e_tag_1)}}

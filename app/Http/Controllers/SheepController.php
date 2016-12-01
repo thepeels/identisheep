@@ -178,6 +178,7 @@ class SheepController extends Controller {
      */
     public function postSeek()
     {
+
         $flock = Input::get('flock');
         $tag    =Input::get('tag');
         $e_flock = $flock;
@@ -185,14 +186,32 @@ class SheepController extends Controller {
             if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
                 return Redirect::to('sheep/seek')->withInput();
             }
-        return View::make('sheepedit')->with([
-            'id'            =>$ewe->id,
-            'title'         => 'Change Tags',
-            'e_flock'       =>$e_flock,
-            'e_tag'         =>$ewe->e_tag,
-            'original_e_flock'=>$ewe->original_e_flock,
-            'colour_flock'  => $ewe->colour_flock,
-        ]);
+        if (Input::get('find')){
+            return View::make('sheepedit')->with([
+                'id'            =>$ewe->id,
+                'title'         => 'Change Tags',
+                'e_flock'       =>$e_flock,
+                'e_tag'         =>$ewe->e_tag,
+                'original_e_flock'=>$ewe->original_e_flock,
+                'colour_flock'  => $ewe->colour_flock,
+            ]);
+        }
+        if (Input::get('view')){
+            return View::make('sheepview')->with([
+                //'ewe'           =>$ewe,
+                'id'            =>$ewe->id,
+                'title'         =>'Details for Sheep number ',
+                'e_flock'       =>$e_flock,
+                'e_tag'         =>$ewe->e_tag,
+                'e_tag_1'        =>$ewe->e_tag_1,
+                'e_tag_2'        =>$ewe->e_tag_2,
+                'original_e_flock'=>$ewe->original_e_flock,
+                'original_e_tag'=>$ewe->original_e_tag,
+                'colour_of_tag'  =>$ewe->colour_of_tag,
+                'move_on'       =>$ewe->move_on,
+
+            ]);
+        }
     }
     /**
      * Find sheep page
@@ -228,14 +247,7 @@ class SheepController extends Controller {
      */
     public function postBatch()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
-            'flock_number' => 'digits:6|required',
-            'start_tag' => 'digits_between:1,5|required',
-            'end_tag'   => 'digits_between:1,5|required'
-        ];
+        $rules = Sheep::$rules['batch'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
@@ -298,13 +310,7 @@ class SheepController extends Controller {
     }
     public function postAddewe()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
-            'e_flock'   => 'digits:6|required',
-            'e_tag'     => 'numeric|required|between:1,99999',
-        ];
+        $rules = Sheep::$rules['dates_and_tags'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
@@ -342,13 +348,7 @@ class SheepController extends Controller {
     }
     public function postDeath()
     {
-        $rules = [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
-            'e_flock'   => 'digits:6|required',
-            'e_tag'     => 'numeric|required|between:1,99999',
-        ];
+        $rules = Sheep::$rules['dates_and_tags'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
@@ -382,4 +382,6 @@ class SheepController extends Controller {
 
         ]);
     }
+
+
 }

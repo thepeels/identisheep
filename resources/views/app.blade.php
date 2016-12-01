@@ -48,7 +48,13 @@
 							<li><a href="/sheep/addtup">Add a Tup</a></li>
 						</ul>
 					</li>
-					<li><a href="/batch/batch">Batch On</a></li>
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch On<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/batch/batch">Batch On</a></li>
+							<li><a href="/batch/batchopson">.csv Batch On</a></li>
+						</ul>
+					</li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
