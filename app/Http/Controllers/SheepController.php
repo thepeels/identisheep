@@ -29,7 +29,7 @@ class SheepController extends Controller {
             ->where('sex','female')
             ->paginate(20);
         return view('sheeplist')->with([
-            'sheep'=>$ewes,
+            'ewes'=>$ewes,
             'title'=>'All Female Sheep',
             'count'=>Sheep::where('user_id',$this->user())->count()
             ]);
@@ -43,9 +43,9 @@ class SheepController extends Controller {
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','male')
             ->orderBy('e_flock')
-            ->get();
+            ->paginate(20);
         return view('sheeplist')->with([
-            'sheep'=>$ewes,
+            'ewes'=>$ewes,
             'title'=>'Male Sheep'
             ]);
 	}
@@ -54,9 +54,9 @@ class SheepController extends Controller {
         $ewes = Sheep::onlyTrashed()
             ->where('user_id',$this->user())
             ->orderBy('e_flock')
-            ->get();
+            ->paginate(20);
         return view('sheeplist')->with([
-            'sheep'=>$ewes,
+            'ewes'=>$ewes,
             'title'=>'Sheep Moved Off'
         ]);
     }
@@ -66,9 +66,9 @@ class SheepController extends Controller {
             ->where('user_id',$this->user())
             ->where('off_how','like','died'.'%')
             ->orderBy('e_flock')
-            ->get();
+            ->paginate(20);
         return view('sheeplist')->with([
-            'sheep'=>$ewes,
+            'ewes'=>$ewes,
             'title'=>'Dead List'
         ]);
     }
@@ -112,7 +112,7 @@ class SheepController extends Controller {
 	public function getEdit($id)
 	{
 		$ewe = Sheep::where('id',$id)->first();
-        //foreach($ewe as $sheep);
+        //foreach($ewe as $ewes);
         $number = $ewe->e_flock.' '.sprintf('%05d',$ewe->e_tag);
         return 'edit sheep number '.$number;
 	}
@@ -162,7 +162,7 @@ class SheepController extends Controller {
         //return $ewe->id;
         return View::make('sheepedit')->with([
             'id'        =>$id,
-            'title'     => 'Edit Sheep Tag Data',
+            'title'     => 'Change Tags',
             'e_flock'   =>$ewe->e_flock,
             'e_tag'     =>$ewe->e_tag
         ]);
@@ -187,7 +187,7 @@ class SheepController extends Controller {
             }
         return View::make('sheepedit')->with([
             'id'            =>$ewe->id,
-            'title'         => 'Edit Sheep Tag Data',
+            'title'         => 'Change Tags',
             'e_flock'       =>$e_flock,
             'e_tag'         =>$ewe->e_tag,
             'original_e_flock'=>$ewe->original_e_flock,

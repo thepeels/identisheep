@@ -16,7 +16,8 @@
             - (number of records = {{$count}})
         @endif
     </h4>
-    <table class="table table-striped table-bordered table-sm table-condensed" >
+        {!! $ewes->render() !!}
+        <table class="table table-striped table-bordered table-sm table-condensed" >
         <thead>
         <tr>
             <th>Ref</th>
@@ -32,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($sheep as $ewe)
+        @foreach ($ewes as $ewe)
             <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('Y-m',strtotime($ewe->move_on)));
               $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
             <tr>
