@@ -30,6 +30,7 @@ class Sheep extends Model
      * @var array
      */
     protected $fillable = [
+        'local_id',
         'user_id',
         'move_on',
         'move_off',
@@ -83,6 +84,15 @@ class Sheep extends Model
         }
 
         return $ewe;
+    }
+    public static function check($flock,$tag,$id)
+    {
+        $ewe = Sheep::withTrashed()
+            ->where('user_id',$id)
+            ->where('e_flock',$flock)
+            ->where('e_tag',$tag)
+            ->first();
+        return (NULL != $ewe?$ewe->local_id:NULL);
     }
     public static $rules = [
         'dates_and_tags' => [

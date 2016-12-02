@@ -261,14 +261,21 @@ class SheepController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $l              = DB::table('sheep')->max('id');
         if ($start_tag < $end_tag){
             $i = $start_tag;
             while ($i <= $end_tag){
+                $l++;
                 $ewe = Sheep::firstOrNew([
                     'e_flock'           =>  $flock_number,
                     'e_tag'             =>  $i,
-                    'user_id'           =>  $id
+                    'user_id'           =>  $id,
                 ]);
+                if(!Sheep::where('e_flock',$flock_number)
+                    ->where('e_tag',$i)
+                    ->where('user_id',$id)){
+                    $ewe->local_id      = $l;
+                }
                 $ewe->original_e_flock  = $flock_number;
                 $ewe->colour_flock      = $flock_number;
                 $ewe->original_e_tag    = $i;
