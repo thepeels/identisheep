@@ -328,20 +328,30 @@ class SheepController extends Controller {
         $d              = Input::get('day');
         $m              = Input::get('month');
         $y              = Input::get('year');
+        $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $ewe = Sheep::firstOrNew([
             'e_flock'           =>  $e_flock_number,
             'e_tag'             =>  $e_tag,
             'user_id'           =>  $this->user()
         ]);
-        $ewe->original_e_flock  =  $e_flock_number;
-        $ewe->colour_flock      =  $e_flock_number;
-        $ewe->e_tag             =  $e_tag;
-        $ewe->move_on           = $move_on;
-        $ewe->sex               = Input::get('sex');
+        $ewe->original_e_flock  =   $e_flock_number;
+        $ewe->colour_flock      =   $e_flock_number;
+        $ewe->e_tag             =   $e_tag;
+        $ewe->move_on           =   $move_on;
+        $ewe->colour_of_tag     =   $colour_of_tag;
+        $ewe->sex               =   Input::get('sex');
         $ewe->save();
 
-        return Redirect::back()->withInput(['e_flock'=>$e_flock,'sex'=>$ewe->sex]);
+        return Redirect::back()->withInput([
+            'e_flock'   =>$e_flock,
+            'sex'       =>$ewe->sex,
+            'day'       =>$d,
+            'month'     =>$m,
+            'year'      =>$y,
+            'colour_of_tag'=>$colour_of_tag
+
+        ]);
     }
 
 

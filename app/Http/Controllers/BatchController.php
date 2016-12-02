@@ -171,26 +171,35 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $l              = DB::table('sheep')->where('user_id',$id)->max('local_id');
+
         if ($start_tag <= $end_tag){
             $i = $start_tag;
+
             while ($i <= $end_tag){
-                $ewe = Sheep::firstOrNew([
-                    'e_flock'           =>  $flock_number,
-                    'e_tag'             =>  $i,
-                    'user_id'           =>  $id
-                ]);
-                $ewe->original_e_flock  = $flock_number;
-                $ewe->colour_flock      = $flock_number;
-                $ewe->original_e_tag    = $i;
-                $ewe->colour_tag        = $i;
-                $ewe->move_on           = $move_on;
-                $ewe->colour_of_tag     = $colour_of_tag;
 
-                $ewe->save();
+                $sheep_exists = Sheep::check($flock_number,$i,$id);
+                if (NULL === $sheep_exists) {
+                    $l++;
+                    $ewe = new Sheep();
+
+                        $ewe->local_id = $l;
+                        $ewe->user_id = $id;
+                        $ewe->e_flock = $flock_number;
+                        $ewe->original_e_flock = $flock_number;
+                        $ewe->colour_flock = $flock_number;
+                        $ewe->e_tag = $i;
+                        $ewe->original_e_tag = $i;
+                        $ewe->colour_tag = $i;
+                        $ewe->move_on = $move_on;
+                        $ewe->colour_of_tag = $colour_of_tag;
+
+                    $ewe->save();
+                }
                 $i++;
-
             }
         }
+        $l=NULL;
         return Redirect::back()->withInput(
             [
                 'day'           =>$d,

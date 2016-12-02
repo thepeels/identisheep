@@ -20,7 +20,7 @@
         <table class="table table-striped table-bordered table-sm table-condensed" >
         <thead>
         <tr>
-            <th>Ref</th>
+            <th>local</th>
             <th>Tag Number</th>
             <th>Original Tags</th>
             <th>Old Tags</th>
@@ -38,7 +38,7 @@
               $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
             <tr>
                 <td>
-                    {{$ewe->id}}
+                    {{$ewe->local_id}}
                 </td>
                 <td>
                     UK0 {{$ewe->e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->e_tag)}}

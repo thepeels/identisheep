@@ -9,6 +9,7 @@ class SheepSeeder extends DatabaseSeeder
         $ewes = [
             [
                 'user_id'       =>  "1",
+                'local_id'      =>  "1",
                 'move_on'       =>  date('Y-m-d'),
                 'move_off'      =>  "0000-00-00 00:00:00",
                 'e_flock'       =>  '109680',
@@ -21,6 +22,7 @@ class SheepSeeder extends DatabaseSeeder
             ],
             [
                 'user_id'       =>  "2",
+                'local_id'      =>  "1",
                 'move_on'       =>  date('Y-m-d'),
                 'move_off'      =>  "0000-00-00 00:00:00",
                 'e_flock'       =>  '106374',
@@ -33,6 +35,7 @@ class SheepSeeder extends DatabaseSeeder
             ],
             [
                 'user_id'       =>  "2",
+                'local_id'      =>  "2",
                 'move_on'       =>  date('Y-m-d'),
                 'move_off'      =>  "0000-00-00 00:00:00",
                 'e_flock'       =>  '106374',
@@ -45,6 +48,7 @@ class SheepSeeder extends DatabaseSeeder
             ],
             [
                 'user_id'       =>  "1",
+                'local_id'      =>  "2",
                 'move_on'       =>  date('Y-m-d'),
                 'move_off'      =>  "0000-00-00 00:00:00",
                 'e_flock'       =>  '106374',
@@ -57,6 +61,7 @@ class SheepSeeder extends DatabaseSeeder
             ],
             [
                 'user_id'       =>  "1",
+                'local_id'      =>  "3",
                 'move_on'       =>  date('Y-m-d'),
                 'move_off'      =>  "0000-00-00 00:00:00",
                 'e_flock'       =>  '109680',

@@ -12,9 +12,9 @@
         {!!Form::input('hidden','id',$id) !!}
 
         {!!Form::label('text','Entry Date') !!}
-        {!!Form::input('int','day',NULL,['class'=>'newclass input-xs','placeholder'=>'DD','size' => '1']) !!}
-        {!!Form::input('int','month',NULL,['class'=>'newclass input-xs','placeholder'=>'MM','size' => '1']) !!}
-        {!!Form::input('int','year',NULL,['class'=>'newclass input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br>
+        {!!Form::input('int','day',date('d'),['class'=>'newclass input-xs','placeholder'=>'DD','size' => '1']) !!}
+        {!!Form::input('int','month',date('m'),['class'=>'newclass input-xs','placeholder'=>'MM','size' => '1']) !!}
+        {!!Form::input('int','year',date('Y'),['class'=>'newclass input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br>
         {!!$errors->first('day','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>

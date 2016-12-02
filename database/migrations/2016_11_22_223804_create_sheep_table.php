@@ -16,6 +16,7 @@ class CreateSheepTable extends Migration {
         {
             $table->increments('id');
             $table->integer('user_id');
+            $table->integer('local_id');
             $table->dateTime('move_on');
             $table->dateTime('move_off');
             $table->string('off_how',32);
@@ -34,6 +35,7 @@ class CreateSheepTable extends Migration {
             $table->timestamps();
             $table->softdeletes();
             $table->index('user_id');
+            $table->index('local_id');
             $table->index('deleted_at');
         });
         DB::unprepared("ALTER TABLE  `sheep` CHANGE  `e_tag`  `e_tag` SMALLINT( 5 ) UNSIGNED ZEROFILL DEFAULT '0';");
