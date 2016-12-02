@@ -92,7 +92,7 @@ class Sheep extends Model
             ->where('e_flock',$flock)
             ->where('e_tag',$tag)
             ->first();
-        return (NULL != $ewe?$ewe->local_id:NULL);
+        return (NULL !== $ewe?$ewe->local_id:NULL);
     }
     public static $rules = [
         'dates_and_tags' => [

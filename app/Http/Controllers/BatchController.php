@@ -171,26 +171,14 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->max('local_id');
-
         if ($start_tag <= $end_tag){
             $i = $start_tag;
-
             while ($i <= $end_tag){
-
-                //$l++;
                 $ewe = Sheep::firstOrNew([
                     'e_flock'           =>  $flock_number,
                     'e_tag'             =>  $i,
                     'user_id'           =>  $id
                 ]);
-                $fetch_local            = Sheep::check($flock_number,$i,$id);
-                //dd($l);
-                if (NULL == $fetch_local) {
-                    $l++;
-                    $ewe->local_id = $l;
-                }
-
                 $ewe->original_e_flock  = $flock_number;
                 $ewe->colour_flock      = $flock_number;
                 $ewe->original_e_tag    = $i;
