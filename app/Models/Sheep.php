@@ -9,7 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Redirect;
+use Redirect,Auth,Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -60,6 +60,10 @@ class Sheep extends Model
     {
         return $this->belongsTo('User');
     }
+    private function userId()
+    {
+        return Auth::user()->id;
+    }
 
     public function details($id)
     {
@@ -92,21 +96,21 @@ class Sheep extends Model
             ->where('e_flock',$flock)
             ->where('e_tag',$tag)
             ->first();
-        return (NULL !== $ewe?$ewe:NULL);
+        return (NULL !== $ewe?:NULL);
     }
 
     public static $rules = [
         'dates_and_tags' => [
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
+            'year'      => 'integer|required|min:2006|max:2025',
             'e_flock'   => 'digits:6|required',
             'e_tag'     => 'numeric|required|between:1,99999',
         ],
         'batch'=> [
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025',
+            'year'      => 'integer|required|min:2006|max:2025',
             'flock_number' => 'digits:6|required',
             'start_tag' => 'digits_between:1,5|required',
             'end_tag'   => 'digits_between:1,5|required'
@@ -114,8 +118,12 @@ class Sheep extends Model
         'dates'=>[
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|min:2009|max:2025'
+            'year'      => 'integer|required|between:2006,2025'
         ],
+        'old_dates'=>[
+            'year'      => 'integer|required|between:2006,2025'
+        ],
+
         'where_to'=>[
             'destination'=>'required'
         ]

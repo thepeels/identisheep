@@ -18,8 +18,8 @@
 
         {!!Form::input('hidden','id',$id)!!}
         {!!Form::input('hidden','sex','male')!!}
-        {!!Form::input('text','e_flock',NULL,['class'=>'newclass input-xs','placeholder'=>' New Flock Number'])!!}
-        {!!Form::input('text','e_tag',NULL,['class'=>'newclass input-xs','placeholder'=>' New Number'])!!}
+        {!!Form::input('text','e_flock',NULL,['class'=>'new_class','placeholder'=>'New Flock Number'])!!}
+        {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'New Number'])!!}
 
         {!!Form::submit('Add Tup',['class'=>'btn btn-info btn-xs'])!!}
         {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>

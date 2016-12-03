@@ -12,8 +12,8 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
     <h4>{{$title}}
-        @if(Request::url() === 'http://flock/list')
-            - (number of records = {{$count}})
+        @if(Request::path() === 'list')
+            - (number of records = {{$count}}){{Request::path()}}
         @endif
     </h4>
         {!! $ewes->render() !!}
@@ -29,6 +29,8 @@
             @if(Request::url() !== 'http://flock/list')
             <th>Move Off</th>
             <th>How moved off</th>
+                @else
+                <th>Date of last changes</th>
             @endif
         </tr>
         </thead>
@@ -55,21 +57,24 @@
                 <td>
                     {{$date_on}}
                 </td>
-                @if(Request::url() !== 'http://flock/list')
-                <td>
-                    {{$date_off}}
-                </td>
-                <td>
-                    {{$ewe->off_how}}
-                </td>
+                @if(Request::path() !== 'list')
+                    <td>
+                        {{$date_off}}
+                    </td>
+                    <td>
+                        {{$ewe->off_how}}
+                    </td>
                 @else
-                <td>
-                    <a href="sheep/edit/{{$ewe->id}}"
-                       class="btn btn-default btn-xs"
-                       style="margin-bottom:-1px;"
-                       title="Edit this Sheep">Edit Sheep
-                    </a>
-                </td>
+                    <td>
+                        {{date('Y-m-d',strtotime($ewe->updated_at))}}
+                    </td>
+                    <td>
+                        <a href="sheep/edit/{{$ewe->id}}"
+                           class="btn btn-default btn-xs"
+                           style="margin-bottom:-1px;"
+                           title="Edit this Sheep">Edit Sheep
+                        </a>
+                    </td>
                 @endif
             </tr>
 

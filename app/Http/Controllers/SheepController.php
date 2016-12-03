@@ -3,7 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Sheep;
-use Auth,View,Input,Redirect,Validator,Session;
+use Auth,View,Input,Redirect,Validator,Session,Carbon\Carbon,DB;
 use Illuminate\Pagination\Paginator;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -73,14 +73,35 @@ class SheepController extends Controller {
         ]);
     }
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for deleting records.
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function getDelete()
 	{
+        $year = date('Y', strtotime('-10 years'));
+        return View::make('delete_old')->with([
+            'title'         => 'Delete old Records',
+            'year'          => $year
 
+        ]);
 	}
+	public function postDelete()
+    {
+        $rules = Sheep::$rules['old_dates'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $year = Input::get('year');
+        $date = Carbon::create($year,12,31,0);
+        $date = $date->toDateTimeString();
+        //dd($date);
+        Sheep::withTrashed()->where('move_on','<=',$date)->forceDelete();
+
+        return Redirect::to('list');
+
+    }
 
 	/**
 	 * Store a newly created resource in storage.
@@ -322,6 +343,7 @@ class SheepController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
+        $user_id             = $this->user();
         $e_flock        = Input::get('e_flock');
         $e_flock_number = $e_flock;
         $e_tag          = Input::get('e_tag');
@@ -330,18 +352,24 @@ class SheepController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $ewe = Sheep::firstOrNew([
-            'e_flock'           =>  $e_flock_number,
-            'e_tag'             =>  $e_tag,
-            'user_id'           =>  $this->user()
-        ]);
-        $ewe->original_e_flock  =   $e_flock_number;
-        $ewe->colour_flock      =   $e_flock_number;
-        $ewe->e_tag             =   $e_tag;
-        $ewe->move_on           =   $move_on;
-        $ewe->colour_of_tag     =   $colour_of_tag;
-        $ewe->sex               =   Input::get('sex');
-        $ewe->save();
+        $l              = DB::table('sheep')->where('user_id',$user_id)->max('local_id');
+        $sheep_exists   = Sheep::check($e_flock_number,$e_tag,$user_id);
+        if (NULL === $sheep_exists) {
+            $l++;
+            $ewe = new Sheep();
+            $ewe->user_id = $user_id;
+            $ewe->local_id = $l;
+            $ewe->e_flock = $e_flock_number;
+            $ewe->original_e_flock = $e_flock_number;
+            $ewe->colour_flock = $e_flock_number;
+            $ewe->e_tag = $e_tag;
+            $ewe->original_e_tag = $e_tag;
+            $ewe->colour_tag = $e_tag;
+            $ewe->move_on = $move_on;
+            $ewe->colour_of_tag = $colour_of_tag;
+            $ewe->sex = Input::get('sex');
+            $ewe->save();
+        }
 
         return Redirect::back()->withInput([
             'e_flock'   =>$e_flock,

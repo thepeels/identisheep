@@ -6,3 +6,4 @@ div.scrolling-area{height: 800px;overflow: auto;}
     top: 50px;
     visibility: hidden;
 }
+.new_class {padding-left:5px;}

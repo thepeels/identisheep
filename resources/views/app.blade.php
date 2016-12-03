@@ -17,6 +17,11 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
+<?
+$url = Request::path();
+$elements = explode('/', $url);
+$help_page = $elements[sizeof($elements)-1];
+?>
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
@@ -68,6 +73,7 @@
 					<li><a href="/sheep/death">Record Death</a></li>
 					<li><a href="/sheep/offlist">Off List</a></li>
 					<li><a href="/sheep/deadlist">Dead List</a></li>
+					<li><a href="../help/{{$help_page}}">Help</a></li>
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>
@@ -76,6 +82,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="/auth/logout">Logout</a></li>
+								<li><a href="/sheep/delete">Delete old Records</a></li>
 							</ul>
 						</li>
 					@endif

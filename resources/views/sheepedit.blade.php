@@ -18,8 +18,8 @@
 
     {!!Form::input('hidden','id',$id)!!}
     {!!Form::label('text','UK 0')!!}
-    {!!Form::input('text','e_flock',$e_flock,['class'=>'newclass input-xs','placeholder'=>' New Flock Number'])!!}
-    {!!Form::input('text','e_tag',sprintf('%05d',$e_tag),['class'=>'newclass input-xs','placeholder'=>' New Number'])!!}
+    {!!Form::input('text','e_flock',$e_flock,['class'=>'new_class input-xs','placeholder'=>' New Flock Number'])!!}
+    {!!Form::input('text','e_tag',sprintf('%05d',$e_tag),['class'=>'new_class input-xs','placeholder'=>' New Number'])!!}
     <br>
     {!!Form::submit('Add/Change',['class'=>'btn btn-info btn-xs'])!!}
     {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>

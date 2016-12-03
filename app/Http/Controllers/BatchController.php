@@ -45,7 +45,7 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         //$no_spaces = preg_replace('/\s+/', '', $file_raw);
-        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $file_raw);
+        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $file_raw);
         $rawlist = str_replace(array("l"), '1', $rawlist);
         $rawlist = str_replace(array("O"), '0', $rawlist);
         $ewelist = array_map('str_getcsv', file($rawlist));
@@ -100,6 +100,7 @@ class BatchController extends Controller {
         $m              = Input::get('month');
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $l              = DB::table('sheep')->where('user_id',$user)->max('local_id');
         //$no_spaces = preg_replace('/\s+/', '', $file_raw);
         $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ","¶"), "", $file_raw);
         $rawlist = str_replace(array("l"), '1', $rawlist);
@@ -121,16 +122,21 @@ class BatchController extends Controller {
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
-                $ewe = Sheep::firstOrNew([
-                    'e_flock' => $e_flock,
-                    'e_tag' => $e_tag]);
-                $ewe->user_id           = $user;
-                $ewe->e_flock           = $e_flock;
-                $ewe->e_tag             = $e_tag;
-                $ewe->move_on         = $move_on;
-                //$ewe->off_how           = $destination;
-                $ewe->save();
-                //$ewe->delete();
+                $sheep_exists = Sheep::check($e_flock,$e_tag,$user);
+                if(NULL === $sheep_exists) {
+                    $l++;
+                    $ewe = Sheep::firstOrNew([
+                        'e_flock' => $e_flock,
+                        'e_tag' => $e_tag]);
+                    $ewe->user_id = $user;
+                    $ewe->local_id = $l;
+                    $ewe->e_flock = $e_flock;
+                    $ewe->e_tag = $e_tag;
+                    $ewe->move_on = $move_on;
+                    //$ewe->off_how           = $destination;
+                    $ewe->save();
+                    //$ewe->delete();
+                }
             }
         }
         return Redirect::to('list');
@@ -193,6 +199,7 @@ class BatchController extends Controller {
                         $ewe->colour_tag = $i;
                         $ewe->move_on = $move_on;
                         $ewe->colour_of_tag = $colour_of_tag;
+                        $ewe->sex = 'female';
 
                     $ewe->save();
                 }

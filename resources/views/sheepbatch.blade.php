@@ -12,27 +12,27 @@
         {!!Form::input('hidden','id',$id) !!}
 
         {!!Form::label('text','Entry Date') !!}
-        {!!Form::input('int','day',date('d'),['class'=>'newclass input-xs','placeholder'=>'DD','size' => '1']) !!}
-        {!!Form::input('int','month',date('m'),['class'=>'newclass input-xs','placeholder'=>'MM','size' => '1']) !!}
-        {!!Form::input('int','year',date('Y'),['class'=>'newclass input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br>
+        {!!Form::input('int','day',date('d'),['class'=>'new_class','placeholder'=>'DD','size' => '1']) !!}
+        {!!Form::input('int','month',date('m'),['class'=>'new_class input-xs','placeholder'=>'MM','size' => '1']) !!}
+        {!!Form::input('int','year',date('Y'),['class'=>'new_class input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br>
         {!!$errors->first('day','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','UK 0 ')!!}
-        {!!Form::input('text','flock_number',NULL,['class'=>'newclass input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+        {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
         {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
-        {!!Form::input('int','start_tag',NULL,['class'=>'newclass input-xs','placeholder'=>'Start Tag Number'])!!}<br>
+        {!!Form::input('int','start_tag',NULL,['class'=>'new_class','placeholder'=>'Start Tag Number'])!!}<br>
         {!!$errors->first('start_tag','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
-        {!!Form::input('int','end_tag',NULL,['class'=>'newclass input-xs','placeholder'=>'Finish Tag Number'])!!}<br>
+        {!!Form::input('int','end_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Finish Tag Number'])!!}<br>
         {!!$errors->first('end_tag','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','Tag Colour')!!}
-        {!!Form::input('text','colour_of_tag',NULL,['class'=>'newclass input-xs','placeholder'=>'Colour'])!!}<br>
+        {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}<br>
         {!!$errors->first('colour_of_tag','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}

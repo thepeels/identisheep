@@ -10,8 +10,8 @@
         {!!Form::open(array('url' => '/sheep/seek','class'=>'form-inline'))!!}
 
         {!!Form::label('text','UK 0')!!}
-        {!!Form::input('text','flock',$flock,['class'=>'newclass input-xs','placeholder'=>' Flock Number'])!!}
-        {!!Form::input('int','tag',NULL,['class'=>'newclass input-xs','placeholder'=>' Tag Number'])!!}<br>
+        {!!Form::input('text','flock',$flock,['class'=>'new_class input-xs','placeholder'=>' Flock Number'])!!}
+        {!!Form::input('int','tag',NULL,['class'=>'new_class input-xs','placeholder'=>' Tag Number'])!!}<br>
         {!!$errors->first('flock','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('e_tag','<small style="color:#f00">:message</small>')!!}<br>
 
