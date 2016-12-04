@@ -27,8 +27,11 @@ class Help extends Model {
              If you are satisfied with the list, press the backspace key and then the \'load\' button.<br> Now the 
              list will be loaded into your \'off list\' (Sheep Off Holding) and also removed from the \'all sheep\' 
              list.<br>'],
-        'batch'     =>  ['batch/batch','Batch of Sheep onto Holding','Help is obvious here<br> ']
-
+        'batch'     =>  ['batch/batch','Batch of Sheep onto Holding','Change the default date if relevant.<br> 
+            Enter the details of a batch of sheep where the tag series is continuous with no gaps. <br> 
+            If you have a gap, go up to the gap first, and then start a new batch from after the gap.<br> '],
+        'delete'    =>  ['sheep/delete','Deleting old records','This option will permanently delete all 
+            records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.'],
 
     ];
 
