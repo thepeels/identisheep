@@ -55,11 +55,14 @@ class BatchController extends Controller {
             $i = 0;
             //dd($ewelist);
             foreach ($ewelist[2] as $ewe) {
-                $i++;
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
-                echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                if($e_tag != 0) {
+                    $i++;
+                    echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                }
             }
+            echo("<br>".$i.' Tags.');
             exit();
         }
         if(Input::get('load')) {
@@ -78,7 +81,7 @@ class BatchController extends Controller {
                 $ewe->delete();
             }
         }
-        return Redirect::to('list');
+        return Redirect::to('sheep/list');
     }
     public function getBatchopson()
     {
@@ -113,11 +116,14 @@ class BatchController extends Controller {
             $i = 0;
             //dd($ewelist);
             foreach ($ewelist[2] as $ewe) {
-                $i++;
-                $e_flock = substr($ewe, -11, 6);
-                $e_tag = substr($ewe,-5);
-                echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                    $e_flock = substr($ewe, -11, 6);
+                    $e_tag = substr($ewe, -5);
+                if($e_tag != 0) {
+                    $i++;
+                    echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                }
             }
+            echo("<br>".$i.' Tags.');
             exit();
         }
         if(Input::get('load')) {
@@ -143,7 +149,7 @@ class BatchController extends Controller {
                 }
             }
         }
-        return Redirect::to('list');
+        return Redirect::to('sheep/list');
     }
     /**
      * Load Batch entry form

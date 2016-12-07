@@ -31,14 +31,29 @@ class SheepController extends Controller {
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'All Female Sheep',
-            'count'=>Sheep::where('user_id',$this->user())->count()
+            'count'=>Sheep::where('user_id',$this->user())
+                ->where('sex','female')
+                ->count()
             ]);
 	}
-	public static function user(){
+    public static function user(){
         $user = Auth::user()->id;
         return $user;
     }
-	public function getTups()
+    public function getList()
+    {
+        $ewes = Sheep::where('user_id',$this->user())
+            ->where('sex','female')
+            ->paginate(20);
+        return view('sheeplist')->with([
+            'ewes'=>$ewes,
+            'title'=>'All Female Sheep',
+            'count'=>Sheep::where('user_id',$this->user())
+                ->where('sex','female')
+                ->count()
+        ]);
+    }
+    public function getTups()
 	{
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','male')
@@ -46,14 +61,18 @@ class SheepController extends Controller {
             ->paginate(20);
         return view('sheeplist')->with([
             'ewes'=>$ewes,
-            'title'=>'Male Sheep'
+            'title'=>'Male Sheep',
+            'count'=>Sheep::where('user_id',$this->user())
+                ->where('sex','male')
+                ->count()
             ]);
 	}
     public function getOfflist()
     {
         $ewes = Sheep::onlyTrashed()
             ->where('user_id',$this->user())
-            ->orderBy('e_flock')
+            ->where('off_how','not like','died'.'%')
+            ->orderBy('move_off','DESC')
             ->paginate(20);
         return view('sheeplist')->with([
             'ewes'=>$ewes,
@@ -99,7 +118,7 @@ class SheepController extends Controller {
         //dd($date);
         Sheep::withTrashed()->where('move_on','<=',$date)->forceDelete();
 
-        return Redirect::to('list');
+        return Redirect::to('sheep/list');
 
     }
 
@@ -200,10 +219,9 @@ class SheepController extends Controller {
     public function postSeek()
     {
 
-        $flock = Input::get('flock');
-        $tag    =Input::get('tag');
-        $e_flock = $flock;
-        $ewe = Sheep::getByTag($e_flock, $tag);
+        $e_flock = Input::get('flock');
+        $e_tag    =Input::get('tag');
+        $ewe = Sheep::getByTag($e_flock, $e_tag);
             if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
                 return Redirect::to('sheep/seek')->withInput();
             }
@@ -230,7 +248,7 @@ class SheepController extends Controller {
                 'original_e_tag'=>$ewe->original_e_tag,
                 'colour_of_tag'  =>$ewe->colour_of_tag,
                 'move_on'       =>$ewe->move_on,
-
+                'sex'           =>$ewe->sex
             ]);
         }
     }
@@ -371,7 +389,7 @@ class SheepController extends Controller {
             $ewe->save();
         }
 
-        return Redirect::back()->withInput([
+        return Redirect::back()->withInput([Input::except('e_tag')]);/*[
             'e_flock'   =>$e_flock,
             'sex'       =>$ewe->sex,
             'day'       =>$d,
@@ -379,7 +397,7 @@ class SheepController extends Controller {
             'year'      =>$y,
             'colour_of_tag'=>$colour_of_tag
 
-        ]);
+        ]);*/
     }
 
 
@@ -388,7 +406,9 @@ class SheepController extends Controller {
         return View::make('sheepdeath')->with([
             'title'     => 'Record a Death',
             'id'        => $this->user(),
-
+            'sex'       =>'female',
+            'e_flock'   => NULL,
+            'e_tag'     => NULL
         ]);
     }
     public function postDeath()
@@ -424,9 +444,41 @@ class SheepController extends Controller {
         return View::make('sheepdeath')->with([
             'title'     => 'Record a Death',
             'id'        => $this->user(),
+            'e_flock'   => NULL,
+            'e_tag'     => NULL,
+            'sex'       => $ewe->sex
 
         ]);
     }
+    public function getEnterdeath($id,$e_flock,$e_tag,$sex)
+    {
+        return View::make('sheepdeath')->with([
+            'title'     => 'Record a Death',
+            'id'        => $id,
+            'e_flock'   => $e_flock,
+            'e_tag'     => $e_tag,
+            'sex'       => $sex
+        ]);
+    }
+    public function getSearch()
+    {
+        $ewes = Sheep::where('e_tag','00084')
+            ->orWhere('e_tag_1','00084')
+            ->orWhere('e_tag_2','00084')
+            ->paginate(20);
+         return View::make('sheeplist')->with([
+             'ewes'=>$ewes,
+             'title'=>'Dead List'
+         ]);
+    }
+    public function getReplaced()
+    {
+        $ewes = Sheep::replaced('ewes');
 
-
+        return View::make('replacement_tags')->with([
+            'ewes'=>$ewes[0],
+            'count'=>$ewes[1],
+            'title'=>'Tag Replacements List'
+        ]);
+    }
 }

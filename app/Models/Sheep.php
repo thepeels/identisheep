@@ -9,7 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Redirect,Auth,Collection;
+use Redirect,Auth,Collection,DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -129,5 +129,13 @@ class Sheep extends Model
         ]
 
     ];
-
+    public static function replaced()
+    {
+        $user = Auth::user()->id;
+        //$ewes = DB::raw('SELECT * FROM `sheep` WHERE `user_id`= $user and `e_tag`!=`original_e_tag`')->paginate(20);
+        $ewes = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->paginate(20);
+        $count = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->count();
+//dd($count);
+        return [$ewes,$count];
+    }
 }

@@ -41,8 +41,10 @@ $help_page = $elements[sizeof($elements)-1];
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/list">Ewes</a></li>
+							<li><a href="/sheep/list">Ewes</a></li>
 							<li><a href="/sheep/tups">Tups</a></li>
+							<li><a href="/sheep/noneid">Non-EID</a></li>
+							<li><a href="/sheep/replaced">Replaced Tags</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
@@ -67,7 +69,15 @@ $help_page = $elements[sizeof($elements)-1];
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch Off<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/batch/batchops">.csv Batch Off</a></li>
-							<li><a href="/batch/batchoff">Batch Off</a></li>
+							<li><a href="/batch/batchoff">Breeding Batch Off</a></li>
+							<li><a href="/batch/batchoff">Single Tag Batch Off</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Exit<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/sheep/eweoff">Ewe Off</a></li>
+							<li><a href="/sheep/tupoff">Tup Off</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/death">Record Death</a></li>
@@ -83,6 +93,7 @@ $help_page = $elements[sizeof($elements)-1];
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="/auth/logout">Logout</a></li>
 								<li><a href="/sheep/delete">Delete old Records</a></li>
+								<li><a href="/sheep/search">Search</a></li>
 							</ul>
 						</li>
 					@endif

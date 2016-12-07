@@ -10,10 +10,10 @@
     <title>{!! $title !!}</title>
 @stop
 @section('content')
-    <div style="width:60%;margin-left:20%;">
+    <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
-        @if(Request::path() === 'list')
-            - (number of records = {{$count}}){{Request::path()}}
+        @if(Request::path() === ('sheep/list') || Request::path() === ('sheep/tups'))
+            - (number of records = {{$count}})
         @endif
     </h4>
         {!! $ewes->render() !!}
@@ -26,9 +26,10 @@
             <th>Old Tags</th>
             <th>Older Tags</th>
             <th>Move on</th>
-            @if(Request::url() !== 'http://flock/list')
+            @if(Request::path() !== 'sheep/list' && Request::path() !== ('sheep/tups'))
             <th>Move Off</th>
             <th>How moved off</th>
+            <th>Sex</th>
                 @else
                 <th>Date of last changes</th>
             @endif
@@ -57,19 +58,22 @@
                 <td>
                     {{$date_on}}
                 </td>
-                @if(Request::path() !== 'list')
+                @if(Request::path() !== 'sheep/list' && Request::path() !== ('sheep/tups'))
                     <td>
                         {{$date_off}}
                     </td>
                     <td>
                         {{$ewe->off_how}}
                     </td>
+                    <td>
+                        {{$ewe->sex}}
+                    </td>
                 @else
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
                     <td>
-                        <a href="sheep/edit/{{$ewe->id}}"
+                        <a href="edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"
                            title="Edit this Sheep">Edit Sheep

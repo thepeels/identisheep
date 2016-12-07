@@ -18,8 +18,8 @@
         <?if (null !=(Session::get('find_error'))){
         echo (Session::pull('find_error'));
         }?><br>
-        {!!Form::submit('Find Sheep to Edit tags',['name'=>'find','class'=>'btn btn-info btn-xs'])!!}
-        {!!Form::submit('View all details',['name'=>'view','class'=>'btn btn-info btn-xs'])!!}<br>
+        {!!Form::submit('Find Sheep to Edit tags',['name'=>'find','class'=>'btn btn-info btn-xs'])!!}<br><br>
+        {!!Form::submit('View all details and/or Record Death',['name'=>'view','class'=>'btn btn-danger btn-xs'])!!}<br>
 
         {!!Form::close()!!}<br>
     </div>
