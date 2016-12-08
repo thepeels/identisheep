@@ -20,12 +20,12 @@
     {!!Form::label('text','UK 0')!!}
     {!!Form::input('text','old_e_flock',$e_flock,['class'=>'new_class input-xs','placeholder'=>' Old Flock Number'])!!}
     {!!Form::input('text','old_e_tag',sprintf('%05d',$e_tag),['class'=>'new_class input-xs','placeholder'=>' Old Number'])!!}
-    <br>
+    <br><br>
     {!! Form::label('text','New Numbers') !!}<br>
     {!!Form::label('text','UK 0')!!}
     {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>' New Flock Number'])!!}
     {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>' New Number'])!!}
-    <br>
+    <br><br>
     {!!Form::submit('Add/Change',['class'=>'btn btn-info btn-xs'])!!}
     {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
 

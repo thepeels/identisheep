@@ -204,7 +204,7 @@ class SheepController extends Controller {
         return View::make('sheepedit')->with([
             'id'        =>$id,
             'title'     => 'Change Tags',
-            //'e_flock'   =>$ewe->e_flock,
+            'e_flock'   =>$ewe->e_flock,
             'e_tag'     =>$ewe->e_tag
         ]);
     }
@@ -482,13 +482,8 @@ class SheepController extends Controller {
     }
     public function getSearch()
     {
-        $ewes = Sheep::where('e_tag','00084')
-            ->orWhere('e_tag_1','00084')
-            ->orWhere('e_tag_2','00084')
-            ->paginate(20);
-         return View::make('sheeplist')->with([
-             'ewes'=>$ewes,
-             'title'=>'Dead List'
+         return View::make('search')->with([
+             'title'=>'Search for a Tag'
          ]);
     }
     public function getReplaced()
@@ -499,6 +494,16 @@ class SheepController extends Controller {
             'ewes'=>$ewes[0],
             'count'=>$ewes[1],
             'title'=>'Tag Replacements List'
+        ]);
+    }
+    public function postSearch()
+    {
+        $tag = Input::get('tag');
+
+        $ewes = Sheep::searchByTag($tag)->paginate(20);
+        return View::make('searchresult')->with([
+            'ewes'=>$ewes,
+            'title'=>'Search Results for Tag '.$tag
         ]);
     }
 }

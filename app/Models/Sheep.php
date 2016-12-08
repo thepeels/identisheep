@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Redirect,Auth,Collection,DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Pagination\Paginator;
 
 
 class Sheep extends Model
@@ -144,5 +145,15 @@ class Sheep extends Model
         $count = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->count();
 //dd($count);
         return [$ewes,$count];
+    }
+    public function scopeSearchByTag($query,$tag)
+    {
+        $user = Auth::user()->id;
+        $query->where('user_id',$user)
+            ->where('e_tag',$tag )
+            ->orWhere('e_tag_1',$tag )
+            ->orWhere('e_tag_2',$tag )
+            ->get();
+        return $query;
     }
 }
