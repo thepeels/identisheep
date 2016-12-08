@@ -72,9 +72,14 @@ class Sheep extends Model
         return $details;
     }
 
-    public static function getById($id)
+    /*public static function getById($id)
     {
         $ewe = Sheep::where('id', $id)->first();
+        return $ewe;
+    }*/
+    public function scopeGetById($ewe,$id)
+    {
+        $ewe = Sheep::withTrashed('id', $id)->first();
         return $ewe;
     }
 

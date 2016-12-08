@@ -12,7 +12,7 @@
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
-        @if(Request::path() === ('sheep/list') || Request::path() === ('sheep/tups'))
+        @if(Request::path() === ('sheep') || Request::path() === ('sheep/tups'))
             - (number of records = {{$count}})
         @endif
     </h4>

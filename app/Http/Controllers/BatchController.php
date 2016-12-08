@@ -138,11 +138,13 @@ class BatchController extends Controller {
                         $ewe = Sheep::firstOrNew([
                             'e_flock' => $e_flock,
                             'e_tag' => $e_tag]);
-                        $ewe->user_id = $user;
-                        $ewe->local_id = $l;
-                        $ewe->e_flock = $e_flock;
-                        $ewe->e_tag = $e_tag;
-                        $ewe->move_on = $move_on;
+                        $ewe->user_id           = $user;
+                        $ewe->local_id          = $l;
+                        $ewe->e_flock           = $e_flock;
+                        $ewe->original_e_flock  = $e_flock;
+                        $ewe->e_tag             = $e_tag;
+                        $ewe->original_e_tag    = $e_tag;
+                        $ewe->move_on           = $move_on;
                         //$ewe->off_how           = $destination;
                         $ewe->save();
                         //$ewe->delete();

@@ -42,7 +42,7 @@ $help_page = $elements[sizeof($elements)-1];
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/list/{print}">Ewes</a></li>
+							<li><a href="/sheep">Ewes</a></li>
 							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid">Non-EID</a></li>
 							<li><a href="/sheep/replaced">Replaced Tags</a></li>
