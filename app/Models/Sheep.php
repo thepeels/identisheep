@@ -126,6 +126,10 @@ class Sheep extends Model
 
         'where_to'=>[
             'destination'=>'required'
+        ],
+        'single'=>[
+            'count'=>'integer|required',
+            'flock_number'=>'digits:6|required',
         ]
 
     ];
@@ -133,7 +137,10 @@ class Sheep extends Model
     {
         $user = Auth::user()->id;
         //$ewes = DB::raw('SELECT * FROM `sheep` WHERE `user_id`= $user and `e_tag`!=`original_e_tag`')->paginate(20);
-        $ewes = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->paginate(20);
+        $ewes = self::where('user_id',$user)
+            ->whereRaw('`e_tag`!=`original_e_tag`')
+            ->orderBy('updated_at')
+            ->paginate(20);
         $count = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->count();
 //dd($count);
         return [$ewes,$count];

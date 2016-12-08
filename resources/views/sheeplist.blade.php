@@ -16,11 +16,15 @@
             - (number of records = {{$count}})
         @endif
     </h4>
-        {!! $ewes->render() !!}
-        <table class="table table-striped table-bordered table-sm table-condensed" >
+        @if(Request::path() !== ('sheep'))
+            <div class="no-print">
+                {!! $ewes->render() !!}
+            </div>
+        @endif
+        <table class="table table-striped table-bordered table-sm table-condensed print" >
         <thead>
         <tr>
-            <th>local</th>
+            <th class="no-print">local</th>
             <th>Tag Number</th>
             <th>Original Tags</th>
             <th>Old Tags</th>
@@ -40,7 +44,7 @@
             <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('Y-m',strtotime($ewe->move_on)));
               $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
             <tr>
-                <td>
+                <td class="no-print">
                     {{$ewe->local_id}}
                 </td>
                 <td>
@@ -72,7 +76,7 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                    <td>
+                    <td class="no-print">
                         <a href="edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"

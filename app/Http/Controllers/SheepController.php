@@ -23,11 +23,11 @@ class SheepController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function getIndex()
 	{
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','female')
-            ->paginate(20);
+            ->get();
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'All Female Sheep',
@@ -166,6 +166,7 @@ class SheepController extends Controller {
 	public function postChangetags()
 	{
         $id = Input::get('id');
+        $old_e_flock = Input::get('old_e_flock');
 		$ewe = Sheep::where('id',$id)->first();
         if ($ewe->e_tag != Input::get('e_tag')) {
             $ewe->e_tag_2 = $ewe->e_tag_1;
@@ -176,7 +177,7 @@ class SheepController extends Controller {
         $ewe->save();
         return View::make('sheepfinder')->with([
             'title'     => 'Find another sheep',
-            'e_flock'   => $ewe->e_flock]);
+            'e_flock'   => $old_e_flock]);
 	}
 
 	/**
@@ -203,6 +204,24 @@ class SheepController extends Controller {
         return View::make('sheepedit')->with([
             'id'        =>$id,
             'title'     => 'Change Tags',
+            //'e_flock'   =>$ewe->e_flock,
+            'e_tag'     =>$ewe->e_tag
+        ]);
+    }
+    /**
+     * Update Tag numbers
+     *
+     * @param none
+     *
+     * @return view
+     */
+    public function getEditmore($flock_old,$flock_new)
+    {
+        //$ewe = Sheep::getById($id);
+        //return $ewe->id;
+        return View::make('sheepeditmore')->with([
+            'id'        =>$id,
+            'title'     => 'Change more Tags',
             'e_flock'   =>$ewe->e_flock,
             'e_tag'     =>$ewe->e_tag
         ]);
@@ -220,6 +239,7 @@ class SheepController extends Controller {
     {
 
         $e_flock = Input::get('flock');
+        //dd($e_flock);
         $e_tag    =Input::get('tag');
         $ewe = Sheep::getByTag($e_flock, $e_tag);
             if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');

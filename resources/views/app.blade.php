@@ -9,6 +9,7 @@
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 	<link href="/css/override.css" rel="stylesheet">
+	<link href="/css/print.css" rel="stylesheet" media="print" type="text/css">
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,10 +42,11 @@ $help_page = $elements[sizeof($elements)-1];
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/list">Ewes</a></li>
+							<li><a href="/sheep/list/{print}">Ewes</a></li>
 							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid">Non-EID</a></li>
 							<li><a href="/sheep/replaced">Replaced Tags</a></li>
+							<li><a href="/batch/singlelist">Batch Tags Used</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
@@ -70,7 +72,7 @@ $help_page = $elements[sizeof($elements)-1];
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/batch/batchops">.csv Batch Off</a></li>
 							<li><a href="/batch/batchoff">Breeding Batch Off</a></li>
-							<li><a href="/batch/batchoff">Single Tag Batch Off</a></li>
+							<li><a href="/batch/singleoff">Single Tag Batch Off</a></li>
 						</ul>
 					</li>
 					<li>

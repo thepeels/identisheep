@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Sheep;
+use App\Models\Single;
 use Auth,View,Input,Redirect,Validator,Session,DB;
 
 class BatchController extends Controller {
@@ -294,5 +295,70 @@ class BatchController extends Controller {
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);
+    }
+    /**
+     * Load Batch entry form
+     *
+     * @param none
+     *
+     * @return view
+     */
+    public function getSingleoff()
+    {
+        return View::make('sheepsingleoff')->with([
+            'id'=>$this->user(),
+            'title' => 'Enter Movement to Slaughter'
+        ]);
+    }
+    /**
+     * Post batch entry
+     *
+     *
+     */
+    public function postSingleoff()
+    {
+        $rules1 = Sheep::$rules['single'];
+        $rules2 = Sheep::$rules['where_to'];
+        $rules3 = Sheep::$rules['dates'];
+        $validation = Validator::make(Input::all(), $rules1 + $rules2 + $rules3);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $id             = Input::get('id');
+        $flock_number   = Input::get('flock_number');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $destination    = Input::get('destination');
+        $count          = Input::get('count');
+        $date_applied   = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+
+                $tags = New Single;
+                $tags->user_id      = $id;
+                $tags->flock_number = $flock_number;
+                $tags->count        = $count;
+                $tags->destination  = $destination;
+                $tags->date_applied = $date_applied;
+                $tags->save();
+
+        return Redirect::back()->withInput(
+            [
+                'day'           =>$d,
+                'month'         =>$m,
+                'year'          =>$y,
+                'flock_number'  =>$flock_number,
+                'destination'   =>$destination
+            ]);
+    }
+
+    public function getSinglelist()
+    {
+        $batches = Single::view();
+
+        return View::make('sheepsinglelist')->with([
+            'id'=>$this->user(),
+            'batches' => $batches,
+            'title' => 'Batch tag Applications'
+        ]);
     }
 }
