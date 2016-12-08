@@ -149,7 +149,7 @@ class Sheep extends Model
     public function scopeSearchByTag($query,$tag)
     {
         $user = Auth::user()->id;
-        $query->where('user_id',$user)
+        $query->withTrashed('user_id',$user)
             ->where('e_tag',$tag )
             ->orWhere('e_tag_1',$tag )
             ->orWhere('e_tag_2',$tag )
