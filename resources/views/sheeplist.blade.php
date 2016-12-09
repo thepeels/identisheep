@@ -12,7 +12,7 @@
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
-        @if(Request::path() === ('sheep') || Request::path() === ('sheep/tups'))
+        @if(Request::path() === ('sheep/ewes') || Request::path() === ('sheep/tups'))
             - (number of records = {{$count}})
         @endif
     </h4>
@@ -30,7 +30,7 @@
             <th>Old Tags</th>
             <th>Older Tags</th>
             <th>Move on</th>
-            @if(Request::path() !== 'sheep/list' && Request::path() !== ('sheep/tups'))
+            @if(Request::path() !== 'sheep/ewes' && Request::path() !== ('sheep/tups'))
             <th>Move Off</th>
             <th>How moved off</th>
             <th>Sex</th>
@@ -62,7 +62,7 @@
                 <td>
                     {{$date_on}}
                 </td>
-                @if(Request::path() !== 'sheep/list' && Request::path() !== ('sheep/tups'))
+                @if(Request::path() !== 'sheep/ewes' && Request::path() !== ('sheep/tups'))
                     <td>
                         {{$date_off}}
                     </td>

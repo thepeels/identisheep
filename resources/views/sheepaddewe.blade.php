@@ -12,6 +12,14 @@
     <title>{!! $title !!}</title>
         {{date('d-m-Y',strtotime('second friday september 2015'))}}
 @stop
+<?  if($home_bred == 'true'){
+        $home_bred = TRUE;
+    }
+    else {
+        $home_bred = FALSE;
+    }
+?>
+
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{!! $title !!}</h4>
@@ -26,6 +34,7 @@
 
         {!!Form::input('hidden','id',$id)!!}
         {!!Form::input('hidden','sex',$sex)!!}
+        {!!Form::input('hidden','home_bred',$home_bred)!!}<br>
         {!!Form::label('text','UK 0')!!}
         {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
         {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number'])!!}<br>

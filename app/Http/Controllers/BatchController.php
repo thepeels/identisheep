@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Sheep;
 use App\Models\Single;
+use App\Models\Homebred;
 use Auth,View,Input,Redirect,Validator,Session,DB;
 
 class BatchController extends Controller {
@@ -20,8 +21,7 @@ class BatchController extends Controller {
         $this->middleware('auth');
     }
     public static function user(){
-        $user = Auth::user()->id;
-        return $user;
+        return Auth::user()->id;
     }
     public function getBatchops()
     {
@@ -115,7 +115,7 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-            //dd($ewelist);
+
             foreach ($ewelist[2] as $ewe) {
                     $e_flock = substr($ewe, -11, 6);
                     $e_tag = substr($ewe, -5);
@@ -128,6 +128,7 @@ class BatchController extends Controller {
             exit();
         }
         if(Input::get('load')) {
+
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe, -5);
@@ -145,9 +146,8 @@ class BatchController extends Controller {
                         $ewe->e_tag             = $e_tag;
                         $ewe->original_e_tag    = $e_tag;
                         $ewe->move_on           = $move_on;
-                        //$ewe->off_how           = $destination;
+
                         $ewe->save();
-                        //$ewe->delete();
                     }
                 }
             }
@@ -161,11 +161,12 @@ class BatchController extends Controller {
      *
      * @return view
      */
-    public function getBatch()
+    public function getBatch($home_bred)
     {
         return View::make('sheepbatch')->with([
             'id'=>$this->user(),
-            'title' => 'Enter Batch of tags'
+            'title' => 'Enter Batch of tags',
+            'home_bred' => $home_bred
         ]);
     }
 
@@ -182,6 +183,7 @@ class BatchController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $id             = Input::get('id');
+        $home_bred      = Input::get('home_bred');
         $flock_number   = Input::get('flock_number');
         $start_tag      = Input::get('start_tag');
         $end_tag        = Input::get('end_tag');
@@ -195,12 +197,14 @@ class BatchController extends Controller {
         if ($start_tag <= $end_tag){
             $i = $start_tag;
 
+            $hb = 0;
             while ($i <= $end_tag){
-
                 $sheep_exists = Sheep::check($flock_number,$i,$id);
                 if($i != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
+                        $hb++;
+
                         $ewe = new Sheep();
 
                         $ewe->local_id = $l;
@@ -216,9 +220,19 @@ class BatchController extends Controller {
                         $ewe->sex = 'female';
 
                         $ewe->save();
+
+
                     }
                 }
                 $i++;
+            }
+            if($home_bred == TRUE){
+                $tag = new Homebred();
+                $tag->e_flock       = $flock_number;
+                $tag->date_applied  = $move_on;
+                $tag->user_id       = $id;
+                $tag->count         = $hb;
+                $tag->save();
             }
         }
         $l=NULL;
@@ -355,12 +369,24 @@ class BatchController extends Controller {
 
     public function getSinglelist()
     {
-        $batches = Single::view();
+        $batches = Single::view($this->user());
 
         return View::make('sheepsinglelist')->with([
             'id'=>$this->user(),
             'batches' => $batches,
             'title' => 'Batch tag Applications'
+        ]);
+    }
+    public function getHomebredlist()
+    {
+        //$count = Homebred::where('user_id',$this->user())->sum('count');
+        $count  = Homebred::howmany($this->user());
+        $tags   = Homebred::numbers($this->user());
+
+        return view('homebredlist')->with([
+            'title'=>'Home Bred Sheep, EID Tags Applied (total = '.$count.')',
+            'count'=>$count,
+            'tags'  => $tags
         ]);
     }
 }

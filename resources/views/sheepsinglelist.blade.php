@@ -17,7 +17,7 @@
         <div class="no-print">
             {!! $batches->render() !!}
         </div>
-        <table class="table table-striped table-bordered table-sm table-condensed print" >
+        <table class="table table-striped table-bordered table-sm table-condensed print medium-width" >
         <thead>
         <tr>
             <th>Date</th>

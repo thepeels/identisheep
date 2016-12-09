@@ -42,11 +42,12 @@ $help_page = $elements[sizeof($elements)-1];
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep">Ewes</a></li>
+							<li><a href="/sheep/ewes">Ewes</a></li>
 							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid">Non-EID</a></li>
 							<li><a href="/sheep/replaced">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Batch Tags Used</a></li>
+							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
@@ -54,14 +55,17 @@ $help_page = $elements[sizeof($elements)-1];
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep Entry<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/addewe">Add a Ewe</a></li>
-							<li><a href="/sheep/addtup">Add a Tup</a></li>
+							<li><a href="/sheep/addewe/false">Add a Ewe</a></li>
+							<li><a href="/sheep/addewe/true">Add a Home Bred Ewe</a></li>
+							<li><a href="/sheep/addtup/false">Add a Tup</a></li>
+							<li><a href="/sheep/addtup/true">Add a Home Bred Tup</a></li>
 						</ul>
 					</li>
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/batch/batch">Batch On</a></li>
+							<li><a href="/batch/batch/false">Batch On</a></li>
+							<li><a href="/batch/batch/true">Home Bred Batch On</a></li>
 							<li><a href="/batch/batchopson">.csv Batch On</a></li>
 						</ul>
 					</li>

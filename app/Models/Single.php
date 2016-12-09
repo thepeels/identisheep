@@ -1,7 +1,6 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
 
 class Single extends Model {
 
@@ -14,14 +13,8 @@ class Single extends Model {
         'destination',
         'date-applied'
     ];
-    public static function view()
+    public function scopeView($query,$id)
     {
-        $batches = self::where('user_id' ,self::user())->paginate(20);
-        return $batches;
-    }
-    public static function user()
-    {
-        $user = Auth::user()->id;
-        return $user;
+        return $query->where('user_id',$id)->paginate(20);
     }
 }

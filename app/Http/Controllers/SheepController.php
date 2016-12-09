@@ -29,22 +29,19 @@ class SheepController extends Controller {
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','female')
             ->get();
-        /*$count = Homebred::count(1)->get();
-        foreach($count as $count){$thecount = $count->count;}
-        'count'=>$thecount,*/
+        $count = Homebred::where('user_id',$this->user())->sum('count');
+        //dd$count['count'];
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'All Female Sheep',
-            'count'=>Sheep::where('user_id',$this->user())
-                ->where('sex','female')
-                ->count()
+            'count'=>$count
             ]);
 	}
-    public static function user(){
-        $user = Auth::user()->id;
-        return $user;
+    public static function user()
+    {
+        return Auth::user()->id;
     }
-    public function getList()
+    public function getEwes()
     {
         $ewes = Sheep::where('user_id',$this->user())
             ->where('sex','female')
@@ -126,41 +123,6 @@ class SheepController extends Controller {
 
     }
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-
-	public function getEdit($id)
-	{
-		$ewe = Sheep::where('id',$id)->first();
-        //foreach($ewe as $ewes);
-        $number = $ewe->e_flock.' '.sprintf('%05d',$ewe->e_tag);
-        return 'edit sheep number '.$number;
-	}
-*/
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -360,22 +322,24 @@ class SheepController extends Controller {
                 'colour_of_tag' =>$colour_of_tag
             ]);
     }
-    public function getAddewe()
+    public function getAddewe($home_bred)
     {
         return View::make('sheepaddewe')
             ->with([
                 'title'     => 'Add a Ewe',
                 'id'        =>  $this->user(),
-                'sex'       => 'female'
+                'sex'       => 'female',
+                'home_bred'  => $home_bred
             ]);
     }
-    public function getAddtup()
+    public function getAddtup($home_bred)
     {
         return View::make('sheepaddewe')
             ->with([
                 'title'     => 'Add a Tup',
                 'id'        =>  $this->user(),
-                'sex'       => 'male'
+                'sex'       => 'male',
+                'home_bred'  => $home_bred
             ]);
     }
     public function postAddewe()
@@ -385,7 +349,8 @@ class SheepController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $user_id             = $this->user();
+        $user_id        = $this->user();
+        $home_bred      = Input::get('home_bred');
         $e_flock        = Input::get('e_flock');
         $e_flock_number = $e_flock;
         $e_tag          = Input::get('e_tag');
@@ -412,12 +377,14 @@ class SheepController extends Controller {
             $ewe->sex = Input::get('sex');
             $ewe->save();
 
-            $tag = new Homebred();
-            $tag->e_flock       = $e_flock_number;
-            $tag->date_applied  = $move_on;
-            $tag->user_id       = $user_id;
-            $tag->count         = 1;
-            $tag->save();
+            if($home_bred == TRUE){
+                $tag = new Homebred();
+                $tag->e_flock       = $e_flock_number;
+                $tag->date_applied  = $move_on;
+                $tag->user_id       = $user_id;
+                $tag->count         = 1;
+                $tag->save();
+            }
         }
 
         return Redirect::back()->withInput([Input::except('e_tag')]);/*[
@@ -511,7 +478,7 @@ class SheepController extends Controller {
     {
         $tag = Input::get('tag');
 
-        $ewes = Sheep::searchByTag($tag)->paginate(20);
+        $ewes = Sheep::searchByTag($this->user(),$tag);
         return View::make('searchresult')->with([
             'ewes'=>$ewes,
             'title'=>'Search Results for Tag '.$tag

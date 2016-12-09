@@ -2,6 +2,13 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
+<?  if($home_bred == 'true'){
+    $home_bred = TRUE;
+}
+else {
+    $home_bred = FALSE;
+}
+?>
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{!! $title !!} - Movement of sheep onto holding</h4>
@@ -10,6 +17,7 @@
         {!!Form::open(array('url' => '/batch/batch','class'=>'form-inline'))!!}
 
         {!!Form::input('hidden','id',$id) !!}
+        {!!Form::input('hidden','home_bred',$home_bred)!!}<br>
 
         {!!Form::label('text','Entry Date') !!}
         {!!Form::input('int','day',date('d'),['class'=>'new_class','placeholder'=>'DD','size' => '1']) !!}

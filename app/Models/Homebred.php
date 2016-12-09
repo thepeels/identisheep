@@ -35,8 +35,12 @@ class Homebred extends Model {
             ->where('date_applied','<',$date_to)
             ->get();
     }
-    public function scopeCount($query, $id)
+    public function scopeNumbers($query,$id)
     {
-        return $query->where('user_id',$id);
+        return $query->where('user_id',$id)->get();
+    }
+    public function scopeHowmany($query, $id)
+    {
+        return $query->where('user_id',$id)->sum('count');
     }
 }

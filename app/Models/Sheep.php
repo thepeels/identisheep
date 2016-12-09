@@ -77,10 +77,14 @@ class Sheep extends Model
         $ewe = Sheep::where('id', $id)->first();
         return $ewe;
     }*/
-    public function scopeGetById($ewe,$id)
+    /*public function scopeGetById($ewe,$id)
     {
         $ewe = Sheep::withTrashed('id', $id)->first();
         return $ewe;
+    }*/
+    public function scopeGetById($query,$id)
+    {
+        return  $query->where('id',$id)->first();
     }
 
     public static function getByTag($flock, $tag)
@@ -151,14 +155,14 @@ class Sheep extends Model
 //dd($count);
         return [$ewes,$count];
     }
-    public function scopeSearchByTag($query,$tag)
+    public function scopeSearchByTag($query,$id,$tag)
     {
-        $user = Auth::user()->id;
-        $query->withTrashed('user_id',$user)
+        //$user = Auth::user()->id;
+        return $query->withTrashed('user_id',$id)
             ->where('e_tag',$tag )
             ->orWhere('e_tag_1',$tag )
             ->orWhere('e_tag_2',$tag )
-            ->get();
-        return $query;
+            ->paginate(20);
+        //return $query;
     }
 }
