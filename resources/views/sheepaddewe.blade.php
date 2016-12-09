@@ -27,8 +27,8 @@
         {!!Form::input('hidden','id',$id)!!}
         {!!Form::input('hidden','sex',$sex)!!}
         {!!Form::label('text','UK 0')!!}
-        {!!Form::input('text','e_flock',NULL,['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
-        {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>$sex])!!}<br>
+        {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
+        {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number'])!!}<br>
         {!!Form::label('text','Tag Colour')!!}
         {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
         {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}

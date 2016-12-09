@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Models\Homebred;
 use App\Models\Sheep;
 use Auth,View,Input,Redirect,Validator,Session,Carbon\Carbon,DB;
 use Illuminate\Pagination\Paginator;
@@ -28,6 +29,9 @@ class SheepController extends Controller {
 		$ewes = Sheep::where('user_id',$this->user())
             ->where('sex','female')
             ->get();
+        /*$count = Homebred::count(1)->get();
+        foreach($count as $count){$thecount = $count->count;}
+        'count'=>$thecount,*/
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'All Female Sheep',
@@ -407,6 +411,13 @@ class SheepController extends Controller {
             $ewe->colour_of_tag = $colour_of_tag;
             $ewe->sex = Input::get('sex');
             $ewe->save();
+
+            $tag = new Homebred();
+            $tag->e_flock       = $e_flock_number;
+            $tag->date_applied  = $move_on;
+            $tag->user_id       = $user_id;
+            $tag->count         = 1;
+            $tag->save();
         }
 
         return Redirect::back()->withInput([Input::except('e_tag')]);/*[
