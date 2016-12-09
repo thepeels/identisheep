@@ -50,6 +50,7 @@ $help_page = $elements[sizeof($elements)-1];
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
+					<li><a href="/sheep/search">Search Tags</a></li>
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep Entry<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">

@@ -76,7 +76,11 @@
         @endforeach
         </tbody>
     </table>
-
+        <a href="search"
+           class="btn btn-default btn-xs"
+           style="margin-bottom:-1px;"
+           title="Edit this Sheep">Search Again
+        </a>
     </div>
 @stop
 

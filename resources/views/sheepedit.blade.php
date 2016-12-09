@@ -23,7 +23,7 @@
     <br><br>
     {!! Form::label('text','New Numbers') !!}<br>
     {!!Form::label('text','UK 0')!!}
-    {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>' New Flock Number'])!!}
+    {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>' New Flock Number','autofocus'=>"autofocus"])!!}
     {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>' New Number'])!!}
     <br><br>
     {!!Form::submit('Add/Change',['class'=>'btn btn-info btn-xs'])!!}

@@ -9,7 +9,7 @@
         {!!Form::open(array('url' => '/sheep/search','class'=>'form-inline'))!!}
 
         {!!Form::label('text','Tag Serial Number')!!}
-        {!!Form::input('text','tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Number'])!!}
+        {!!Form::input('text','tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Number','autofocus'=>TRUE])!!}
         {!!$errors->first('tag','<small style="color:#f00">:message</small>')!!}<br>
 
         <?if (null !=(Session::get('find_error'))){
