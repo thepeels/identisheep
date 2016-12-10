@@ -11,10 +11,11 @@ class Single extends Model {
         'count',
         'flock_number',
         'destination',
-        'date-applied'
+        'date_applied'
     ];
     public function scopeView($query,$id)
     {
         return $query->where('user_id',$id)->paginate(20);
     }
+
 }

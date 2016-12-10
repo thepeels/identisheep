@@ -4,7 +4,7 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        <h4>{!! $title !!} - Movement of single tagged sheep Off holding</h4>
+        <h4>{!! $title !!} - Single Tagged Sheep Off Holding</h4>
         {!!Form::open(array('url' => '/batch/singleoff','class'=>'form-inline'))!!}
 
         {!!Form::input('hidden','id',$id) !!}

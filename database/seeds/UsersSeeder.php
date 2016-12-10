@@ -12,6 +12,7 @@ class UsersSeeder extends DatabaseSeeder
                 "name" 			=> "John Corley",
                 "password" 		=> Hash::make("notmine"),
                 "email"    		=> "john@jjc.me",
+                "flock"    		=> "109680",
                 "both_emails"	=> FALSE,
                 "superuser"		=> TRUE
             ],
@@ -20,6 +21,7 @@ class UsersSeeder extends DatabaseSeeder
                 "name" 			=> "Juliet Corley",
                 "password" 		=> Hash::make("pucketty"),
                 "email"    		=> "juliet@julietcorley.com",
+                "flock"    		=> "109681",
                 "both_emails"	=> FALSE,
                 "superuser"		=> TRUE
             ],
@@ -28,6 +30,7 @@ class UsersSeeder extends DatabaseSeeder
                 "name" 			=> "Rob Corley",
                 "password" 		=> Hash::make("robert"),
                 "email"    		=> "rob@corley.co",
+                "flock"    		=> "106374",
                 "both_emails"	=> FALSE,
                 "superuser"		=> FALSE
             ],
@@ -36,6 +39,7 @@ class UsersSeeder extends DatabaseSeeder
                 "name" 			=> "A.N.Other",
                 "password" 		=> Hash::make("m¡ne20!5"),
                 "email"    		=> "other@corley.co",
+                "flock"    		=> "109682",
                 "both_emails"	=> FALSE,
                 "superuser"		=> FALSE
             ]

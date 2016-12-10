@@ -26,15 +26,12 @@ class SheepController extends Controller {
 	 */
 	public function getIndex()
 	{
-		$ewes = Sheep::where('user_id',$this->user())
-            ->where('sex','female')
-            ->get();
-        $count = Homebred::where('user_id',$this->user())->sum('count');
-        //dd$count['count'];
+		$ewes = Sheep::females($this->user());
+
         return view('sheeplist')->with([
-            'ewes'=>$ewes,
+            'ewes'=>$ewes[0],
             'title'=>'All Female Sheep',
-            'count'=>$count
+            'count'=>$ewes[1]
             ]);
 	}
     public static function user()
@@ -43,38 +40,28 @@ class SheepController extends Controller {
     }
     public function getEwes()
     {
-        $ewes = Sheep::where('user_id',$this->user())
-            ->where('sex','female')
-            ->paginate(20);
+        $ewes = Sheep::females($this->user());
+
         return view('sheeplist')->with([
-            'ewes'=>$ewes,
+            'ewes'=>$ewes[0],
             'title'=>'All Female Sheep',
-            'count'=>Sheep::where('user_id',$this->user())
-                ->where('sex','female')
-                ->count()
+            'count'=>$ewes[1]
         ]);
     }
     public function getTups()
 	{
-		$ewes = Sheep::where('user_id',$this->user())
-            ->where('sex','male')
-            ->orderBy('e_flock')
-            ->paginate(20);
+        $ewes = Sheep::tups($this->user());
+
         return view('sheeplist')->with([
-            'ewes'=>$ewes,
-            'title'=>'Male Sheep',
-            'count'=>Sheep::where('user_id',$this->user())
-                ->where('sex','male')
-                ->count()
-            ]);
+            'ewes'=>$ewes[0],
+            'title'=>'All Tups ',
+            'count'=>$ewes[1]
+        ]);
 	}
     public function getOfflist()
     {
-        $ewes = Sheep::onlyTrashed()
-            ->where('user_id',$this->user())
-            ->where('off_how','not like','died'.'%')
-            ->orderBy('move_off','DESC')
-            ->paginate(20);
+        $ewes = Sheep::offList($this->user());
+
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'Sheep Moved Off'
@@ -82,11 +69,8 @@ class SheepController extends Controller {
     }
     public function getDeadlist()
     {
-        $ewes = Sheep::onlyTrashed()
-            ->where('user_id',$this->user())
-            ->where('off_how','like','died'.'%')
-            ->orderBy('e_flock')
-            ->paginate(20);
+        $ewes = Sheep::dead($this->user());
+
         return view('sheeplist')->with([
             'ewes'=>$ewes,
             'title'=>'Dead List'
@@ -116,7 +100,6 @@ class SheepController extends Controller {
         $year = Input::get('year');
         $date = Carbon::create($year,12,31,0);
         $date = $date->toDateTimeString();
-        //dd($date);
         Sheep::withTrashed()->where('move_on','<=',$date)->forceDelete();
 
         return Redirect::to('sheep/list');
@@ -468,7 +451,7 @@ class SheepController extends Controller {
     }
     public function getReplaced()
     {
-        $ewes = Sheep::replaced('ewes');
+        $ewes = Sheep::replaced($this->user());
 
         return View::make('replacement_tags')->with([
             'ewes'=>$ewes[0],

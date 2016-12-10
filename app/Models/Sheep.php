@@ -143,23 +143,38 @@ class Sheep extends Model
         ]
 
     ];
-    public static function replaced()
+    public function scopeReplaced($query,$id)
     {
-        $user = Auth::user()->id;
-        $ewes = self::where('user_id',$user)
-            ->whereRaw('`e_tag`!=`original_e_tag`')
-            ->orderBy('updated_at')
-            ->paginate(20);
-        $count = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->count();
-
+        $ewes = $query->where('user_id',$id)->whereRaw('`e_tag`!=`original_e_tag`')
+            ->orderBy('updated_at')->paginate(20);
+        $count = $query->where('user_id',$id)->whereRaw('`e_tag`!=`original_e_tag`')->count();
         return [$ewes,$count];
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
-        return $query->withTrashed('user_id',$id)
-            ->where('e_tag',$tag )
-            ->orWhere('e_tag_1',$tag )
-            ->orWhere('e_tag_2',$tag )
-            ->paginate(20);
+        return $query->withTrashed('user_id',$id)->where('e_tag',$tag )
+            ->orWhere('e_tag_1',$tag )->orWhere('e_tag_2',$tag )->paginate(20);
+    }
+    public function scopeFemales($query,$id)
+    {
+        $ewes = $query->where('user_id',$id)->where('sex','female')->paginate(20);
+        $count = $query->where('user_id',$id)->where('sex','female')->count();
+        return [$ewes,$count];
+    }
+    public function scopeTups($query,$id)
+    {
+        $ewes = $query->where('user_id',$id)->where('sex','male')->paginate(20);
+        $count = $query->where('user_id',$id)->where('sex','male')->count();
+        return [$ewes,$count];
+    }
+    public function scopeOffList($query,$id)
+    {
+        return $query->onlyTrashed()->where('user_id',$id)
+            ->where('off_how','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
+    }
+    public function scopeDead($query,$id)
+    {
+        return $query->onlyTrashed()->where('user_id',$id)
+            ->where('off_how','like','died'.'%')->orderBy('e_flock')->paginate(20);
     }
 }
