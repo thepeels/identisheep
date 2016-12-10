@@ -2,17 +2,14 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
-<?  if($home_bred == 'true'){
-    $home_bred = TRUE;
-}
-else {
-    $home_bred = FALSE;
-}
-?>
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        <h4>{!! $title !!} - Movement of sheep onto holding</h4>
-        <h5>(A continuous series of tags with no spaces.)</h5>
+        @if($home_bred == 'false')<?$home_bred = FALSE;?>
+            <h4>{!! $title !!}</h4>
+        @else
+            <h4>{!! $alt_title !!}</h4>
+        @endif
+            <h5>(A continuous series of tags with no spaces.)</h5>
         <h5>Start a new batch after any spaces in the series.</h5>
         {!!Form::open(array('url' => '/batch/batch','class'=>'form-inline'))!!}
 
@@ -27,10 +24,15 @@ else {
         {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
-        {!!Form::label('text','UK 0 ')!!}
-        {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
-        {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
-
+        @if($home_bred == FALSE)
+            {!!Form::label('text','UK 0 ')!!}
+            {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+            {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
+        @else
+            {!!Form::label('text','UK 0 '.$home_bred)!!}
+            {!!Form::input('hidden','flock_number',$home_bred,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+            {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
+        @endif
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
         {!!Form::input('int','start_tag',NULL,['class'=>'new_class','placeholder'=>'Start Tag Number'])!!}<br>
         {!!$errors->first('start_tag','<small style="color:#f00">:message</small>')!!}<br>

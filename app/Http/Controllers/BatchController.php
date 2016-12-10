@@ -165,7 +165,8 @@ class BatchController extends Controller {
     {
         return View::make('sheepbatch')->with([
             'id'=>$this->user(),
-            'title' => 'Enter Batch of tags',
+            'title' => 'Enter Batch of Tags - Movement of Sheep onto Holding',
+            'alt_title' => 'Enter Batch of Tags - Home Bred Sheep Entering Flock',
             'home_bred' => $home_bred
         ]);
     }
@@ -226,9 +227,9 @@ class BatchController extends Controller {
                 }
                 $i++;
             }
-            if($home_bred == TRUE){
+            if($home_bred !== FALSE){
                 $tag = new Homebred();
-                $tag->e_flock       = $flock_number;
+                $tag->e_flock       = $home_bred;
                 $tag->date_applied  = $move_on;
                 $tag->user_id       = $id;
                 $tag->count         = $hb;

@@ -22,6 +22,8 @@
 $url = Request::path();
 $elements = explode('/', $url);
 $help_page = $elements[sizeof($elements)-1];
+		if (Auth::check()){$home_flock = Auth::user()->flock;}
+		else{$home_flock = 'false';}
 ?>
 <body>
 	<nav class="navbar navbar-default">
@@ -56,16 +58,16 @@ $help_page = $elements[sizeof($elements)-1];
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep Entry<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/addewe/false">Add a Ewe</a></li>
-							<li><a href="/sheep/addewe/true">Add a Home Bred Ewe</a></li>
+							<li><a href="/sheep/addewe/{{$home_flock}}">Add a Home Bred Ewe</a></li>
 							<li><a href="/sheep/addtup/false">Add a Tup</a></li>
-							<li><a href="/sheep/addtup/true">Add a Home Bred Tup</a></li>
+							<li><a href="/sheep/addtup/{{$home_flock}}">Add a Home Bred Tup</a></li>
 						</ul>
 					</li>
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/batch/batch/false">Batch On</a></li>
-							<li><a href="/batch/batch/true">Home Bred Batch On</a></li>
+							<li><a href="/batch/batch/{{$home_flock}}">Home Bred Batch On</a></li>
 							<li><a href="/batch/batchopson">.csv Batch On</a></li>
 						</ul>
 					</li>

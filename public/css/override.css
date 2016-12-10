@@ -7,5 +7,5 @@ div.scrolling-area{height: 800px;overflow: auto;}
     visibility: hidden;
 }
 .new_class {padding-left:5px;}
-.narrow{width:300px;}
-.medium-width{width:700px;}
+.narrow{width:30%;}
+.medium-width{width:50%;}

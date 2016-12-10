@@ -146,23 +146,20 @@ class Sheep extends Model
     public static function replaced()
     {
         $user = Auth::user()->id;
-        //$ewes = DB::raw('SELECT * FROM `sheep` WHERE `user_id`= $user and `e_tag`!=`original_e_tag`')->paginate(20);
         $ewes = self::where('user_id',$user)
             ->whereRaw('`e_tag`!=`original_e_tag`')
             ->orderBy('updated_at')
             ->paginate(20);
         $count = self::where('user_id',$user)->whereRaw('`e_tag`!=`original_e_tag`')->count();
-//dd($count);
+
         return [$ewes,$count];
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
-        //$user = Auth::user()->id;
         return $query->withTrashed('user_id',$id)
             ->where('e_tag',$tag )
             ->orWhere('e_tag_1',$tag )
             ->orWhere('e_tag_2',$tag )
             ->paginate(20);
-        //return $query;
     }
 }

@@ -327,6 +327,7 @@ class SheepController extends Controller {
         return View::make('sheepaddewe')
             ->with([
                 'title'     => 'Add a Ewe',
+                'alt_title' => 'Add a Home Bred Ewe',
                 'id'        =>  $this->user(),
                 'sex'       => 'female',
                 'home_bred'  => $home_bred
@@ -337,6 +338,7 @@ class SheepController extends Controller {
         return View::make('sheepaddewe')
             ->with([
                 'title'     => 'Add a Tup',
+                'alt_title'     => 'Add a Home Bred Tup',
                 'id'        =>  $this->user(),
                 'sex'       => 'male',
                 'home_bred'  => $home_bred
@@ -377,9 +379,9 @@ class SheepController extends Controller {
             $ewe->sex = Input::get('sex');
             $ewe->save();
 
-            if($home_bred == TRUE){
+            if($home_bred !== FALSE){
                 $tag = new Homebred();
-                $tag->e_flock       = $e_flock_number;
+                $tag->e_flock       = $home_bred;
                 $tag->date_applied  = $move_on;
                 $tag->user_id       = $user_id;
                 $tag->count         = 1;
