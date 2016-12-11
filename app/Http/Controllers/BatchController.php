@@ -380,13 +380,12 @@ class BatchController extends Controller {
     }
     public function getHomebredlist()
     {
-        //$count = Homebred::where('user_id',$this->user())->sum('count');
         $count  = Homebred::howmany($this->user());
         $tags   = Homebred::numbers($this->user());
 
         return view('homebredlist')->with([
             'title'=>'Home Bred Sheep, EID Tags Applied (total = '.$count.')',
-            'count'=>$count,
+            //'count'=>$count,
             'tags'  => $tags
         ]);
     }

@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Homebred;
 use App\Models\Sheep;
+use App\user;
 use Auth,View,Input,Redirect,Validator,Session,Carbon\Carbon,DB;
 use Illuminate\Pagination\Paginator;
 
@@ -206,16 +207,15 @@ class SheepController extends Controller {
         }
         if (Input::get('view')){
             return View::make('sheepview')->with([
-                //'ewe'           =>$ewe,
                 'id'            =>$ewe->id,
                 'title'         =>'Details for Sheep number ',
                 'e_flock'       =>$e_flock,
                 'e_tag'         =>$ewe->e_tag,
-                'e_tag_1'        =>$ewe->e_tag_1,
-                'e_tag_2'        =>$ewe->e_tag_2,
+                'e_tag_1'       =>$ewe->e_tag_1,
+                'e_tag_2'       =>$ewe->e_tag_2,
                 'original_e_flock'=>$ewe->original_e_flock,
                 'original_e_tag'=>$ewe->original_e_tag,
-                'colour_of_tag'  =>$ewe->colour_of_tag,
+                'colour_of_tag' =>$ewe->colour_of_tag,
                 'move_on'       =>$ewe->move_on,
                 'sex'           =>$ewe->sex
             ]);
@@ -247,13 +247,12 @@ class SheepController extends Controller {
             'title' => 'Enter Batch of tags'
         ]);
     }
-
     /**
      * Post batch entry
      *
      *
      */
-    public function postBatch()
+   /* public function postBatch()
     {
         $rules = Sheep::$rules['batch'];
         $validation = Validator::make(Input::all(), $rules);
@@ -304,7 +303,7 @@ class SheepController extends Controller {
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);
-    }
+    }*/
     public function getAddewe($home_bred)
     {
         return View::make('sheepaddewe')

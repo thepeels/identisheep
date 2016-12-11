@@ -26,6 +26,7 @@ class Homebred extends Model {
         return $query->where('user_id',$id)
             ->where('date_applied','>=',$date_from)
             ->where('date_applied','<',$date_to)
+            ->orderBy('date_applied')
             ->sum('count');
     }
     public function scopeListByDate($query,$id,$date_from,$date_to)
@@ -33,11 +34,12 @@ class Homebred extends Model {
         return $query->where('user_id',$id)
             ->where('date_applied','>=',$date_from)
             ->where('date_applied','<',$date_to)
+            ->orderBy('date_applied')
             ->get();
     }
     public function scopeNumbers($query,$id)
     {
-        return $query->where('user_id',$id)->get();
+        return $query->where('user_id',$id)->orderBy('date_applied')->get();
     }
     public function scopeHowmany($query, $id)
     {
