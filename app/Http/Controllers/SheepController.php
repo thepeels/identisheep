@@ -41,7 +41,7 @@ class SheepController extends Controller {
     }
     public function getEwes()
     {
-        $ewes = Sheep::females($this->user());
+        $ewes = Sheep::stock($this->user(),'female');
 
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
@@ -51,7 +51,7 @@ class SheepController extends Controller {
     }
     public function getTups()
 	{
-        $ewes = Sheep::tups($this->user());
+        $ewes = Sheep::stock($this->user(),'male');
 
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],

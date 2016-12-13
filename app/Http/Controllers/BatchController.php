@@ -82,7 +82,7 @@ class BatchController extends Controller {
                 $ewe->delete();
             }
         }
-        return Redirect::to('sheep/list');
+        return Redirect::to('sheep/ewe');
     }
     public function getBatchopson()
     {
@@ -152,7 +152,7 @@ class BatchController extends Controller {
                 }
             }
         }
-        return Redirect::to('sheep/list');
+        return Redirect::to('sheep/ewe');
     }
     /**
      * Load Batch entry form

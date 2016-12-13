@@ -155,16 +155,10 @@ class Sheep extends Model
         return $query->withTrashed('user_id',$id)->where('e_tag',$tag )
             ->orWhere('e_tag_1',$tag )->orWhere('e_tag_2',$tag )->paginate(20);
     }
-    public function scopeFemales($query,$id)
+    public function scopeStock($query,$id,$sex)
     {
-        $ewes = $query->where('user_id',$id)->where('sex','female')->paginate(20);
-        $count = $query->where('user_id',$id)->where('sex','female')->count();
-        return [$ewes,$count];
-    }
-    public function scopeTups($query,$id)
-    {
-        $ewes = $query->where('user_id',$id)->where('sex','male')->paginate(20);
-        $count = $query->where('user_id',$id)->where('sex','male')->count();
+        $ewes = $query->where('user_id',$id)->where('sex',$sex)->paginate(20);
+        $count = $query->where('user_id',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
     public function scopeOffList($query,$id)
