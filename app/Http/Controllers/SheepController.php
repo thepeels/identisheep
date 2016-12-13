@@ -247,63 +247,6 @@ class SheepController extends Controller {
             'title' => 'Enter Batch of tags'
         ]);
     }
-    /**
-     * Post batch entry
-     *
-     *
-     */
-   /* public function postBatch()
-    {
-        $rules = Sheep::$rules['batch'];
-        $validation = Validator::make(Input::all(), $rules);
-        if ($validation->fails()) {
-            return Redirect::back()->withInput()->withErrors($validation->messages());
-        }
-        $id             = Input::get('id');
-        $flock_number   = Input::get('flock_number');
-        $start_tag      = Input::get('start_tag');
-        $end_tag        = Input::get('end_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $colour_of_tag  = Input::get('colour_of_tag');
-        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->max('id');
-        if ($start_tag < $end_tag){
-            $i = $start_tag;
-            while ($i <= $end_tag){
-                $l++;
-                $ewe = Sheep::firstOrNew([
-                    'e_flock'           =>  $flock_number,
-                    'e_tag'             =>  $i,
-                    'user_id'           =>  $id,
-                ]);
-                if(!Sheep::where('e_flock',$flock_number)
-                    ->where('e_tag',$i)
-                    ->where('user_id',$id)){
-                    $ewe->local_id      = $l;
-                }
-                $ewe->original_e_flock  = $flock_number;
-                $ewe->colour_flock      = $flock_number;
-                $ewe->original_e_tag    = $i;
-                $ewe->colour_tag        = $i;
-                $ewe->move_on           = $move_on;
-                $ewe->colour_of_tag     = $colour_of_tag;
-
-                $ewe->save();
-            $i++;
-
-            }
-        }
-        return Redirect::back()->withInput(
-            [
-                'day'           =>$d,
-                'month'         =>$m,
-                'year'          =>$y,
-                'flock_number'  =>$flock_number,
-                'colour_of_tag' =>$colour_of_tag
-            ]);
-    }*/
     public function getAddewe($home_bred)
     {
         return View::make('sheepaddewe')
@@ -381,7 +324,55 @@ class SheepController extends Controller {
 
         ]);*/
     }
+    public function getSheepoff($sex)
+    {
+        return View::make('sheepoff')->with([
+            'title'     => 'Single '.ucwords($sex).' Sheep Off',
+            'id'        => $this->user(),
+            'sex'       => $sex,
+            'e_flock'   => NULL,
+            'e_tag'     => NULL
+        ]);
+    }
+    public function postSheepoff()
+    {
+        $rules = Sheep::$rules['dates_and_tags'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $e_flock        = Input::get('e_flock');
+        $e_flock_number = $e_flock;
+        $e_tag          = Input::get('e_tag');
+        $d              = Input::get('day');
+        $m              = Input::get('month');
+        $y              = Input::get('year');
+        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $destination       = Input::get('destination');
 
+        $ewe = Sheep::firstOrNew([
+            'e_flock'           =>  $e_flock_number,
+            'e_tag'             =>  $e_tag,
+            'user_id'           =>  $this->user()
+        ]);
+        $ewe->original_e_flock  =  $e_flock_number;
+        $ewe->colour_flock      =  $e_flock_number;
+        $ewe->e_tag             =  $e_tag;
+        $ewe->move_off          = $move_off;
+        $ewe->off_how           = $destination;
+        $ewe->sex               = Input::get('sex');
+        $ewe->save();
+        $ewe->delete();
+
+        return Redirect::back()->with([
+            'title'     => 'Single '.ucwords($ewe->sex).' Sheep Off',
+            'id'        => $this->user(),
+            'e_flock'   => NULL,
+            'e_tag'     => NULL,
+            'sex'       => $ewe->sex
+        ]);
+
+    }
 
     public function getDeath()
     {
