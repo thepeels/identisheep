@@ -19,11 +19,9 @@
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','UK 0 ')!!}
-        {!!Form::input('text','e_flock',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
-        {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
-
-        {!!Form::label('text','Tag ')!!}
+        {!!Form::input('text','e_flock',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}
         {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number'])!!}<br>
+        {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('e_tag','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','Destination Holding')!!}
