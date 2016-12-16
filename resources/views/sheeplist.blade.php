@@ -12,7 +12,9 @@
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
-        @if(Request::path() === ('sheep/ewes') || Request::path() === ('sheep/tups'))
+        @if(Request::path() === ('sheep/ewes')
+                || Request::path() === ('sheep/tups')
+                || Request::path() === ('sheep/noneid'))
             - (number of records = {{$count}})
         @endif
     </h4>
@@ -27,8 +29,8 @@
             <th class="no-print">local</th>
             <th>Tag Number</th>
             <th>Original Tags</th>
-            <th>Old Tags</th>
-            <th>Older Tags</th>
+            <th class="no-print">Old Tags</th>
+            <th class="no-print">Older Tags</th>
             <th>Move on</th>
             @if(Request::path() !== 'sheep/ewes' && Request::path() !== ('sheep/tups'))
             <th>Move Off</th>
@@ -53,10 +55,10 @@
                 <td>
                     {{$ewe->original_e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->original_e_tag) .' - - ' . $ewe->colour_of_tag}}
                 </td>
-                <td>
+                <td class="no-print">
                     {{sprintf('%05d',$ewe->e_tag_1)}}
                 </td>
-                <td>
+                <td class="no-print">
                     {{sprintf('%05d',$ewe->e_tag_2)}}
                 </td>
                 <td>

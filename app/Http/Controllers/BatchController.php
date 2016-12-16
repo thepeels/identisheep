@@ -73,13 +73,16 @@ class BatchController extends Controller {
                 $ewe = Sheep::firstOrNew([
                     'e_flock' => $e_flock,
                     'e_tag' => $e_tag]);
-                $ewe->user_id           = $user;
-                $ewe->e_flock           = $e_flock;
-                $ewe->e_tag             = $e_tag;
-                $ewe->move_off          = $move_off;
-                $ewe->off_how           = $destination;
-                $ewe->save();
-                $ewe->delete();
+                //if($ewe->trashed()){
+                    $ewe->setUserId($user);
+                    $ewe->setElectronicFlockNumber($e_flock);
+                    $ewe->setTagNumber($e_tag);
+                    $ewe->setMoveOff($move_off);
+                    $ewe->setOffHow($destination);
+                    
+                    $ewe->save();
+                    $ewe->delete();
+                //}
             }
         }
         return Redirect::to('sheep/ewes');
@@ -100,12 +103,12 @@ class BatchController extends Controller {
         }
         $file_raw       = Input::file('file_raw');
         //$destination    = Input::get('destination');
-        $user           = Auth::user()->id;
+        $userId           = Auth::user()->id;
         $d              = Input::get('day');
         $m              = Input::get('month');
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->where('user_id',$user)->max('local_id');
+        $l              = DB::table('sheep')->where('user_id',$userId)->max('local_id');
         $no_spaces = preg_replace('/\s*,\s*/', ',', $file_raw);
         $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $no_spaces);
         $rawlist = str_replace(array("\r\n,"),"\r\n", $rawlist);
@@ -132,20 +135,21 @@ class BatchController extends Controller {
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe, -5);
-                $sheep_exists = Sheep::check($e_flock, $e_tag, $user);
+                $sheep_exists = Sheep::check($e_flock, $e_tag, $userId);
                 if($e_tag != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
+                        //** @var Sheep $ewe */
                         $ewe = Sheep::firstOrNew([
                             'e_flock' => $e_flock,
                             'e_tag' => $e_tag]);
-                        $ewe->user_id           = $user;
-                        $ewe->local_id          = $l;
-                        $ewe->e_flock           = $e_flock;
-                        $ewe->original_e_flock  = $e_flock;
-                        $ewe->e_tag             = $e_tag;
-                        $ewe->original_e_tag    = $e_tag;
-                        $ewe->move_on           = $move_on;
+                        $ewe->setUserId($userId);
+                        $ewe->setLocalId($l);
+                        $ewe->setElectronicFlockNumber($e_flock);
+                        $ewe->setOriginalElectronicFlockNumber($e_flock);
+                        $ewe->setTagNumber($e_tag);
+                        $ewe->setOriginalTagNumber($e_tag);
+                        $ewe->setMoveOn($move_on);
 
                         $ewe->save();
                     }
@@ -198,42 +202,42 @@ class BatchController extends Controller {
         if ($start_tag <= $end_tag){
             $i = $start_tag;
 
-            $hb = 0;
+            $home_bred_count = 0;
             while ($i <= $end_tag){
                 $sheep_exists = Sheep::check($flock_number,$i,$id);
                 if($i != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
-                        $hb++;
+                        $home_bred_count++;
 
                         $ewe = new Sheep();
 
-                        $ewe->local_id = $l;
-                        $ewe->user_id = $id;
-                        $ewe->e_flock = $flock_number;
-                        $ewe->original_e_flock = $flock_number;
-                        $ewe->colour_flock = $flock_number;
-                        $ewe->e_tag = $i;
-                        $ewe->original_e_tag = $i;
-                        $ewe->colour_tag = $i;
-                        $ewe->move_on = $move_on;
-                        $ewe->colour_of_tag = $colour_of_tag;
-                        $ewe->sex = 'female';
+                        $ewe->setLocalId($l);
+                        $ewe->setUserId($id);
+                        $ewe->setElectronicFlockNumber($flock_number);
+                        $ewe->setOriginalElectronicFlockNumber($flock_number);
+                        $ewe->setColourTagFlockNumber($flock_number);
+                        $ewe->setTagNumber($i);
+                        $ewe->setOriginalTagNumber($i);
+                        $ewe->setColourTagNumber($i);
+                        $ewe->setMoveOn($move_on);
+                        $ewe->setColourOfTag($colour_of_tag);
+                        $ewe->setSex('female');
 
                         $ewe->save();
-
 
                     }
                 }
                 $i++;
             }
             if($home_bred !== FALSE){
-                $tag = new Homebred();
-                $tag->e_flock       = $home_bred;
-                $tag->date_applied  = $move_on;
-                $tag->user_id       = $id;
-                $tag->count         = $hb;
-                $tag->save();
+                $batch_of_tags = new Homebred();
+                    $batch_of_tags->setFlockNumber($home_bred);
+                    $batch_of_tags->setDateApplied($move_on);
+                    $batch_of_tags->setUserId($id);
+                    $batch_of_tags->setCount($home_bred_count);
+                //dd($home_bred_count);
+                $batch_of_tags->save();
             }
         }
         $l=NULL;
@@ -273,7 +277,7 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $id             = Input::get('id');
+        $user_id        = Input::get('id');
         $flock_number   = Input::get('flock_number');
         $start_tag      = Input::get('start_tag');
         $end_tag        = Input::get('end_tag');
@@ -289,15 +293,16 @@ class BatchController extends Controller {
                 $ewe = Sheep::firstOrNew([
                     'e_flock'           =>  $flock_number,
                     'e_tag'             =>  $i,
-                    'user_id'           =>  $id
+                    'user_id'           =>  $user_id
                 ]);
-                $ewe->original_e_flock  = $flock_number;
-                $ewe->colour_flock      = $flock_number;
-                $ewe->original_e_tag    = $i;
-                $ewe->colour_tag        = $i;
-                $ewe->move_off           = $move_off;
-                $ewe->colour_of_tag     = $colour_of_tag;
-                $ewe->off_how           = $off_how;
+                $ewe->setOriginalElectronicFlockNumber($flock_number);
+                $ewe->setColourTagFlockNumber($flock_number);
+                $ewe->setOriginalTagNumber($i);
+                $ewe->setColourTagNumber($i);
+                $ewe->setMoveOff($move_off);
+                $ewe->setColourOfTag($colour_of_tag);
+                $ewe->setOffHow($off_how);
+
                 $ewe->save();
                 $ewe->delete();
                 $i++;
@@ -351,11 +356,11 @@ class BatchController extends Controller {
         $date_applied   = $y.'-'.$m.'-'.$d.' '.'00:00:00';
 
                 $tags = New Single;
-                $tags->user_id      = $id;
-                $tags->flock_number = $flock_number;
-                $tags->count        = $count;
-                $tags->destination  = $destination;
-                $tags->date_applied = $date_applied;
+                $tags->setUserId($id);
+                $tags->setFlockNumber($flock_number);
+                $tags->setCount($count);
+                $tags->setDestination($destination);
+                $tags->setDateApplied($date_applied);
                 $tags->save();
 
         return Redirect::back()->withInput(

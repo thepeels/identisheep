@@ -18,6 +18,60 @@ use Illuminate\Pagination\Paginator;
 class Sheep extends Model
 {
     use SoftDeletes;
+
+    /**
+     * @var int
+     */
+    protected $user_id;
+    /**
+     * @var int
+     */
+    protected $e_flock;
+    /**
+     * @var int
+     */
+    protected $original_e_flock;
+    /**
+     * @var int
+     */
+    protected $local_id;
+    /**
+     * @var string
+     */
+    protected $colour_of_tag;
+    /**
+     * @var string
+     */
+    protected $move_on;
+    /**
+     * @var string
+     */
+    protected $move_off;
+    /**
+     * @var string
+     */
+    protected $off_how;
+    /**
+     * @var int
+     */
+    protected $e_tag;
+    /**
+     * @var int
+     */
+    protected $e_tag_1;
+    /**
+     * @var int
+     */
+    protected $e_tag_2;
+    /**
+     * @var string
+     */
+    protected $colour_flock;
+    /**
+     * @var string
+     */
+    protected $sex;
+    
     /**
      * The database table used by the model.
      *
@@ -52,6 +106,202 @@ class Sheep extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->attributes['user_id'] = $user_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLocalId()
+    {
+        return $this->local_id;
+    }
+
+    /**
+     * @param int $local_id
+     */
+    public function setLocalId($local_id)
+    {
+        $this->attributes['local_id'] = $local_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getElectronicFlockNumber()
+    {
+        return $this->e_flock;
+    }
+
+    /**
+     * @param int $flock_number
+     */
+    public function setElectronicFlockNumber($flock_number)
+    {
+        $this->attributes['e_flock'] = $flock_number;
+
+    }
+
+    /**
+     * @param int $flock_number
+     */
+    public function setOriginalElectronicFlockNumber($flock_number)
+    {
+        $this->attributes['original_e_flock'] = $flock_number;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getOriginalElectronicFlockNumber()
+    {
+        return $this->original_e_flock;
+    }
+    /**
+     * @return int
+     */
+    public function getTagNumber()
+    {
+        return $this->e_tag;
+    }
+
+    /**
+     * @param int $tag_number
+     */
+    public function setTagNumber($tag_number)
+    {
+        $this->attributes['e_tag'] = $tag_number;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginalTagNumber()
+    {
+        return $this->original_e_tag;
+    }
+
+    /**
+     * @param int $tag_number
+     */
+    public function setOriginalTagNumber($tag_number)
+    {
+        $this->attributes['original_e_tag'] = $tag_number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMoveOn()
+    {
+        return $this->move_on;
+    }
+
+    /**
+     * @param string $move_on
+     */
+    public function setMoveOn($move_on)
+    {
+        $this->attributes['move_on'] = $move_on;
+    }
+    /**
+     * @return string
+     */
+    public function getMoveOff()
+    {
+        return $this->move_off;
+    }
+    /**
+     * @param string $move_off
+     */
+    public function setMoveOff($move_off)
+    {
+        $this->attributes['move_off'] = $move_off;
+    }
+    /**
+     * @return string
+     */
+    public function getOffHow()
+    {
+        return $this->off_how;
+    }
+    /**
+     * @param string $off_how
+     */
+    public function setOffHow($off_how)
+    {
+        $this->attributes['off_how'] = $off_how;
+    }
+    /**
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+    /**
+     * @param string $sex
+     */
+    public function setSex($sex)
+    {
+        $this->attributes['sex'] = $sex;
+    }
+    /**
+     * @return string
+     */
+    public function getColourOfTag()
+    {
+        return $this->colour_of_tag;
+    }
+    /**
+     * @param string $colour_of_tag
+     */
+    public function setColourOfTag($colour_of_tag)
+    {
+        $this->attributes['colour_of_tag'] = $colour_of_tag;
+    }
+    /**
+     * @return int
+     */
+    public function getColourTagNumber()
+    {
+        return $this->colour_tag;
+    }
+    /**
+     * @param int $colour_tag
+     */
+    public function setColourTagNumber($colour_tag)
+    {
+        $this->attributes['colour_tag'] = $colour_tag;
+    }
+    /**
+     * @return int
+     */
+    public function getColourTagFlockNumber()
+    {
+        return $this->colour_flock;
+    }
+    /**
+     * @param int $colour_flock
+     */
+    public function setColourTagFlockNumber($colour_flock)
+    {
+        $this->attributes['colour_flock'] = $colour_flock;
+    }
+    /**
      * @param integer
      *
      * @return array
@@ -61,10 +311,6 @@ class Sheep extends Model
     {
         return $this->belongsTo('User');
     }
-    private function userId()
-    {
-        return Auth::user()->id;
-    }
 
     public function details($id)
     {
@@ -72,16 +318,6 @@ class Sheep extends Model
         return $details;
     }
 
-    /*public static function getById($id)
-    {
-        $ewe = Sheep::where('id', $id)->first();
-        return $ewe;
-    }*/
-    /*public function scopeGetById($ewe,$id)
-    {
-        $ewe = Sheep::withTrashed('id', $id)->first();
-        return $ewe;
-    }*/
     public function scopeGetById($query,$id)
     {
         return  $query->where('id',$id)->first();
@@ -109,6 +345,9 @@ class Sheep extends Model
         return (NULL !== $ewe?:NULL);
     }
 
+    /**
+     * @var array
+     */
     public static $rules = [
         'dates_and_tags' => [
             'day'       => 'digits:2|required|min:1|max:31',
@@ -157,7 +396,7 @@ class Sheep extends Model
     }
     public function scopeStock($query,$id,$sex)
     {
-        $ewes = $query->where('user_id',$id)->where('sex',$sex)->paginate(20);
+        $ewes = $query->where('user_id',$id)->where('sex',$sex)->orderBy('move_on')->paginate(20);
         $count = $query->where('user_id',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
@@ -170,5 +409,11 @@ class Sheep extends Model
     {
         return $query->onlyTrashed()->where('user_id',$id)
             ->where('off_how','like','died'.'%')->orderBy('e_flock')->paginate(20);
+    }
+    public function scopeTotal($query,$id)
+    {
+        $ewes = $query->where('user_id',$id)->paginate(20);
+        $count = $query->where('user_id',$id)->count();
+        return [$ewes,$count];
     }
 }

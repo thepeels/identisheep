@@ -286,30 +286,31 @@ class SheepController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $sex            = Input::get('sex');
         $l              = DB::table('sheep')->where('user_id',$user_id)->max('local_id');
         $sheep_exists   = Sheep::check($e_flock_number,$e_tag,$user_id);
         if (NULL === $sheep_exists) {
             $l++;
             $ewe = new Sheep();
-            $ewe->user_id = $user_id;
-            $ewe->local_id = $l;
-            $ewe->e_flock = $e_flock_number;
-            $ewe->original_e_flock = $e_flock_number;
-            $ewe->colour_flock = $e_flock_number;
-            $ewe->e_tag = $e_tag;
-            $ewe->original_e_tag = $e_tag;
-            $ewe->colour_tag = $e_tag;
-            $ewe->move_on = $move_on;
-            $ewe->colour_of_tag = $colour_of_tag;
-            $ewe->sex = Input::get('sex');
+            $ewe->setUserId($user_id);
+            $ewe->setLocalId($l);
+            $ewe->setElectronicFlockNumber($e_flock_number);
+            $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+            $ewe->setColourTagFlockNumber($e_flock_number);
+            $ewe->setTagNumber($e_tag);
+            $ewe->setOriginalTagNumber($e_tag);
+            $ewe->setColourTagNumber($e_tag);
+            $ewe->setMoveOn($move_on);
+            $ewe->setColourOfTag($colour_of_tag);
+            $ewe->setSex($sex);
             $ewe->save();
 
             if($home_bred !== FALSE){
                 $tag = new Homebred();
-                $tag->e_flock       = $home_bred;
-                $tag->date_applied  = $move_on;
-                $tag->user_id       = $user_id;
-                $tag->count         = 1;
+                $tag->setFlockNumber($home_bred);
+                $tag->setDateApplied($move_on);
+                $tag->setUserId($user_id);
+                $tag->setCount(1);
                 $tag->save();
             }
         }
@@ -457,6 +458,16 @@ class SheepController extends Controller {
         return View::make('searchresult')->with([
             'ewes'=>$ewes,
             'title'=>'Search Results for Tag '.$tag
+        ]);
+    }
+    public function getNoneid()
+    {
+        $ewes = Sheep::total($this->user());
+
+        return view('sheeplist')->with([
+            'ewes'=>$ewes[0],
+            'title'=>'All Tagged Sheep',
+            'count'=>$ewes[1]
         ]);
     }
 }
