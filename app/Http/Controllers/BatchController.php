@@ -54,7 +54,8 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-            //dd($ewelist);
+            echo($ewelist[0][0]."<br>");
+            echo($ewelist[1][0]."<br><br>");
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
@@ -118,7 +119,8 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-
+            echo($ewelist[0][0]."<br>");
+            echo($ewelist[1][0]."<br><br>");
             foreach ($ewelist[2] as $ewe) {
                     $e_flock = substr($ewe, -11, 6);
                     $e_tag = substr($ewe, -5);
