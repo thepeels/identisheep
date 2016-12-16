@@ -349,28 +349,29 @@ class SheepController extends Controller {
         $m              = Input::get('month');
         $y              = Input::get('year');
         $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $destination       = Input::get('destination');
+        $destination    = Input::get('destination');
+        $sex            = Input::get('sex');
 
         $ewe = Sheep::firstOrNew([
             'e_flock'           =>  $e_flock_number,
             'e_tag'             =>  $e_tag,
             'user_id'           =>  $this->user()
         ]);
-        $ewe->original_e_flock  =  $e_flock_number;
-        $ewe->colour_flock      =  $e_flock_number;
-        $ewe->e_tag             =  $e_tag;
-        $ewe->move_off          = $move_off;
-        $ewe->off_how           = $destination;
-        $ewe->sex               = Input::get('sex');
+        $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+        $ewe->setColourTagFlockNumber($e_flock_number);
+        $ewe->setTagNumber($e_tag);
+        $ewe->setMoveOff($move_off);
+        $ewe->setOffHow($destination);
+        $ewe->setSex($sex);
         $ewe->save();
         $ewe->delete();
 
         return Redirect::back()->with([
-            'title'     => 'Single '.ucwords($ewe->sex).' Sheep Off',
+            'title'     => 'Single '.ucwords($ewe->getSex()).' Sheep Off',
             'id'        => $this->user(),
             'e_flock'   => NULL,
             'e_tag'     => NULL,
-            'sex'       => $ewe->sex
+            'sex'       => $ewe->getSex()
         ]);
 
     }
@@ -400,18 +401,19 @@ class SheepController extends Controller {
         $y              = Input::get('year');
         $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $how_died       = ' - '.Input::get('how_died');
+        $sex            = Input::get('sex');
 
         $ewe = Sheep::firstOrNew([
             'e_flock'           =>  $e_flock_number,
             'e_tag'             =>  $e_tag,
             'user_id'           =>  $this->user()
         ]);
-        $ewe->original_e_flock  =  $e_flock_number;
-        $ewe->colour_flock      =  $e_flock_number;
-        $ewe->e_tag             =  $e_tag;
-        $ewe->move_off          = $move_off;
-        $ewe->off_how           = 'died'.$how_died;
-        $ewe->sex               = Input::get('sex');
+        $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+        $ewe->setColourTagFlockNumber($e_flock_number);
+        $ewe->setTagNumber($e_tag);
+        $ewe->setMoveOff($move_off);
+        $ewe->setOffHow('died'.$how_died);
+        $ewe->setSex($sex);
         $ewe->save();
         $ewe->delete();
 
@@ -420,8 +422,7 @@ class SheepController extends Controller {
             'id'        => $this->user(),
             'e_flock'   => NULL,
             'e_tag'     => NULL,
-            'sex'       => $ewe->sex
-
+            'sex'       => $ewe->getSex()
         ]);
     }
     public function getEnterdeath($id,$e_flock,$e_tag,$sex)
