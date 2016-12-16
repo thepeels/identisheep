@@ -141,7 +141,6 @@ class BatchController extends Controller {
                 if($e_tag != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
-                        //** @var Sheep $ewe */
                         $ewe = Sheep::firstOrNew([
                             'e_flock' => $e_flock,
                             'e_tag' => $e_tag]);
