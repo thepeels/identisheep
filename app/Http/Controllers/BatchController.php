@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Domain\TagNumber;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -52,15 +53,17 @@ class BatchController extends Controller {
         $rawlist = str_replace(array("O"), '0', $rawlist);
         $ewelist = array_map('str_getcsv', file($rawlist));
 
+        // CsvImporter->import() -- @return TagNumber[]
+
         if(Input::get('check')) {
             $i = 0;
-            //dd($ewelist);
+            echo ($ewelist[0][0]."<br>");
+            echo ($ewelist[1][0]."<br><br>");
             foreach ($ewelist[2] as $ewe) {
-                $e_flock = substr($ewe, -11, 6);
-                $e_tag = substr($ewe,-5);
-                if($e_tag != 0) {
+                $tag = new TagNumber($ewe);
+                if($tag->getSerialNumber() != 0) {
                     $i++;
-                    echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                    echo("{$i} {$tag->getShortTagNumber()}<br>");
                 }
             }
             echo("<br>".$i.' Tags.');
@@ -74,8 +77,8 @@ class BatchController extends Controller {
                     'e_flock' => $e_flock,
                     'e_tag' => $e_tag]);
                 //if($ewe->trashed()){
-                    $ewe->setUserId($user);
-                    $ewe->setElectronicFlockNumber($e_flock);
+                    $ewe->setOwner($user);
+                    $ewe->setFlockNumber($e_flock);
                     $ewe->setTagNumber($e_tag);
                     $ewe->setMoveOff($move_off);
                     $ewe->setOffHow($destination);
@@ -118,7 +121,8 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-
+            echo ($ewelist[0][0]."<br>");
+            echo ($ewelist[1][0]."<br><br>");
             foreach ($ewelist[2] as $ewe) {
                     $e_flock = substr($ewe, -11, 6);
                     $e_tag = substr($ewe, -5);
@@ -139,14 +143,14 @@ class BatchController extends Controller {
                 if($e_tag != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
-                        //** @var Sheep $ewe */
                         $ewe = Sheep::firstOrNew([
                             'e_flock' => $e_flock,
-                            'e_tag' => $e_tag]);
-                        $ewe->setUserId($userId);
+                            'e_tag' => $e_tag
+                        ]);
+                        $ewe->setOwner($userId);
                         $ewe->setLocalId($l);
-                        $ewe->setElectronicFlockNumber($e_flock);
-                        $ewe->setOriginalElectronicFlockNumber($e_flock);
+                        $ewe->setFlockNumber($e_flock);
+                        $ewe->setOriginalFlockNumber($e_flock);
                         $ewe->setTagNumber($e_tag);
                         $ewe->setOriginalTagNumber($e_tag);
                         $ewe->setMoveOn($move_on);
@@ -213,15 +217,15 @@ class BatchController extends Controller {
                         $ewe = new Sheep();
 
                         $ewe->setLocalId($l);
-                        $ewe->setUserId($id);
-                        $ewe->setElectronicFlockNumber($flock_number);
-                        $ewe->setOriginalElectronicFlockNumber($flock_number);
+                        $ewe->setOwner($id);
+                        $ewe->setFlockNumber($flock_number);
+                        $ewe->setOriginalFlockNumber($flock_number);
                         $ewe->setColourTagFlockNumber($flock_number);
                         $ewe->setTagNumber($i);
                         $ewe->setOriginalTagNumber($i);
                         $ewe->setColourTagNumber($i);
                         $ewe->setMoveOn($move_on);
-                        $ewe->setColourOfTag($colour_of_tag);
+                        $ewe->setTagColour($colour_of_tag);
                         $ewe->setSex('female');
 
                         $ewe->save();
@@ -295,12 +299,12 @@ class BatchController extends Controller {
                     'e_tag'             =>  $i,
                     'user_id'           =>  $user_id
                 ]);
-                $ewe->setOriginalElectronicFlockNumber($flock_number);
+                $ewe->setOriginalFlockNumber($flock_number);
                 $ewe->setColourTagFlockNumber($flock_number);
                 $ewe->setOriginalTagNumber($i);
                 $ewe->setColourTagNumber($i);
                 $ewe->setMoveOff($move_off);
-                $ewe->setColourOfTag($colour_of_tag);
+                $ewe->setTagColour($colour_of_tag);
                 $ewe->setOffHow($off_how);
 
                 $ewe->save();

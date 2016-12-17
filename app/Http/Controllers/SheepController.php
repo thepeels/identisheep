@@ -188,36 +188,37 @@ class SheepController extends Controller {
     public function postSeek()
     {
 
-        $e_flock = Input::get('flock');
-        //dd($e_flock);
+        $flock_number = Input::get('flock');
+        //dd($flock_number);
         $e_tag    =Input::get('tag');
-        $ewe = Sheep::getByTag($e_flock, $e_tag);
-            if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
+        /** @var $ewe Sheep */
+        $ewe = Sheep::getByTag($flock_number, $e_tag);
+        if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
                 return Redirect::to('sheep/seek')->withInput();
             }
         if (Input::get('find')){
             return View::make('sheepedit')->with([
                 'id'            =>$ewe->id,
                 'title'         => 'Change Tags',
-                'e_flock'       =>$e_flock,
-                'e_tag'         =>$ewe->e_tag,
-                'original_e_flock'=>$ewe->original_e_flock,
-                'colour_flock'  => $ewe->colour_flock,
+                'e_flock'       =>$flock_number,
+                'e_tag'         =>$ewe->getSerialNumber(),
+                'original_e_flock'=>$ewe->getOriginalFlockNumber(),
+                'colour_flock'  => $ewe->getSupplementaryTagFlockNumber(),
             ]);
         }
         if (Input::get('view')){
             return View::make('sheepview')->with([
-                'id'            =>$ewe->id,
-                'title'         =>'Details for Sheep number ',
-                'e_flock'       =>$e_flock,
-                'e_tag'         =>$ewe->e_tag,
-                'e_tag_1'       =>$ewe->e_tag_1,
-                'e_tag_2'       =>$ewe->e_tag_2,
-                'original_e_flock'=>$ewe->original_e_flock,
-                'original_e_tag'=>$ewe->original_e_tag,
-                'colour_of_tag' =>$ewe->colour_of_tag,
-                'move_on'       =>$ewe->move_on,
-                'sex'           =>$ewe->sex
+                'id'                    =>$ewe->getId(),
+                'title'                 =>'Details for Sheep number ',
+                'e_flock'          =>$flock_number,
+                'e_tag'         =>$ewe->getSerialNumber(),
+                'e_tag_1'     =>$ewe->getOldSerialNumber(),
+                'e_tag_2'   =>$ewe->getOlderSerialNumber(),
+                'original_e_flock' =>$ewe->getOriginalFlockNumber(),
+                'original_e_tag'=>$ewe->getOriginalSerialNumber(),
+                'colour_of_tag'            =>$ewe->getTagColour(),
+                'move_on'               =>$ewe->getMoveOn(),
+                'sex'                   =>$ewe->getSex()
             ]);
         }
     }
@@ -292,16 +293,16 @@ class SheepController extends Controller {
         if (NULL === $sheep_exists) {
             $l++;
             $ewe = new Sheep();
-            $ewe->setUserId($user_id);
+            $ewe->setOwner($user_id);
             $ewe->setLocalId($l);
-            $ewe->setElectronicFlockNumber($e_flock_number);
-            $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+            $ewe->setFlockNumber($e_flock_number);
+            $ewe->setOriginalFlockNumber($e_flock_number);
             $ewe->setColourTagFlockNumber($e_flock_number);
             $ewe->setTagNumber($e_tag);
             $ewe->setOriginalTagNumber($e_tag);
             $ewe->setColourTagNumber($e_tag);
             $ewe->setMoveOn($move_on);
-            $ewe->setColourOfTag($colour_of_tag);
+            $ewe->setTagColour($colour_of_tag);
             $ewe->setSex($sex);
             $ewe->save();
 
@@ -357,7 +358,7 @@ class SheepController extends Controller {
             'e_tag'             =>  $e_tag,
             'user_id'           =>  $this->user()
         ]);
-        $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+        $ewe->setOriginalFlockNumber($e_flock_number);
         $ewe->setColourTagFlockNumber($e_flock_number);
         $ewe->setTagNumber($e_tag);
         $ewe->setMoveOff($move_off);
@@ -408,7 +409,7 @@ class SheepController extends Controller {
             'e_tag'             =>  $e_tag,
             'user_id'           =>  $this->user()
         ]);
-        $ewe->setOriginalElectronicFlockNumber($e_flock_number);
+        $ewe->setOriginalFlockNumber($e_flock_number);
         $ewe->setColourTagFlockNumber($e_flock_number);
         $ewe->setTagNumber($e_tag);
         $ewe->setMoveOff($move_off);

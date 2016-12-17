@@ -41,16 +41,16 @@
                     {{$ewe->local_id}}
                 </td>
                 <td>
-                    UK0 {{$ewe->e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->e_tag)}}
+                    UK0 {{$ewe->flock_number . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->serial_number)}}
                 </td>
                 <td>
-                    {{$ewe->original_e_flock . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->original_e_tag) .' - - ' . $ewe->colour_of_tag}}
+                    {{$ewe->original_flock_number . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->original_serial_number) .' - - ' . $ewe->tag_colour}}
                 </td>
                 <td>
-                    {{sprintf('%05d',$ewe->e_tag_1)}}
+                    {{sprintf('%05d',$ewe->old_serial_number)}}
                 </td>
                 <td>
-                    {{sprintf('%05d',$ewe->e_tag_2)}}
+                    {{sprintf('%05d',$ewe->older_serial_number)}}
                 </td>
                 <td>
                     {{$date_on}}
