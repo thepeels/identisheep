@@ -35,7 +35,7 @@ class SheepController extends Controller {
             'count'=>$ewes[1]
             ]);
 	}
-    public static function user()
+    private static function user()
     {
         return Auth::user()->id;
     }
@@ -145,17 +145,17 @@ class SheepController extends Controller {
      *
      * @param int $id
      *
-     * @return view
+     * @return Response
      */
     public function getEdit($id)
     {
         $ewe = Sheep::getById($id);
-        //return $ewe->id;
+
         return View::make('sheepedit')->with([
             'id'        =>$id,
             'title'     => 'Change Tags',
-            'e_flock'   =>$ewe->e_flock,
-            'e_tag'     =>$ewe->e_tag
+            'e_flock'   =>$ewe->getFlockNumber(),
+            'e_tag'     =>$ewe->getSerialNumber()
         ]);
     }
     /**
@@ -167,13 +167,13 @@ class SheepController extends Controller {
      */
     public function getEditmore($flock_old,$flock_new)
     {
-        //$ewe = Sheep::getById($id);
+        $ewe = Sheep::getById($id);
         //return $ewe->id;
         return View::make('sheepeditmore')->with([
             'id'        =>$id,
             'title'     => 'Change more Tags',
-            'e_flock'   =>$ewe->e_flock,
-            'e_tag'     =>$ewe->e_tag
+            'e_flock'   =>$ewe->getFlockNumber(),
+            'e_tag'     =>$ewe->getSerialNumber()
         ]);
     }
     /**
@@ -189,16 +189,14 @@ class SheepController extends Controller {
     {
 
         $flock_number = Input::get('flock');
-        //dd($flock_number);
         $e_tag    =Input::get('tag');
-        /** @var $ewe Sheep */
-        $ewe = Sheep::getByTag($flock_number, $e_tag);
+        $ewe = Sheep::getByEarNumbers($flock_number, $e_tag);
         if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
-                return Redirect::to('sheep/seek')->withInput();
-            }
+            return Redirect::to('sheep/seek')->withInput();
+        }
         if (Input::get('find')){
             return View::make('sheepedit')->with([
-                'id'            =>$ewe->id,
+                'id'            =>$ewe->getId(),
                 'title'         => 'Change Tags',
                 'e_flock'       =>$flock_number,
                 'e_tag'         =>$ewe->getSerialNumber(),
@@ -208,17 +206,17 @@ class SheepController extends Controller {
         }
         if (Input::get('view')){
             return View::make('sheepview')->with([
-                'id'                    =>$ewe->getId(),
-                'title'                 =>'Details for Sheep number ',
-                'e_flock'          =>$flock_number,
-                'e_tag'         =>$ewe->getSerialNumber(),
-                'e_tag_1'     =>$ewe->getOldSerialNumber(),
-                'e_tag_2'   =>$ewe->getOlderSerialNumber(),
-                'original_e_flock' =>$ewe->getOriginalFlockNumber(),
-                'original_e_tag'=>$ewe->getOriginalSerialNumber(),
-                'colour_of_tag'            =>$ewe->getTagColour(),
-                'move_on'               =>$ewe->getMoveOn(),
-                'sex'                   =>$ewe->getSex()
+                'id'                =>$ewe->getId(),
+                'title'             =>'Details for Sheep number ',
+                'e_flock'           =>$flock_number,
+                'e_tag'             =>$ewe->getSerialNumber(),
+                'e_tag_1'           =>$ewe->getOldSerialNumber(),
+                'e_tag_2'           =>$ewe->getOlderSerialNumber(),
+                'original_e_flock'  =>$ewe->getOriginalFlockNumber(),
+                'original_e_tag'    =>$ewe->getOriginalSerialNumber(),
+                'colour_of_tag'     =>$ewe->getTagColour(),
+                'move_on'           =>$ewe->getMoveOn(),
+                'sex'               =>$ewe->getSex()
             ]);
         }
     }
@@ -288,7 +286,7 @@ class SheepController extends Controller {
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $sex            = Input::get('sex');
-        $l              = DB::table('sheep')->where('user_id',$user_id)->max('local_id');
+        $l              = DB::table('sheep')->where('owner',$user_id)->max('local_id');
         $sheep_exists   = Sheep::check($e_flock_number,$e_tag,$user_id);
         if (NULL === $sheep_exists) {
             $l++;
@@ -316,16 +314,9 @@ class SheepController extends Controller {
             }
         }
 
-        return Redirect::back()->withInput([Input::except('e_tag')]);/*[
-            'e_flock'   =>$e_flock,
-            'sex'       =>$ewe->sex,
-            'day'       =>$d,
-            'month'     =>$m,
-            'year'      =>$y,
-            'colour_of_tag'=>$colour_of_tag
-
-        ]);*/
+        return Redirect::back()->withInput([Input::except('e_tag')]);
     }
+
     public function getSheepoff($sex)
     {
         return View::make('sheepoff')->with([
@@ -336,6 +327,7 @@ class SheepController extends Controller {
             'e_tag'     => NULL
         ]);
     }
+
     public function postSheepoff()
     {
         $rules = Sheep::$rules['dates_and_tags'];

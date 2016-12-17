@@ -22,6 +22,10 @@ class Sheep extends Model
     /**
      * @var int
      */
+    protected $id;
+    /**
+     * @var int
+     */
     protected $owner;
     /**
      * @var int
@@ -114,11 +118,26 @@ class Sheep extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->attributes['id'] = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->attributes['id'];
+    }
+    /**
      * @return int
      */
     public function getOwner()
     {
-        return $this->owner;
+        return $this->attributes['owner'];
     }
 
     /**
@@ -134,7 +153,7 @@ class Sheep extends Model
      */
     public function getLocalId()
     {
-        return $this->local_id;
+        return $this->attributes['local_id'];
     }
 
     /**
@@ -150,7 +169,7 @@ class Sheep extends Model
      */
     public function getFlockNumber()
     {
-        return $this->flock_number;
+        return $this->attributes['flock_number'];
     }
 
     /**
@@ -176,28 +195,28 @@ class Sheep extends Model
      */
     public function getOriginalFlockNumber()
     {
-        return $this->original_flock_number;
+        return $this->attributes['original_flock_number'];
     }
     /**
      * @return int
      */
     public function getSerialNumber()
     {
-        return $this->serial_number;
+        return $this->attributes['serial_number'];
     }
 
     /**
-     * @param int $tag_number
+     * @param int $serial_number
      */
-    public function setSerialNumber($tag_number)
+    public function setSerialNumber($serial_number)
     {
-        $this->attributes['serial_number'] = $tag_number;
+        $this->attributes['serial_number'] = $serial_number;
     }
     /**
      * @return int
      */public function getOldSerialNumber()
     {
-        return $this->old_serial_number;
+        return $this->attributes['old_serial_number'];
     }
     /**
      * @param int $old_serial_number
@@ -209,7 +228,7 @@ class Sheep extends Model
      * @return int
      */public function getOlderSerialNumber()
     {
-        return $this->older_serial_number;
+        return $this->attributes['older_serial_number'];
     }
     /**
      * @param int $older_serial_number
@@ -221,7 +240,7 @@ class Sheep extends Model
      * @return int
      */public function getOriginalSerialNumber()
     {
-        return $this->original_serial_number;
+        return $this->attributes['original_serial_number'];
     }
     /**
      * @param int $original_serial_number
@@ -233,7 +252,7 @@ class Sheep extends Model
      * @return int
      */public function getSupplementarySerialNumber()
     {
-        return $this->supplementary_serial_number;
+        return $this->attributes['supplementary_serial_number'];
     }
     /**
      * @param int $supplementary_serial_number
@@ -246,7 +265,7 @@ class Sheep extends Model
      */
     public function getOriginalTagNumber()
     {
-        return $this->original_serial_number;
+        return $this->attributes['original_serial_number'];
     }
 
     /**
@@ -262,7 +281,7 @@ class Sheep extends Model
      */
     public function getMoveOn()
     {
-        return $this->move_on;
+        return $this->attributes['move_on'];
     }
 
     /**
@@ -277,7 +296,7 @@ class Sheep extends Model
      */
     public function getMoveOff()
     {
-        return $this->move_off;
+        return $this->attributes['move_off'];
     }
     /**
      * @param string $move_off
@@ -291,7 +310,7 @@ class Sheep extends Model
      */
     public function getDestination()
     {
-        return $this->destination;
+        return $this->attributes['destination'];
     }
 
     /**
@@ -305,7 +324,7 @@ class Sheep extends Model
      */
     public function getSex()
     {
-        return $this->sex;
+        return $this->attributes['sex'];
     }
     /**
      * @param string $sex
@@ -319,7 +338,7 @@ class Sheep extends Model
      */
     public function getTagColour()
     {
-        return $this->tag_colour;
+        return $this->attributes['tag_colour'];
     }
     /**
      * @param string $tag_colour
@@ -333,7 +352,7 @@ class Sheep extends Model
      */
     public function getColourTagNumber()
     {
-        return $this->colour_tag;
+        return $this->attributes['colour_tag'];
     }
     /**
      * @param int $colour_tag
@@ -347,7 +366,7 @@ class Sheep extends Model
      */
     public function getSupplementaryTagFlockNumber()
     {
-        return $this->supplementary_tag_flock_number;
+        return $this->attributes['supplementary_tag_flock_number'];
     }
     /**
      * @param int $flock_number
@@ -376,7 +395,8 @@ class Sheep extends Model
 
     public function scopeGetById($query,$id)
     {
-        return  $query->where('id',$id)->first();
+        $ewe = $query->where('id',$id)->first();
+        return $ewe;
     }
 
     public static function getByTag($flock, $tag)
@@ -471,5 +491,11 @@ class Sheep extends Model
         $ewes = $query->where('owner',$id)->paginate(20);
         $count = $query->where('owner',$id)->count();
         return [$ewes,$count];
+    }
+    public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
+    {
+        $ewe = $query->where('flock_number',$flock_number)
+            ->where('serial_number',$serial_number)->first();
+        return $ewe;
     }
 }
