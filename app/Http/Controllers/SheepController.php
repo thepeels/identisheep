@@ -297,10 +297,10 @@ class SheepController extends Controller {
             $ewe->setLocalId($l);
             $ewe->setFlockNumber($e_flock_number);
             $ewe->setOriginalFlockNumber($e_flock_number);
-            $ewe->setColourTagFlockNumber($e_flock_number);
-            $ewe->setTagNumber($e_tag);
-            $ewe->setOriginalTagNumber($e_tag);
-            $ewe->setColourTagNumber($e_tag);
+            $ewe->setSupplementaryTagFlockNumber($e_flock_number);
+            $ewe->setSerialNumber($e_tag);
+            $ewe->setOriginalSerialNumber($e_tag);
+            $ewe->setSupplementarySerialNumber($e_tag);
             $ewe->setMoveOn($move_on);
             $ewe->setTagColour($colour_of_tag);
             $ewe->setSex($sex);
@@ -359,8 +359,8 @@ class SheepController extends Controller {
             'user_id'           =>  $this->user()
         ]);
         $ewe->setOriginalFlockNumber($e_flock_number);
-        $ewe->setColourTagFlockNumber($e_flock_number);
-        $ewe->setTagNumber($e_tag);
+        $ewe->setSupplementaryTagFlockNumber($e_flock_number);
+        $ewe->setSerialNumber($e_tag);
         $ewe->setMoveOff($move_off);
         $ewe->setOffHow($destination);
         $ewe->setSex($sex);
@@ -410,8 +410,8 @@ class SheepController extends Controller {
             'user_id'           =>  $this->user()
         ]);
         $ewe->setOriginalFlockNumber($e_flock_number);
-        $ewe->setColourTagFlockNumber($e_flock_number);
-        $ewe->setTagNumber($e_tag);
+        $ewe->setSupplementaryTagFlockNumber($e_flock_number);
+        $ewe->setSerialNumber($e_tag);
         $ewe->setMoveOff($move_off);
         $ewe->setOffHow('died'.$how_died);
         $ewe->setSex($sex);

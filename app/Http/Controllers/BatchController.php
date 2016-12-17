@@ -79,9 +79,9 @@ class BatchController extends Controller {
                 //if($ewe->trashed()){
                     $ewe->setOwner($user);
                     $ewe->setFlockNumber($e_flock);
-                    $ewe->setTagNumber($e_tag);
+                    $ewe->setSerialNumber($e_tag);
                     $ewe->setMoveOff($move_off);
-                    $ewe->setOffHow($destination);
+                    $ewe->setDestination($destination);
                     
                     $ewe->save();
                     $ewe->delete();
@@ -111,7 +111,7 @@ class BatchController extends Controller {
         $m              = Input::get('month');
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->where('user_id',$userId)->max('local_id');
+        $l              = DB::table('sheep')->where('owner',$userId)->max('local_id');
         $no_spaces = preg_replace('/\s*,\s*/', ',', $file_raw);
         $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $no_spaces);
         $rawlist = str_replace(array("\r\n,"),"\r\n", $rawlist);
@@ -151,8 +151,8 @@ class BatchController extends Controller {
                         $ewe->setLocalId($l);
                         $ewe->setFlockNumber($e_flock);
                         $ewe->setOriginalFlockNumber($e_flock);
-                        $ewe->setTagNumber($e_tag);
-                        $ewe->setOriginalTagNumber($e_tag);
+                        $ewe->setSerialNumber($e_tag);
+                        $ewe->setOriginalSerialNumber($e_tag);
                         $ewe->setMoveOn($move_on);
 
                         $ewe->save();
@@ -201,7 +201,7 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $colour_of_tag  = Input::get('colour_of_tag');
         $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->where('user_id',$id)->max('local_id');
+        $l              = DB::table('sheep')->where('owner',$id)->max('local_id');
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -220,10 +220,10 @@ class BatchController extends Controller {
                         $ewe->setOwner($id);
                         $ewe->setFlockNumber($flock_number);
                         $ewe->setOriginalFlockNumber($flock_number);
-                        $ewe->setColourTagFlockNumber($flock_number);
-                        $ewe->setTagNumber($i);
-                        $ewe->setOriginalTagNumber($i);
-                        $ewe->setColourTagNumber($i);
+                        $ewe->setSupplementaryTagFlockNumber($flock_number);
+                        $ewe->setSerialNumber($i);
+                        $ewe->setOriginalSerialNumber($i);
+                        $ewe->setSupplementarySerialNumber($i);
                         $ewe->setMoveOn($move_on);
                         $ewe->setTagColour($colour_of_tag);
                         $ewe->setSex('female');
@@ -234,7 +234,7 @@ class BatchController extends Controller {
                 }
                 $i++;
             }
-            if($home_bred !== FALSE){
+            if($home_bred !== 'false'){
                 $batch_of_tags = new Homebred();
                     $batch_of_tags->setFlockNumber($home_bred);
                     $batch_of_tags->setDateApplied($move_on);
@@ -300,12 +300,12 @@ class BatchController extends Controller {
                     'user_id'           =>  $user_id
                 ]);
                 $ewe->setOriginalFlockNumber($flock_number);
-                $ewe->setColourTagFlockNumber($flock_number);
-                $ewe->setOriginalTagNumber($i);
-                $ewe->setColourTagNumber($i);
+                $ewe->setSupplementaryTagFlockNumber($flock_number);
+                $ewe->setOriginalSerialNumber($i);
+                $ewe->setSupplementarySerialNumber($i);
                 $ewe->setMoveOff($move_off);
                 $ewe->setTagColour($colour_of_tag);
-                $ewe->setOffHow($off_how);
+                $ewe->setDestination($off_how);
 
                 $ewe->save();
                 $ewe->delete();
@@ -360,7 +360,7 @@ class BatchController extends Controller {
         $date_applied   = $y.'-'.$m.'-'.$d.' '.'00:00:00';
 
                 $tags = New Single;
-                $tags->setUserId($id);
+                $tags->setOwner($id);
                 $tags->setFlockNumber($flock_number);
                 $tags->setCount($count);
                 $tags->setDestination($destination);

@@ -126,7 +126,7 @@ class Sheep extends Model
      */
     public function setOwner($owner)
     {
-        $this->attributes['owner_id'] = $owner;
+        $this->attributes['owner'] = $owner;
     }
 
     /**
@@ -448,7 +448,7 @@ class Sheep extends Model
     public function scopeSearchByTag($query,$id,$tag)
     {
         return $query->withTrashed('owner',$id)->where('serial_number',$tag )
-            ->orWhere('serial_number_1',$tag )->orWhere('serial_number_2',$tag )->paginate(20);
+            ->orWhere('old_serial_number',$tag )->orWhere('older_serial_number',$tag )->paginate(20);
     }
     public function scopeStock($query,$id,$sex)
     {
@@ -459,12 +459,12 @@ class Sheep extends Model
     public function scopeOffList($query,$id)
     {
         return $query->onlyTrashed()->where('owner',$id)
-            ->where('off_how','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
+            ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
     public function scopeDead($query,$id)
     {
         return $query->onlyTrashed()->where('owner',$id)
-            ->where('off_how','like','died'.'%')->orderBy('flock_number')->paginate(20);
+            ->where('destination','like','died'.'%')->orderBy('flock_number')->paginate(20);
     }
     public function scopeTotal($query,$id)
     {
