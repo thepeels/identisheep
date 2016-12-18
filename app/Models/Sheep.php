@@ -429,16 +429,17 @@ class Sheep extends Model
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
             'year'      => 'integer|required|min:2006|max:2025',
-            'flock_number'   => 'digits:6|required',
-            'serial_number'     => 'numeric|required|between:1,99999',
+            'e_flock'   => 'digits:6|required',
+            'e_tag'     => 'numeric|required|between:1,99999',
         ],
         'batch'=> [
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
             'year'      => 'integer|required|min:2006|max:2025',
-            'flock_number' => 'digits:6|required',
+            'flock_number'=> 'digits:6|required',
             'start_tag' => 'digits_between:1,5|required',
-            'end_tag'   => 'digits_between:1,5|required'
+            'end_tag'   => 'digits_between:1,5|required',
+            'colour_of_tag'=>'required',
         ],
         'dates'=>[
             'day'       => 'digits:2|required|min:1|max:31',
@@ -453,8 +454,12 @@ class Sheep extends Model
             'destination'=>'required'
         ],
         'single'=>[
-            'count'=>'integer|required',
-            'flock_number'=>'digits:6|required',
+            'count'     => 'integer|required',
+            'flock_number'   => 'digits:6|required',
+        ],
+        'death'=>[
+            'e_flock'   => 'digits:6|required',
+            'e_tag'     => 'numeric|required|between:1,99999',
         ]
 
     ];

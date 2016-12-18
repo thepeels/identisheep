@@ -63,7 +63,7 @@ class Single extends Model {
      */
     public function getCount()
     {
-        return $this->count;
+        return $this->attributes['count'];
     }
 
     /**
@@ -79,7 +79,7 @@ class Single extends Model {
      */
     public function getFlockNumber()
     {
-        return $this->flock_number;
+        return $this->attributes['flock_number'];
     }
 
     /**
@@ -95,7 +95,7 @@ class Single extends Model {
      */
     public function getDestination()
     {
-        return $this->destination;
+        return $this->attributes['destination'];
     }
 
     /**
@@ -111,7 +111,7 @@ class Single extends Model {
      */
     public function getDateApplied()
     {
-        return $this->date_applied;
+        return $this->attributes['date_applied'];
     }
 
     /**

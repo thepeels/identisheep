@@ -78,7 +78,8 @@ $help_page = $elements[sizeof($elements)-1];
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch Off<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/batch/batchops">.csv Batch Off</a></li>
-							<li><a href="/batch/batchoff">Breeding Batch Off</a></li>
+							<li><a href="/batch/batchoff/false">Breeding Batch Off</a></li>
+							<li><a href="/batch/batchoff/{{$home_flock}}">Home Bred Batch Off</a></li>
 							<li><a href="/batch/singleoff">Single Tag Batch Off</a></li>
 						</ul>
 					</li>

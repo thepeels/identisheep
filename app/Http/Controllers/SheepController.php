@@ -115,15 +115,20 @@ class SheepController extends Controller {
 	 */
 	public function postChangetags()
 	{
+        $rules = Sheep::$rules['death'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
         $id = Input::get('id');
         $old_e_flock = Input::get('old_e_flock');
 		$ewe = Sheep::where('id',$id)->first();
-        if ($ewe->e_tag != Input::get('e_tag')) {
-            $ewe->e_tag_2 = $ewe->e_tag_1;
-            $ewe->e_tag_1 = $ewe->e_tag;
-            $ewe->e_tag = Input::get('e_tag');
+        if ($ewe->serial_number != Input::get('e_tag')) {
+            $ewe->older_serial_number = $ewe->old_serial_number;
+            $ewe->old_serial_number = $ewe->serial_number;
+            $ewe->serial_number = Input::get('e_tag');
         }
-        $ewe->e_flock = Input::get('e_flock');
+        $ewe->flock_number = Input::get('e_flock');
         $ewe->save();
         return View::make('sheepfinder')->with([
             'title'     => 'Find another sheep',
@@ -387,7 +392,6 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $e_flock        = Input::get('e_flock');
-        $e_flock_number = $e_flock;
         $e_tag          = Input::get('e_tag');
         $d              = Input::get('day');
         $m              = Input::get('month');
@@ -397,15 +401,16 @@ class SheepController extends Controller {
         $sex            = Input::get('sex');
 
         $ewe = Sheep::firstOrNew([
-            'e_flock'           =>  $e_flock_number,
-            'e_tag'             =>  $e_tag,
-            'user_id'           =>  $this->user()
+            'flock_number'    =>  $e_flock,
+            'serial_number'   =>  $e_tag,
+            'owner'           =>  $this->user()
         ]);
-        $ewe->setOriginalFlockNumber($e_flock_number);
-        $ewe->setSupplementaryTagFlockNumber($e_flock_number);
+        //dd($ewe->getSerialNumber());
+        $ewe->setOriginalFlockNumber($e_flock);
+        $ewe->setSupplementaryTagFlockNumber($e_flock);
         $ewe->setSerialNumber($e_tag);
         $ewe->setMoveOff($move_off);
-        $ewe->setOffHow('died'.$how_died);
+        $ewe->setDestination('died'.$how_died);
         $ewe->setSex($sex);
         $ewe->save();
         $ewe->delete();

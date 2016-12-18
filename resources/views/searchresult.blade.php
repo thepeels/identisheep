@@ -64,13 +64,15 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                    <td class="no-print">
+                    @if($date_off = (date('Y',strtotime($ewe->move_off))=="1970"))
+                        <td class="no-print">
                         <a href="edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"
                            title="Edit this Sheep">Edit Sheep
                         </a>
-                    </td>
+                        </td>
+                    @endif
             </tr>
 
         @endforeach
