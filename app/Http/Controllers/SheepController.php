@@ -64,8 +64,8 @@ class SheepController extends Controller {
         $ewes = Sheep::offList($this->user());
 
         return view('sheeplist')->with([
-            'ewes'=>$ewes,
-            'title'=>'Sheep Moved Off'
+            'ewes'  =>  $ewes,
+            'title' =>  'Sheep Moved Off'
         ]);
     }
     public function getDeadlist()
@@ -474,6 +474,41 @@ class SheepController extends Controller {
             'ewes'=>$ewes[0],
             'title'=>'All Tagged Sheep',
             'count'=>$ewes[1]
+        ]);
+    }
+
+    public function postDatesetter()
+    {
+        if (Input::get('oneyear') == "on") {
+            Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december this year')));
+            Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 december last year')));
+            //dd(Session::get('date_to'));
+        } else {
+
+        $year_from = Input::get('year');
+        $month_from = Input::get('month');
+        $day_from = Input::get('day');
+        $year_to = Input::get('year_to');
+        $month_to = Input::get('month_to');
+        $day_to = Input::get('day_to');
+        $target = Input::get('target');
+
+        Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
+        Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
+        //$date = Session::get('date_to');
+        //dd($date);
+        }
+        return Redirect::to('sheep/ewes');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDatesetter()
+    {
+        return View('date_setter')->with([
+            'target' => 'sheeplist',
+            'title' => 'Select Date Range for Lists',
         ]);
     }
 }

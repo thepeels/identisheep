@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 use Redirect,Auth,Collection,DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -382,6 +383,8 @@ class Sheep extends Model
     {
         $this->attributes['supplementary_tag_flock_number'] = $flock_number;
     }
+
+
     /**
      * @param integer
      *
@@ -489,12 +492,18 @@ class Sheep extends Model
     }
     public function scopeOffList($query,$id)
     {
+        $dates = $this->dateRange();
         return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
     public function scopeDead($query,$id)
     {
+        $dates = $this->dateRange();
         return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
             ->where('destination','like','died'.'%')->orderBy('flock_number')->paginate(20);
     }
     public function scopeTotal($query,$id)
@@ -508,5 +517,12 @@ class Sheep extends Model
         return $query->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
         //return $ewe;
+    }
+
+    private function dateRange()
+    {
+        $date_from = Session::get('date_from');
+        $date_to = Session::get('date_to');
+        return [$date_from,$date_to];
     }
 }
