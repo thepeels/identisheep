@@ -81,7 +81,12 @@
         <a href="search"
            class="btn btn-default btn-xs"
            style="margin-bottom:-1px;"
-           title="Edit this Sheep">Search Again
+           title="Search fo another Sheep">Search Again
+        </a>
+        <a href="edit/{{$ewe->id}}"
+           class="btn btn-default btn-xs"
+           style="margin-bottom:-1px;"
+           title="Edit this Sheep">Edit Sheep
         </a>
     </div>
 @stop

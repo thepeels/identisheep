@@ -192,13 +192,19 @@ class SheepController extends Controller {
      */
     public function postSeek()
     {
+        $rules = Sheep::$rules['death'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $flock_number = Input::get('e_flock');
+        $serial_number    =Input::get('e_tag');
+        $ewe = Sheep::getByEarNumbers($flock_number, $serial_number);
 
-        $flock_number = Input::get('flock');
-        $e_tag    =Input::get('tag');
-        $ewe = Sheep::getByEarNumbers($flock_number, $e_tag);
         if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
             return Redirect::to('sheep/seek')->withInput();
         }
+        //**@var $ewe Sheep*/
         if (Input::get('find')){
             return View::make('sheepedit')->with([
                 'id'            =>$ewe->getId(),
@@ -209,6 +215,7 @@ class SheepController extends Controller {
                 'colour_flock'  => $ewe->getSupplementaryTagFlockNumber(),
             ]);
         }
+        //**@var $ewe Sheep*/
         if (Input::get('view')){
             return View::make('sheepview')->with([
                 'id'                =>$ewe->getId(),

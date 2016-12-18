@@ -277,13 +277,19 @@ class Sheep extends Model
     }
 
     /**
+     * @param int $tag_number
+     */
+    public function setTagNumber($tag_number)
+    {
+        $this->attributes['tag_number'] = $tag_number;
+    }
+    /**
      * @return string
      */
     public function getMoveOn()
     {
         return $this->attributes['move_on'];
     }
-
     /**
      * @param string $move_on
      */
@@ -499,8 +505,8 @@ class Sheep extends Model
     }
     public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
     {
-        $ewe = $query->where('flock_number',$flock_number)
+        return $query->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
-        return $ewe;
+        //return $ewe;
     }
 }

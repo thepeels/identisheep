@@ -48,7 +48,7 @@ $help_page = $elements[sizeof($elements)-1];
 							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid">Non-EID</a></li>
 							<li><a href="/sheep/replaced">Replaced Tags</a></li>
-							<li><a href="/batch/singlelist">Batch Tags Used</a></li>
+							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
 							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
 						</ul>
 					</li>

@@ -32,15 +32,17 @@
         {!!Form::input('hidden','sex',$sex)!!}
         {!!Form::input('hidden','home_bred',$home_bred)!!}<br>
         @if($home_bred == FALSE)
+            {!!Form::label('text','Flock and Individual Number')!!}<br>
             {!!Form::label('text','UK 0')!!}
             {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
         @else
             {!!Form::label('text','UK 0 '.$home_bred)!!}
             {!!Form::input('hidden','e_flock',$home_bred,['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
-        @endif
-        {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number'])!!}<br>
-        {!!Form::label('text','Tag Colour')!!}
-        {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
+            {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
+            @endif
+            {!!Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number'])!!}<br><br>
+            {!!Form::label('text','Tag Colour')!!}<br>
+            {!!Form::label('text','&nbsp;')!!}
         {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}
 
         {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
