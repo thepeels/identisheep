@@ -517,7 +517,6 @@ class Sheep extends Model
     {
         return $query->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
-        //return $ewe;
     }
 
     public function scopePermanentDelete($query,$id,$date)

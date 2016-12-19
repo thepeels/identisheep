@@ -198,12 +198,14 @@ class SheepController extends Controller {
         }
         $flock_number = Input::get('e_flock');
         $serial_number    =Input::get('e_tag');
-        $ewe = Sheep::getByEarNumbers($flock_number, $serial_number);
-
+        /**@var $ewe Sheep*/
+        $ewe = Sheep::where('id',$this->user())
+        ->where('flock_number',$flock_number)
+        ->where('serial_number', $serial_number)->first();
+        //above as 'getByEarNumbers()'returns empty model instead of NULL ???
         if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
             return Redirect::to('sheep/seek')->withInput();
         }
-        //**@var $ewe Sheep*/
         if (Input::get('find')){
             return View::make('sheepedit')->with([
                 'id'            =>$ewe->getId(),
@@ -426,7 +428,7 @@ class SheepController extends Controller {
             'id'        => $this->user(),
             'e_flock'   => NULL,
             'e_tag'     => NULL,
-            'sex'       => $ewe->getSex()
+            'sex'       => $sex
         ]);
     }
     public function getEnterdeath($id,$e_flock,$e_tag,$sex)
@@ -459,7 +461,17 @@ class SheepController extends Controller {
     {
         $tag = Input::get('tag');
 
-        $ewes = Sheep::searchByTag($this->user(),$tag);
+        //$ewes = Sheep::searchByTag($this->user(),$tag);
+        $ewes = Sheep::withTrashed('owner',$this->user())
+            ->where('serial_number',$tag)
+            ->orWhere('old_serial_number',$tag)
+            ->orWhere('older_serial_number',$tag)
+            ->get();
+        //dd($ewes);
+        if ($ewes->isEmpty()){Session::put('find_error','Sheep not found, check number and re-try.');
+            return Redirect::to('sheep/search')->withInput();
+        }
+
         return View::make('searchresult')->with([
             'ewes'=>$ewes,
             'title'=>'Search Results for Tag '.$tag

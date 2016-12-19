@@ -14,9 +14,7 @@
     <h4>{{$title}}
     </h4>
         @if(Request::path() !== ('sheep'))
-            <div class="no-print">
-                {!! $ewes->render() !!}
-            </div>
+
         @endif
         <table class="table table-striped table-bordered table-sm table-condensed print" >
         <thead>
