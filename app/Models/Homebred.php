@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Homebred extends Model {
 
@@ -47,7 +48,7 @@ protected $fillable = [
  */
 public function getUserId()
 {
-    return $this->user_id;
+    return $this->attributes['user_id'];
 }
 
 /**
@@ -63,7 +64,7 @@ public function setUserId($user_id)
  */
 public function getCount()
 {
-    return $this->count;
+    return $this->attributes['count'];
 }
 
 /**
@@ -79,7 +80,7 @@ public function setCount($count)
  */
 public function getDateApplied()
 {
-    return $this->date_applied;
+    return $this->attributes['date_applied'];
 }
 
 /**
@@ -95,7 +96,7 @@ public function setDateApplied($date_applied)
  */
 public function getFlockNumber()
 {
-    return $this->e_flock;
+    return $this->attributes['e_flock'];
 }
 
 /**
@@ -117,16 +118,30 @@ public function scopeListByDate($query,$id,$date_from,$date_to)
 {
     return $query->where('user_id',$id)
         ->where('date_applied','>=',$date_from)
-        ->where('date_applied','<',$date_to)
+        ->where('date_applied','<=',$date_to)
         ->orderBy('date_applied')
         ->get();
 }
 public function scopeNumbers($query,$id)
 {
-    return $query->where('user_id',$id)->orderBy('date_applied')->get();
+    $dates = $this->dateRange();
+        return $query->where('user_id',$id)
+        ->where('date_applied','>=',$dates[0])
+        ->where('date_applied','<=',$dates[1])
+        ->orderBy('date_applied')->get();
 }
 public function scopeHowmany($query, $id)
 {
-    return $query->where('user_id',$id)->sum('count');
+    $dates = $this->dateRange();
+    return $query->where('user_id',$id)
+        ->where('date_applied','>=',$dates[0])
+        ->where('date_applied','<=',$dates[1])
+        ->sum('count');
 }
+    private function dateRange()
+    {
+        $date_from = Session::get('date_from');
+        $date_to = Session::get('date_to');
+        return [$date_from,$date_to];
+    }
 }

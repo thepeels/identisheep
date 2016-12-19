@@ -48,7 +48,7 @@ $help_page = $elements[sizeof($elements)-1];
 							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid">Non-EID</a></li>
 							<li><a href="/sheep/replaced">Replaced Tags</a></li>
-							<li><a href="/batch/singlelist">Batch Tags Used</a></li>
+							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
 							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
 						</ul>
 					</li>
@@ -78,7 +78,8 @@ $help_page = $elements[sizeof($elements)-1];
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch Off<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/batch/batchops">.csv Batch Off</a></li>
-							<li><a href="/batch/batchoff">Breeding Batch Off</a></li>
+							<li><a href="/batch/batchoff/false">Breeding Batch Off</a></li>
+							<li><a href="/batch/batchoff/{{$home_flock}}">Home Bred Batch Off</a></li>
 							<li><a href="/batch/singleoff">Single Tag Batch Off</a></li>
 						</ul>
 					</li>
@@ -87,11 +88,17 @@ $help_page = $elements[sizeof($elements)-1];
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/sheepoff/female">Ewe Off</a></li>
 							<li><a href="/sheep/sheepoff/male">Tup Off</a></li>
+
 						</ul>
 					</li>
 					<li><a href="/sheep/death">Record Death</a></li>
-					<li><a href="/sheep/offlist">Off List</a></li>
-					<li><a href="/sheep/deadlist">Dead List</a></li>
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Off Lists<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/sheep/offlist/full">Off List</a></li>
+							<li><a href="/sheep/deadlist">Dead List</a></li>
+						</ul>
+					</li>
 					<li><a href="../help/{{$help_page}}">Help</a></li>
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
@@ -103,6 +110,7 @@ $help_page = $elements[sizeof($elements)-1];
 								<li><a href="/auth/logout">Logout</a></li>
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/sheep/search">Search</a></li>
+								<li><a href="/sheep/datesetter">Select Date Range</a></li>
 							</ul>
 						</li>
 					@endif

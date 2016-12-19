@@ -4,7 +4,7 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        @if($home_bred == 'false')<?$home_bred = FALSE;?>
+        @if($home_bred == 'false')
             <h4>{!! $title !!}</h4>
         @else
             <h4>{!! $alt_title !!}</h4>
@@ -24,7 +24,7 @@
         {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
-        @if($home_bred == FALSE)
+        @if($home_bred == 'false')
             {!!Form::label('text','UK 0 ')!!}
             {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
             {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>

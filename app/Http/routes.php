@@ -27,6 +27,8 @@ Route::controller('sheep','SheepController');
 
 Route::controller('batch','BatchController');
 
+Route::controller('test','TestController');
+
 Route::get('Singles','Singles@index');
 //Route::get('list','SheepController@index');
 

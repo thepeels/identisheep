@@ -4,7 +4,11 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
-        <h4>{!! $title !!} - Movement of Double Tagged Sheep Off Holding</h4>
+        @if($home_bred == 'false')
+            <h4>{!! $title !!} - Movement of Double Tagged Sheep Off Holding</h4>
+        @else
+            <h4>{!! $alt_title !!} - Movement of Double Tagged Sheep Off Holding</h4>
+        @endif
         {!!Form::open(array('url' => '/batch/batchoff','class'=>'form-inline'))!!}
 
         {!!Form::input('hidden','id',$id) !!}
@@ -17,14 +21,27 @@
         {!!$errors->first('month','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
-        {!!Form::label('text','UK 0 ')!!}
-        {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
-        {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
+        @if($home_bred == 'false')
+            {!!Form::label('text','UK 0 ')!!}
+            {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+            {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
+        @else
+            {!!Form::label('text','UK 0 '.$home_bred)!!}
+            {!!Form::input('hidden','flock_number',$home_bred,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+            {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
+        @endif
 
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
-        {!!Form::input('int','count',NULL,['class'=>'new_class','placeholder'=>'Number of Sheep/Lambs'])!!}<br>
-        {!!$errors->first('count','<small style="color:#f00">:message</small>')!!}<br>
+        {!!Form::input('int','start_tag',NULL,['class'=>'new_class','placeholder'=>'Start Tag Number'])!!}<br>
+        {!!$errors->first('start_tag','<small style="color:#f00">:message</small>')!!}<br>
 
+        {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
+        {!!Form::input('int','end_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Finish Tag Number'])!!}<br>
+        {!!$errors->first('end_tag','<small style="color:#f00">:message</small>')!!}<br>
+
+        {!!Form::label('text','Tag Colour')!!}
+        {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}<br>
+        {!!$errors->first('colour_of_tag','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','Destination Holding')!!}
         {!!Form::input('text','destination',NULL,['class'=>'new_class input-xs','placeholder'=>'Number or Name'])!!}<br>

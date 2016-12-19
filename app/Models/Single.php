@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Single extends Model {
 
@@ -45,11 +46,9 @@ class Single extends Model {
     /**
      * @return int
      */
-    public function getUserId()
-    {
-        return $this->user_id;
+    public function getUserId(){
+        return $this->attributes['user_id'];
     }
-
     /**
      * @param int $user_id
      */
@@ -63,7 +62,7 @@ class Single extends Model {
      */
     public function getCount()
     {
-        return $this->count;
+        return $this->attributes['count'];
     }
 
     /**
@@ -79,7 +78,7 @@ class Single extends Model {
      */
     public function getFlockNumber()
     {
-        return $this->flock_number;
+        return $this->attributes['flock_number'];
     }
 
     /**
@@ -95,7 +94,7 @@ class Single extends Model {
      */
     public function getDestination()
     {
-        return $this->destination;
+        return $this->attributes['destination'];
     }
 
     /**
@@ -111,7 +110,7 @@ class Single extends Model {
      */
     public function getDateApplied()
     {
-        return $this->date_applied;
+        return $this->attributes['date_applied'];
     }
 
     /**
@@ -128,7 +127,16 @@ class Single extends Model {
      */
     public function scopeView($query,$id)
     {
-        return $query->where('user_id',$id)->paginate(20);
+        $dates = $this->dateRange();
+        return $query->where('user_id',$id)
+            ->where('date_applied','>=',$dates[0])
+            ->where('date_applied','<=',$dates[1])
+            ->paginate(20);
     }
-
+    private function dateRange()
+    {
+        $date_from = Session::get('date_from');
+        $date_to = Session::get('date_to');
+        return [$date_from,$date_to];
+    }
 }

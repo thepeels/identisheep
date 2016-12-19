@@ -21,7 +21,8 @@
         {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
         {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
 
-        {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
+        {!!Form::label('text','Number of tags applied')!!}<br>
+        {!!Form::label('text','&nbsp;')!!}
         {!!Form::input('int','count',NULL,['class'=>'new_class','placeholder'=>'Number of Sheep/Lambs'])!!}<br>
         {!!$errors->first('count','<small style="color:#f00">:message</small>')!!}<br>
 

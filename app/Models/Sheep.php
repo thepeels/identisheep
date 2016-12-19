@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 use Redirect,Auth,Collection,DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,15 +23,19 @@ class Sheep extends Model
     /**
      * @var int
      */
-    protected $user_id;
+    protected $id;
     /**
      * @var int
      */
-    protected $e_flock;
+    protected $owner;
     /**
      * @var int
      */
-    protected $original_e_flock;
+    protected $flock_number;
+    /**
+     * @var int
+     */
+    protected $original_flock_number;
     /**
      * @var int
      */
@@ -38,7 +43,7 @@ class Sheep extends Model
     /**
      * @var string
      */
-    protected $colour_of_tag;
+    protected $tag_colour;
     /**
      * @var string
      */
@@ -50,23 +55,31 @@ class Sheep extends Model
     /**
      * @var string
      */
-    protected $off_how;
+    protected $destination;
     /**
      * @var int
      */
-    protected $e_tag;
+    protected $serial_number;
     /**
      * @var int
      */
-    protected $e_tag_1;
+    protected $original_serial_number;
+        /**
+     * @var int
+     */
+    protected $old_serial_number;
     /**
      * @var int
      */
-    protected $e_tag_2;
+    protected $older_serial_number;
     /**
-     * @var string
+     * @var int
      */
-    protected $colour_flock;
+    protected $supplementary_tag_flock_number;
+    /**
+     * @var int
+     */
+    protected $supplementary_serial_number;
     /**
      * @var string
      */
@@ -86,39 +99,54 @@ class Sheep extends Model
      */
     protected $fillable = [
         'local_id',
-        'user_id',
+        'owner',
         'move_on',
         'move_off',
-        'off_how',
-        'e_flock',
-        'original_e_flock',
-        'colour_flock',
-        'e_tag',
-        'e_tag_1',
-        'e_tag_2',
-        'original_e_tag',
-        'colour_tag',
+        'destination',
+        'flock_number',
+        'original_flock_number',
+        'supplementary_tag_flock_number',
+        'serial_number',
+        'old_serial_number\'',
+        'older_serial_number',
+        'original_serial_number',
+        'supplementary_serial_number',
         'colour_tag_1',
         'colour_tag_2',
         'sex',
-        'colour_of_tag'
+        'tag_colour'
     ];
     protected $dates = ['deleted_at'];
 
     /**
-     * @return int
+     * @param int $id
      */
-    public function getUserId()
+    public function setId($id)
     {
-        return $this->user_id;
+        $this->attributes['id'] = $id;
     }
 
     /**
-     * @param int $user_id
+     * @return int
      */
-    public function setUserId($user_id)
+    public function getId()
     {
-        $this->attributes['user_id'] = $user_id;
+        return $this->attributes['id'];
+    }
+    /**
+     * @return int
+     */
+    public function getOwner()
+    {
+        return $this->attributes['owner'];
+    }
+
+    /**
+     * @param int $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->attributes['owner'] = $owner;
     }
 
     /**
@@ -126,7 +154,7 @@ class Sheep extends Model
      */
     public function getLocalId()
     {
-        return $this->local_id;
+        return $this->attributes['local_id'];
     }
 
     /**
@@ -140,58 +168,105 @@ class Sheep extends Model
     /**
      * @return int
      */
-    public function getElectronicFlockNumber()
+    public function getFlockNumber()
     {
-        return $this->e_flock;
+        return $this->attributes['flock_number'];
     }
 
     /**
      * @param int $flock_number
      */
-    public function setElectronicFlockNumber($flock_number)
+    public function setFlockNumber($flock_number)
     {
-        $this->attributes['e_flock'] = $flock_number;
+        $this->attributes['flock_number'] = $flock_number;
 
     }
 
     /**
      * @param int $flock_number
      */
-    public function setOriginalElectronicFlockNumber($flock_number)
+    public function setOriginalFlockNumber($flock_number)
     {
-        $this->attributes['original_e_flock'] = $flock_number;
+        $this->attributes['original_flock_number'] = $flock_number;
     }
 
 
     /**
      * @return int
      */
-    public function getOriginalElectronicFlockNumber()
+    public function getOriginalFlockNumber()
     {
-        return $this->original_e_flock;
+        return $this->attributes['original_flock_number'];
     }
     /**
      * @return int
      */
-    public function getTagNumber()
+    public function getSerialNumber()
     {
-        return $this->e_tag;
+        return $this->attributes['serial_number'];
     }
 
     /**
-     * @param int $tag_number
+     * @param int $serial_number
      */
-    public function setTagNumber($tag_number)
+    public function setSerialNumber($serial_number)
     {
-        $this->attributes['e_tag'] = $tag_number;
+        $this->attributes['serial_number'] = $serial_number;
     }
-
+    /**
+     * @return int
+     */public function getOldSerialNumber()
+    {
+        return $this->attributes['old_serial_number'];
+    }
+    /**
+     * @param int $old_serial_number
+     */public function setOldSerialNumber($old_serial_number)
+    {
+        $this->attributes['old_serial_number'] = $old_serial_number;
+    }
+    /**
+     * @return int
+     */public function getOlderSerialNumber()
+    {
+        return $this->attributes['older_serial_number'];
+    }
+    /**
+     * @param int $older_serial_number
+     */public function setOlderSerialNumber($older_serial_number)
+    {
+        $this->attributes['older_serial_number'] = $older_serial_number;
+    }
+    /**
+     * @return int
+     */public function getOriginalSerialNumber()
+    {
+        return $this->attributes['original_serial_number'];
+    }
+    /**
+     * @param int $original_serial_number
+     */public function setOriginalSerialNumber($original_serial_number)
+    {
+        $this->attributes['original_serial_number'] = $original_serial_number;
+    }
+    /**
+     * @return int
+     */public function getSupplementarySerialNumber()
+    {
+        return $this->attributes['supplementary_serial_number'];
+    }
+    /**
+     * @param int $supplementary_serial_number
+     */public function setSupplementarySerialNumber($supplementary_serial_number)
+    {
+        $this->attributes['supplementary_serial_number'] = $supplementary_serial_number;
+    }
     /**
      * @return int
      */
     public function getOriginalTagNumber()
     {
-        return $this->original_e_tag;
+        return $this->attributes['original_serial_number'];
     }
 
     /**
@@ -199,17 +274,23 @@ class Sheep extends Model
      */
     public function setOriginalTagNumber($tag_number)
     {
-        $this->attributes['original_e_tag'] = $tag_number;
+        $this->attributes['original_serial_number'] = $tag_number;
     }
 
+    /**
+     * @param int $tag_number
+     */
+    public function setTagNumber($tag_number)
+    {
+        $this->attributes['tag_number'] = $tag_number;
+    }
     /**
      * @return string
      */
     public function getMoveOn()
     {
-        return $this->move_on;
+        return $this->attributes['move_on'];
     }
-
     /**
      * @param string $move_on
      */
@@ -222,7 +303,7 @@ class Sheep extends Model
      */
     public function getMoveOff()
     {
-        return $this->move_off;
+        return $this->attributes['move_off'];
     }
     /**
      * @param string $move_off
@@ -234,23 +315,23 @@ class Sheep extends Model
     /**
      * @return string
      */
-    public function getOffHow()
+    public function getDestination()
     {
-        return $this->off_how;
+        return $this->attributes['destination'];
     }
+
     /**
-     * @param string $off_how
-     */
-    public function setOffHow($off_how)
-    {
-        $this->attributes['off_how'] = $off_how;
-    }
+     * @param string $destination
+     */public function setDestination($destination)
+{
+    $this->attributes['destination'] = $destination;
+}
     /**
      * @return string
      */
     public function getSex()
     {
-        return $this->sex;
+        return $this->attributes['sex'];
     }
     /**
      * @param string $sex
@@ -262,23 +343,23 @@ class Sheep extends Model
     /**
      * @return string
      */
-    public function getColourOfTag()
+    public function getTagColour()
     {
-        return $this->colour_of_tag;
+        return $this->attributes['tag_colour'];
     }
     /**
-     * @param string $colour_of_tag
+     * @param string $tag_colour
      */
-    public function setColourOfTag($colour_of_tag)
+    public function setTagColour($tag_colour)
     {
-        $this->attributes['colour_of_tag'] = $colour_of_tag;
+        $this->attributes['tag_colour'] = $tag_colour;
     }
     /**
      * @return int
      */
     public function getColourTagNumber()
     {
-        return $this->colour_tag;
+        return $this->attributes['colour_tag'];
     }
     /**
      * @param int $colour_tag
@@ -290,17 +371,20 @@ class Sheep extends Model
     /**
      * @return int
      */
-    public function getColourTagFlockNumber()
+    public function getSupplementaryTagFlockNumber()
     {
-        return $this->colour_flock;
+        return $this->attributes['supplementary_tag_flock_number'];
     }
     /**
-     * @param int $colour_flock
+     * @param int $flock_number
+     *
      */
-    public function setColourTagFlockNumber($colour_flock)
+    public function setSupplementaryTagFlockNumber($flock_number)
     {
-        $this->attributes['colour_flock'] = $colour_flock;
+        $this->attributes['supplementary_tag_flock_number'] = $flock_number;
     }
+
+
     /**
      * @param integer
      *
@@ -320,14 +404,15 @@ class Sheep extends Model
 
     public function scopeGetById($query,$id)
     {
-        return  $query->where('id',$id)->first();
+        $ewe = $query->where('id',$id)->first();
+        return $ewe;
     }
 
     public static function getByTag($flock, $tag)
     {
         try {
-            $ewe = Sheep::where('e_flock', $flock)
-                ->where('e_tag', $tag)
+            $ewe = Sheep::where('flock_number', $flock)
+                ->where('serial_number', $tag)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             return (NULL);
@@ -338,9 +423,9 @@ class Sheep extends Model
     public static function check($flock,$tag,$id)
     {
         $ewe = Sheep::withTrashed()
-            ->where('user_id',$id)
-            ->where('e_flock',$flock)
-            ->where('e_tag',$tag)
+            ->where('owner',$id)
+            ->where('flock_number',$flock)
+            ->where('serial_number',$tag)
             ->first();
         return (NULL !== $ewe?:NULL);
     }
@@ -360,9 +445,10 @@ class Sheep extends Model
             'day'       => 'digits:2|required|min:1|max:31',
             'month'     => 'digits:2|required|min:1|max:12',
             'year'      => 'integer|required|min:2006|max:2025',
-            'flock_number' => 'digits:6|required',
+            'flock_number'=> 'digits:6|required',
             'start_tag' => 'digits_between:1,5|required',
-            'end_tag'   => 'digits_between:1,5|required'
+            'end_tag'   => 'digits_between:1,5|required',
+            'colour_of_tag'=>'required',
         ],
         'dates'=>[
             'day'       => 'digits:2|required|min:1|max:31',
@@ -377,43 +463,66 @@ class Sheep extends Model
             'destination'=>'required'
         ],
         'single'=>[
-            'count'=>'integer|required',
-            'flock_number'=>'digits:6|required',
+            'count'     => 'integer|required',
+            'flock_number'   => 'digits:6|required',
+        ],
+        'death'=>[
+            'e_flock'   => 'digits:6|required',
+            'e_tag'     => 'numeric|required|between:1,99999',
         ]
 
     ];
     public function scopeReplaced($query,$id)
     {
-        $ewes = $query->where('user_id',$id)->whereRaw('`e_tag`!=`original_e_tag`')
+        $ewes = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')
             ->orderBy('updated_at')->paginate(20);
-        $count = $query->where('user_id',$id)->whereRaw('`e_tag`!=`original_e_tag`')->count();
+        $count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         return [$ewes,$count];
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
-        return $query->withTrashed('user_id',$id)->where('e_tag',$tag )
-            ->orWhere('e_tag_1',$tag )->orWhere('e_tag_2',$tag )->paginate(20);
+        return $query->withTrashed('owner',$id)->where('serial_number',$tag )
+            ->orWhere('old_serial_number',$tag )->orWhere('older_serial_number',$tag )->paginate(20);
     }
     public function scopeStock($query,$id,$sex)
     {
-        $ewes = $query->where('user_id',$id)->where('sex',$sex)->orderBy('move_on')->paginate(20);
-        $count = $query->where('user_id',$id)->where('sex',$sex)->count();
+        $ewes = $query->where('owner',$id)->where('sex',$sex)->orderBy('move_on')->paginate(20);
+        $count = $query->where('owner',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
     public function scopeOffList($query,$id)
     {
-        return $query->onlyTrashed()->where('user_id',$id)
-            ->where('off_how','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
+        $dates = $this->dateRange();
+        return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
+            ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
     public function scopeDead($query,$id)
     {
-        return $query->onlyTrashed()->where('user_id',$id)
-            ->where('off_how','like','died'.'%')->orderBy('e_flock')->paginate(20);
+        $dates = $this->dateRange();
+        return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
+            ->where('destination','like','died'.'%')->orderBy('flock_number')->paginate(20);
     }
     public function scopeTotal($query,$id)
     {
-        $ewes = $query->where('user_id',$id)->paginate(20);
-        $count = $query->where('user_id',$id)->count();
+        $ewes = $query->where('owner',$id)->paginate(20);
+        $count = $query->where('owner',$id)->count();
         return [$ewes,$count];
+    }
+    public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
+    {
+        return $query->where('flock_number',$flock_number)
+            ->where('serial_number',$serial_number)->first();
+        //return $ewe;
+    }
+
+    private function dateRange()
+    {
+        $date_from = Session::get('date_from');
+        $date_to = Session::get('date_to');
+        return [$date_from,$date_to];
     }
 }
