@@ -23,7 +23,11 @@ $url = Request::path();
 $elements = explode('/', $url);
 //$help_page = $elements[sizeof($elements)-1];
 		//dd($elements);
-$help_page = $elements[1];
+if(Request::path() === ('home')){
+    $help_page = $elements[0];}
+else
+    {$help_page = $elements[1];}
+
 		if (Auth::check()){$home_flock = Auth::user()->flock;}
 		else{$home_flock = 'false';}
 ?>

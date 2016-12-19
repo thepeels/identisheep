@@ -13,7 +13,8 @@
 @stop
 <?$f = 0;$m = 0;
 
-if ($sex == 'female') {$f = 1;}
+
+if (strcasecmp($sex ,'female') == 0) {$f = 1;}
 else {$m =1;} ?>
 @section('content')
     <div style="width:60%;margin-left:20%;">

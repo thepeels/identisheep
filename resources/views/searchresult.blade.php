@@ -81,6 +81,7 @@
            style="margin-bottom:-1px;"
            title="Search fo another Sheep">Search Again
         </a>
+        @if($date_off = (date('Y',strtotime($ewe->move_off))=="1970"))
         <a href="edit/{{$ewe->id}}"
            class="btn btn-default btn-xs"
            style="margin-bottom:-1px;"
@@ -91,6 +92,7 @@
            style="margin-bottom:-1px;"
            title="Edit this Sheep">Enter Death of this Sheep
         </a>
+        @endif
     </div>
 @stop
 
