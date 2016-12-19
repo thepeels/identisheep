@@ -495,8 +495,6 @@ class SheepController extends Controller {
 
         Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
         Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
-        //$date = Session::get('date_to');
-        //dd($date);
         }
         return Redirect::to('sheep/ewes');
     }

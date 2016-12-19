@@ -123,13 +123,10 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-<<<<<<< HEAD
+
             echo($ewelist[0][0]."<br>");
             echo($ewelist[1][0]."<br><br>");
-=======
-            echo ($ewelist[0][0]."<br>");
-            echo ($ewelist[1][0]."<br><br>");
->>>>>>> drop_some_tags
+
             foreach ($ewelist[2] as $ewe) {
                     $e_flock = substr($ewe, -11, 6);
                     $e_tag = substr($ewe, -5);

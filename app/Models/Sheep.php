@@ -14,6 +14,7 @@ use Redirect,Auth,Collection,DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
 
 
 class Sheep extends Model
@@ -521,8 +522,8 @@ class Sheep extends Model
 
     private function dateRange()
     {
-        $date_from = Session::get('date_from');
-        $date_to = Session::get('date_to');
+        $date_from = Null !=(Session::get('date_from'))?Session::get('date_from'):Carbon::now()->subYears(10);
+        $date_to = Null !=  (Session::get('date_to'))?Session::get('date_to'):Carbon::now();
         return [$date_from,$date_to];
     }
 }
