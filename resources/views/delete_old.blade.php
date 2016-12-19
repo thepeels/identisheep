@@ -15,9 +15,10 @@
     <div style="width:60%;margin-left:20%;">
         <h4>{{$title}}</h4>
         {!! Form::open(array('url' => '/sheep/delete','class'=>'form-inline','onsubmit' => 'return ConfirmDelete()')) !!}
-        {!! Form::label('text','Delete Records of sheep entered up to end of this Year...') !!}<br>
-        {!! Form::input('int','year',$year,['class'=>'new_class','placeholder'=>'YYYY','size' => '3']) !!}
-        {!! Form::submit($title,['class'=>'btn btn-info btn-xs']) !!}<br>
+        {!! Form::label('text','Delete Records of sheep entered up to 1st of December ...') !!}
+        {!! Form::input('int','year',$year,['class'=>'new_class','placeholder'=>'YYYY','size' => '3']) !!}<br>
+        {!! Form::label('text','Change this year to suit your needs') !!}<br><br>
+        {!! Form::submit($title,['class'=>'btn btn-danger btn-xs']) !!}<br>
         {!! $errors->first('year','<small style="color:#f00">:message</small>') !!}
         {!! Form::close() !!}
     </div>

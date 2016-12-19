@@ -99,11 +99,10 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $year = Input::get('year');
-        $date = Carbon::create($year,12,31,0);
+        $date = Carbon::create($year,11,30,23,59,59,'UTC');
         $date = $date->toDateTimeString();
-        Sheep::withTrashed()->where('move_on','<=',$date)->forceDelete();
-
-        return Redirect::to('sheep/list');
+        Sheep::permanentDelete($this->user(),$date);
+        return Redirect::to('sheep/ewes');
 
     }
 
@@ -358,15 +357,15 @@ class SheepController extends Controller {
         $sex            = Input::get('sex');
 
         $ewe = Sheep::firstOrNew([
-            'e_flock'           =>  $e_flock_number,
-            'e_tag'             =>  $e_tag,
-            'user_id'           =>  $this->user()
+            'flock_number'           =>  $e_flock_number,
+            'serial_number'             =>  $e_tag,
+            'owner'           =>  $this->user()
         ]);
         $ewe->setOriginalFlockNumber($e_flock_number);
         $ewe->setSupplementaryTagFlockNumber($e_flock_number);
         $ewe->setSerialNumber($e_tag);
         $ewe->setMoveOff($move_off);
-        $ewe->setOffHow($destination);
+        $ewe->setDestination($destination);
         $ewe->setSex($sex);
         $ewe->save();
         $ewe->delete();

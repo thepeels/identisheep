@@ -520,6 +520,11 @@ class Sheep extends Model
         //return $ewe;
     }
 
+    public function scopePermanentDelete($query,$id,$date)
+    {
+        return $query->withTrashed()->where('owner',$id)->where('move_on','<=',$date)
+            ->forceDelete();
+    }
     private function dateRange()
     {
         $date_from = Null !=(Session::get('date_from'))?Session::get('date_from'):Carbon::now()->subYears(10);
