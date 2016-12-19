@@ -57,13 +57,10 @@ class BatchController extends Controller {
 
         if(Input::get('check')) {
             $i = 0;
-<<<<<<< HEAD
+
             echo($ewelist[0][0]."<br>");
             echo($ewelist[1][0]."<br><br>");
-=======
-            echo($ewelist[0][0]."<br>");
-            echo($ewelist[1][0]."<br><br>");
->>>>>>> drop_some_tags
+
             foreach ($ewelist[2] as $ewe) {
                 $tag = new TagNumber($ewe);
                 if($tag->getSerialNumber() != 0) {
