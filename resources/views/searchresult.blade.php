@@ -86,6 +86,11 @@
            style="margin-bottom:-1px;"
            title="Edit this Sheep">Edit Sheep
         </a>
+        <a href="deathsearch/{{$ewe->flock_number}}/{{$ewe->serial_number}}/{{$ewe->sex}}"
+           class="btn btn-default btn-xs"
+           style="margin-bottom:-1px;"
+           title="Edit this Sheep">Enter Death of this Sheep
+        </a>
     </div>
 @stop
 

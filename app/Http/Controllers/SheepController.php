@@ -392,6 +392,16 @@ class SheepController extends Controller {
             'e_tag'     => NULL
         ]);
     }
+    public function getDeathsearch($flock_number,$serial_number,$sex)
+    {
+        return View::make('sheepdeath')->with([
+            'title'     => 'Record this Sheep Death (correct date?)',
+            'id'        => $this->user(),
+            'sex'       => $sex,
+            'e_flock'   => $flock_number,
+            'e_tag'     => $serial_number
+        ]);
+    }
     public function postDeath()
     {
         $rules = Sheep::$rules['dates_and_tags'];
