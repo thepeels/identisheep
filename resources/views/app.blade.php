@@ -105,7 +105,7 @@ else
 							<li><a href="/sheep/deadlist/screen">Dead List</a></li>
 						</ul>
 					</li>
-					<li><a href="/help/{{$help_page}}">Help</a></li>
+					<li><a href="/help/{{$help_page}}" target="_blank">Help</a></li>
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>

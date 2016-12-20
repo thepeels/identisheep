@@ -32,5 +32,5 @@ Route::controller('test','TestController');
 Route::get('singles','Singles@index');
 //Route::get('list','SheepController@index');
 
-Route::get('back',function(){return Redirect::back();});
+Route::get('back',function(){return redirect()->back();});
 

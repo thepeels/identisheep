@@ -15,10 +15,7 @@
     <div style="width:60%;margin-left:20%;">
         <h4>{{$title}}</h4>
         {!! $text !!}
-        <a href="../{{$return}}"
-           class="btn btn-info "
-           style="margin-top:10px;margin-left:50px;"
-        >Close
-        </a>
+
+        <input class="btn btn-xs btn-info" type="button" value="Close this window" onclick="self.close()">
     </div>
 @stop

@@ -22,11 +22,12 @@ class HelpController extends Controller {
             $help = Help::$help_text[$page];
         }
         catch (Exception $e){
+
             //throw new DomainException('help page not published yet');
             return View::make('help')->with([
                 'return'=> 'sheep/'.$page,
-                'title' => 'Error',
-                'text'=> 'help page not published yet'
+                'title' => 'Please be patient...',
+                'text'=> 'This help page not published yet<br><br>'
             ]);
         }
         return View::make('help')->with([
@@ -35,7 +36,6 @@ class HelpController extends Controller {
             'text' => $help[2]
         ]);
 	}
-
 
 	public static $help_text= [
 	    'addewe'=>['Help for Add a ewe page','This is the help text <br>

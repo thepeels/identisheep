@@ -10,3 +10,5 @@ div.scrolling-area{height: 800px;overflow: auto;}
 .narrow{width:30%;}
 .medium-width{width:50%;}
 label{min-width:40px;}
+.bolder{font-size: larger;
+font-weight: 400;}

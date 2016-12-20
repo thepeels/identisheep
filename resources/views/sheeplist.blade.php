@@ -14,12 +14,13 @@ $url = Request::path();
 $elements = explode('/', $url);
         $string = array_slice($elements,0,-1);
         $print = implode("/",$string).'/print';
+        $filtered_pages = array('ewes','tups');
 ?>
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
 
-        @if($elements[sizeof($elements)-2]===('ewes'||'tups'))
+        @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
             - (number of records = {{$count}})
         @endif
     </h4>
@@ -44,7 +45,7 @@ $elements = explode('/', $url);
             <th class="no-print">Old Tags</th>
             <th class="no-print">Older Tags</th>
             <th>Move on</th>
-            @if($elements[sizeof($elements)-2] !== ('ewes' || 'tups'))
+            @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
             <th>Move Off</th>
             <th>How moved off</th>
             <th>Sex</th>
@@ -76,7 +77,7 @@ $elements = explode('/', $url);
                 <td>
                     {{$date_on}}
                 </td>
-                @if($elements[sizeof($elements)-2] !== ('ewes' || 'tups'))
+                @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
                     <td>
                         {{$date_off}}
                     </td>

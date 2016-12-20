@@ -17,9 +17,9 @@
     {!!Form::open(array('url' => '/sheep/changetags','class'=>'form-inline'))!!}
 
     {!!Form::input('hidden','id',$id)!!}
-    {!!Form::label('text','UK 0 '.$e_flock.' '.$e_tag)!!}
-    {!!Form::input('text','old_e_flock',$e_flock,['class'=>'new_class input-xs','placeholder'=>' Old Flock Number'])!!}
-    {!!Form::input('text','old_e_tag',sprintf('%05d',$e_tag),['class'=>'new_class input-xs','placeholder'=>' Old Number'])!!}
+    {!!Form::label('text','UK 0 '.$e_flock.' '.sprintf('%05d',$e_tag),['class' =>'bolder'])!!}
+    {!!Form::input('hidden','old_e_flock',$e_flock,['class'=>'new_class input-xs','placeholder'=>' Old Flock Number'])!!}
+    {!!Form::input('hidden','old_e_tag',sprintf('%05d',$e_tag),['class'=>'new_class input-xs','placeholder'=>' Old Number'])!!}
     <br><br>
     {!! Form::label('text','New Numbers') !!}<br>
     {!!Form::label('text','UK 0')!!}
