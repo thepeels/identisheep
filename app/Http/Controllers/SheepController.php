@@ -598,7 +598,7 @@ class SheepController extends Controller {
     {
         return View('date_setter')->with([
             'target' => 'sheeplist',
-            'title' => 'Select Date Range for Lists',
+            'title' => 'Select Date Range for Movement \'OFF\' Lists',
         ]);
     }
 

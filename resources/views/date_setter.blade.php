@@ -37,6 +37,6 @@
         <h4>or</h4>
         {!! Form::label('text','Select one year prior to 1st December this year') !!}
         {!! Form::input('checkbox','oneyear') !!}<br><br>
-        {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
+        {!!Form::submit($title,['target'=>'_blank','class'=>'btn btn-info btn-xs'])!!}
     </div>
 @stop
