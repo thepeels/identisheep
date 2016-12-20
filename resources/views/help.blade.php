@@ -17,7 +17,7 @@
         {!! $text !!}
         <a href="../{{$return}}"
            class="btn btn-info "
-           style="margin-top:50px;margin-left:50px;"
+           style="margin-top:10px;margin-left:50px;"
         >Close
         </a>
     </div>

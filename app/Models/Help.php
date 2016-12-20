@@ -7,10 +7,14 @@ class Help extends Model {
 	public static $help_text =
         [
         'addewe'    =>  ['sheep/addewe','Help for Add a ewe page',
-            'This is the help text <br>this is after the line break'],
+            '<p>This is the help text <br>this is after the line break</p>'],
         'seek'      =>  ['sheep/seek','Help for Sheep finder page',
-            'Flock Number entered must be six digits - i.e. excluding the \'UK\' and the leading zero.<br>
-            The Tag number can be entered without the leading zeros but will always be shown with 5 digits.'],
+            '<p>Flock Number entered must be six digits - i.e. excluding the \'UK\' and the leading 
+            zero.<br>The Tag number can be entered without the leading zeros but will always be shown with 5 digits.</p>'],
+        'search'    =>  ['sheep/search','Help for Search page',
+            '<p>The Tag number can be entered without the leading zeros but will always be returned with 5 digits. <br>  
+            Search includes dead sheep still in records or sheep moved off the holding.</p>'],
+
         'batchops'  =>  ['batch/batchops','.csv File entry',
             '<p>First prepare your .csv File. This can be from a tag reader, or a file can be generated from 
              a market list of tag reads. <br> To do this, scan the document with \'OCR\' and save it as a text 
@@ -27,12 +31,13 @@ class Help extends Model {
              If you are satisfied with the list, press the backspace key and then the \'load\' button.<br> Now the 
              list will be loaded into your \'off list\' (Sheep Off Holding) and also removed from the \'all sheep\' 
              list.<br>'],
-        'batch'     =>  ['batch/batch','Batch of Sheep onto Holding','Change the default date if relevant.<br> 
+        'batch'     =>  ['batch/batch','Batch of Sheep onto Holding',',<p>Change the default date if relevant.<br> 
             Enter the details of a batch of sheep where the tag series is continuous with no gaps. <br> 
-            If you have a gap, go up to the gap first, and then start a new batch from after the gap.<br> '],
-        'delete'    =>  ['sheep/delete','Deleting old records','This option will permanently delete all 
-            records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.'],
-
+            If you have a gap, go up to the gap first, and then start a new batch from after the gap.<br></p> '],
+        'delete'    =>  ['sheep/delete','Deleting old records','<p>This option will permanently delete all 
+            records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.</p>'],
+        'death'     =>  ['sheep/death','Recording a death','<p>This action removes a sheep from the \'Sheep\' lists, 
+            but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number</p>']
     ];
 
 }

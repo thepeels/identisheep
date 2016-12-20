@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Help,View;
+use App\Domain\DomainException;
+use Exception;
 
 
 class HelpController extends Controller {
@@ -16,7 +18,17 @@ class HelpController extends Controller {
 	 */
 	public function index($page)
 	{
-        $help = Help::$help_text[$page];
+        try{
+            $help = Help::$help_text[$page];
+        }
+        catch (Exception $e){
+            //throw new DomainException('help page not published yet');
+            return View::make('help')->with([
+                'return'=> 'sheep/'.$page,
+                'title' => 'Error',
+                'text'=> 'help page not published yet'
+            ]);
+        }
         return View::make('help')->with([
             'return'=>$help[0],
             'title'=> $help[1],
