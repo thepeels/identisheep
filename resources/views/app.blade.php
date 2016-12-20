@@ -55,7 +55,7 @@ else
 							<li><a href="/sheep/noneid/screen">Non-EID</a></li>
 							<li><a href="/sheep/replaced/screen">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
-							<li><a href="/batch/homebredlist/screen">Home Bred Tags</a></li>
+							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
