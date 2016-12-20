@@ -102,6 +102,13 @@ return [
 	|
 	*/
 
-	'attributes' => [],
+	'attributes' => [
+	    'e_tag'         =>  'Individual Serial Number',
+        'e_flock'       =>  'Flock Number',
+        'flock_number'  =>  'Flock Number',
+        'colour_of_tag' =>  'Tag Colour',
+        'start_tag'     =>  'Start Tag Number',
+        'end_tag'       =>  'Finish Number',
+    ],
 
 ];

@@ -181,12 +181,11 @@ class SheepController extends Controller {
             'e_tag'     =>$ewe->getSerialNumber()
         ]);
     }
+
     /**
-     * Update Tag numbers
-     *
-     * @param none
-     *
-     * @return view
+     * @param $flock_old
+     * @param $flock_new
+     * @return mixed
      */
     public function getEditmore($flock_old,$flock_new)
     {
@@ -199,14 +198,9 @@ class SheepController extends Controller {
             'e_tag'     =>$ewe->getSerialNumber()
         ]);
     }
+
     /**
-     * Update finding by tag number
-     *
-     * @param int $tag
-     *
-     * @param string $flock_number
-     *
-     * @return view
+     * @return mixed
      */
     public function postSeek()
     {
@@ -263,12 +257,9 @@ class SheepController extends Controller {
             'title'     => 'Find a sheep'
         ]);
     }
+
     /**
-     * Load Batch entry form
-     *
-     * @param none
-     *
-     * @return view
+     * @return mixed
      */
     public function getBatch()
     {
@@ -277,6 +268,11 @@ class SheepController extends Controller {
             'title' => 'Enter Batch of tags'
         ]);
     }
+
+    /**
+     * @param $home_bred
+     * @return mixed
+     */
     public function getAddewe($home_bred)
     {
         return View::make('sheepaddewe')
@@ -285,9 +281,14 @@ class SheepController extends Controller {
                 'alt_title' => 'Add a Home Bred Ewe',
                 'id'        =>  $this->user(),
                 'sex'       => 'female',
-                'home_bred'  => $home_bred
+                'home_bred' => $home_bred
             ]);
     }
+
+    /**
+     * @param $home_bred
+     * @return mixed
+     */
     public function getAddtup($home_bred)
     {
         return View::make('sheepaddewe')
@@ -299,6 +300,10 @@ class SheepController extends Controller {
                 'home_bred'  => $home_bred
             ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function postAddewe()
     {
         $rules = Sheep::$rules['dates_and_tags'];
@@ -345,9 +350,13 @@ class SheepController extends Controller {
             }
         }
 
-        return Redirect::back()->withInput([Input::except('e_tag')]);
+        return Redirect::back()->withInput(Input::except('e_tag'));
     }
 
+    /**
+     * @param $sex
+     * @return mixed
+     */
     public function getSheepoff($sex)
     {
         return View::make('sheepoff')->with([
@@ -359,6 +368,9 @@ class SheepController extends Controller {
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function postSheepoff()
     {
         $rules = Sheep::$rules['dates_and_tags'];
@@ -400,6 +412,9 @@ class SheepController extends Controller {
 
     }
 
+    /**
+     * @return mixed
+     */
     public function getDeath()
     {
         return View::make('sheepdeath')->with([
@@ -410,6 +425,13 @@ class SheepController extends Controller {
             'e_tag'     => NULL
         ]);
     }
+
+    /**
+     * @param $flock_number
+     * @param $serial_number
+     * @param $sex
+     * @return mixed
+     */
     public function getDeathsearch($flock_number,$serial_number,$sex)
     {
         return View::make('sheepdeath')->with([
@@ -420,6 +442,10 @@ class SheepController extends Controller {
             'e_tag'     => $serial_number
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function postDeath()
     {
         $rules = Sheep::$rules['dates_and_tags'];
@@ -459,6 +485,14 @@ class SheepController extends Controller {
             'sex'       => $sex
         ]);
     }
+
+    /**
+     * @param $id
+     * @param $e_flock
+     * @param $e_tag
+     * @param $sex
+     * @return mixed
+     */
     public function getEnterdeath($id,$e_flock,$e_tag,$sex)
     {
         return View::make('sheepdeath')->with([
@@ -469,12 +503,20 @@ class SheepController extends Controller {
             'sex'       => $sex
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function getSearch()
     {
          return View::make('search')->with([
              'title'=>'Search for a Tag'
          ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function getReplaced()
     {
         $ewes = Sheep::replaced($this->user());
@@ -485,6 +527,10 @@ class SheepController extends Controller {
             'title'=>'Tag Replacements List'
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function postSearch()
     {
         $tag = Input::get('tag');
@@ -505,6 +551,10 @@ class SheepController extends Controller {
             'title'=>'Search Results for Tag '.$tag
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function getNoneid()
     {
         $ewes = Sheep::total($this->user());
@@ -516,6 +566,9 @@ class SheepController extends Controller {
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function postDatesetter()
     {
         if (Input::get('oneyear') == "on") {

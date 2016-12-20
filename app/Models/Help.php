@@ -7,7 +7,9 @@ class Help extends Model {
 	public static $help_text =
         [
         'addewe'    =>  ['sheep/addewe','Help for Add a ewe page',
-            '<p>This is the help text <br>this is after the line break</p>'],
+            '<p>On this page alter the entry date if necessary.<br>Enter the tag number if a home bred ewe,
+            but also the flock number if it is a bought in sheep<br> The tag colour is optional but does appear as a column
+            in many of the lists.</p>'],
         'seek'      =>  ['sheep/seek','Help for Sheep finder page',
             '<p>Flock Number entered must be six digits - i.e. excluding the \'UK\' and the leading 
             zero.<br>The Tag number can be entered without the leading zeros but will always be shown with 5 digits.</p>'],
