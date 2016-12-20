@@ -29,7 +29,7 @@ Route::controller('batch','BatchController');
 
 Route::controller('test','TestController');
 
-Route::get('Singles','Singles@index');
+Route::get('singles','Singles@index');
 //Route::get('list','SheepController@index');
 
 Route::get('back',function(){return Redirect::back();});

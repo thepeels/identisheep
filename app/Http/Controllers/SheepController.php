@@ -39,38 +39,57 @@ class SheepController extends Controller {
     {
         return Auth::user()->id;
     }
-    public function getEwes()
+    public function getEwes($print)
     {
-        $ewes = Sheep::stock($this->user(),'female');
-
+        if ($print == 'print'){
+            $ewes = Sheep::stockPrint($this->user(),'female');
+        }
+        else {
+            $ewes = Sheep::stock($this->user(), 'female');
+        }
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
             'title'=>'All Female Sheep',
             'count'=>$ewes[1]
         ]);
     }
-    public function getTups()
+    public function getTups($print)
 	{
-        $ewes = Sheep::stock($this->user(),'male');
-
+        if ($print == 'print'){
+            $ewes = Sheep::stockPrint($this->user(),'male');
+        }
+        else {
+            $ewes = Sheep::stock($this->user(), 'male');
+        }
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
             'title'=>'All Tups ',
             'count'=>$ewes[1]
         ]);
 	}
-    public function getOfflist()
+    public function getOfflist($print)
     {
-        $ewes = Sheep::offList($this->user());
+        if ($print == 'print'){
+            $ewes = Sheep::offListPrint($this->user());
+        }
+        else {
+            $ewes = Sheep::offList($this->user());
+        }
 
         return view('sheeplist')->with([
             'ewes'  =>  $ewes,
             'title' =>  'Sheep Moved Off'
         ]);
     }
-    public function getDeadlist()
+    public function getDeadlist($print)
     {
-        $ewes = Sheep::dead($this->user());
+        if ($print == 'print'){
+            $ewes = Sheep::deadPrint($this->user());
+        }
+        else {
+            $ewes = Sheep::dead($this->user());
+        }
+        //$ewes = Sheep::dead($this->user());
 
         return view('sheeplist')->with([
             'ewes'=>$ewes,

@@ -491,6 +491,12 @@ class Sheep extends Model
         $count = $query->where('owner',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
+    public function scopeStockPrint($query,$id,$sex)
+    {
+        $ewes = $query->where('owner',$id)->where('sex',$sex)->orderBy('move_on')->get();
+        $count = $query->where('owner',$id)->where('sex',$sex)->count();
+        return [$ewes,$count];
+    }
     public function scopeOffList($query,$id)
     {
         $dates = $this->dateRange();
@@ -499,6 +505,14 @@ class Sheep extends Model
             ->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
+    public function scopeOffListPrint($query,$id)
+    {
+        $dates = $this->dateRange();
+        return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
+            ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->get();
+    }
     public function scopeDead($query,$id)
     {
         $dates = $this->dateRange();
@@ -506,6 +520,14 @@ class Sheep extends Model
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
             ->where('destination','like','died'.'%')->orderBy('flock_number')->paginate(20);
+    }
+    public function scopeDeadPrint($query,$id)
+    {
+        $dates = $this->dateRange();
+        return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_off','>=',$dates[0])
+            ->where('move_off','<=',$dates[1])
+            ->where('destination','like','died'.'%')->orderBy('flock_number')->get();
     }
     public function scopeTotal($query,$id)
     {

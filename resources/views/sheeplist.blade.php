@@ -9,18 +9,30 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
+<?
+$url = Request::path();
+$elements = explode('/', $url);
+        $string = array_slice($elements,0,-1);
+        $print = implode("/",$string).'/print';
+?>
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4>{{$title}}
-        @if(Request::path() === ('sheep/ewes')
-                || Request::path() === ('sheep/tups')
-                || Request::path() === ('sheep/noneid'))
+
+        @if($elements[sizeof($elements)-2]===('ewes'||'tups'))
             - (number of records = {{$count}})
         @endif
     </h4>
         @if(Request::path() !== ('sheep'))
-            <div class="no-print">
-                {!! $ewes->render() !!}
+            <div class="no-print" style="margin:0 0 10px;">
+                @if($elements[sizeof($elements)-1]!='print')
+                {!! $ewes->render() !!}<br>
+                <a href="../../{{$print}}"
+                   class="btn btn-default btn-xs"
+                   style="margin-bottom:-1px;"
+                   title="printable version of whole list">Printable Version
+                </a>
+                @endif
             </div>
         @endif
         <table class="table table-striped table-bordered table-sm table-condensed print" >
@@ -32,7 +44,7 @@
             <th class="no-print">Old Tags</th>
             <th class="no-print">Older Tags</th>
             <th>Move on</th>
-            @if(Request::path() !== 'sheep/ewes' && Request::path() !== ('sheep/tups'))
+            @if($elements[sizeof($elements)-2] !== ('ewes' || 'tups'))
             <th>Move Off</th>
             <th>How moved off</th>
             <th>Sex</th>
@@ -64,7 +76,7 @@
                 <td>
                     {{$date_on}}
                 </td>
-                @if(Request::path() !== 'sheep/ewes' && Request::path() !== ('sheep/tups'))
+                @if($elements[sizeof($elements)-2] !== ('ewes' || 'tups'))
                     <td>
                         {{$date_off}}
                     </td>
@@ -85,6 +97,7 @@
                            title="Edit this Sheep">Edit Sheep
                         </a>
                     </td>
+
                 @endif
             </tr>
 

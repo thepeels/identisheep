@@ -50,12 +50,12 @@ else
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/ewes">Ewes</a></li>
-							<li><a href="/sheep/tups">Tups</a></li>
-							<li><a href="/sheep/noneid">Non-EID</a></li>
-							<li><a href="/sheep/replaced">Replaced Tags</a></li>
+							<li><a href="/sheep/ewes/screen">Ewes</a></li>
+							<li><a href="/sheep/tups/screen">Tups</a></li>
+							<li><a href="/sheep/noneid/screen">Non-EID</a></li>
+							<li><a href="/sheep/replaced/screen">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
-							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
+							<li><a href="/batch/homebredlist/screen">Home Bred Tags</a></li>
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
@@ -101,8 +101,8 @@ else
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Off Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/offlist/full">Off List</a></li>
-							<li><a href="/sheep/deadlist">Dead List</a></li>
+							<li><a href="/sheep/offlist/screen">Off List</a></li>
+							<li><a href="/sheep/deadlist/screen">Dead List</a></li>
 						</ul>
 					</li>
 					<li><a href="/help/{{$help_page}}">Help</a></li>
