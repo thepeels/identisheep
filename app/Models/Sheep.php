@@ -513,6 +513,13 @@ class Sheep extends Model
         $count = $query->where('owner',$id)->count();
         return [$ewes,$count];
     }
+
+    /**
+     * @param $query
+     * @param $flock_number
+     * @param $serial_number
+     * @return mixed
+     */
     public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
     {
         return $query->where('flock_number',$flock_number)

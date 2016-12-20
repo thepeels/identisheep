@@ -199,10 +199,9 @@ class SheepController extends Controller {
         $flock_number = Input::get('e_flock');
         $serial_number    =Input::get('e_tag');
         /**@var $ewe Sheep*/
-        $ewe = Sheep::where('id',$this->user())
-        ->where('flock_number',$flock_number)
-        ->where('serial_number', $serial_number)->first();
-        //above as 'getByEarNumbers()'returns empty model instead of NULL ???
+        $ewe = $this->getByEarNumbers($flock_number, $serial_number);
+        //$ewe = Sheep::getByEarNumbers($flock_number,$serial_number);
+        //above as 'Sheep::getByEarNumbers()'returns empty model instead of NULL ???
         if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
             return Redirect::to('sheep/seek')->withInput();
         }
@@ -529,5 +528,18 @@ class SheepController extends Controller {
             'target' => 'sheeplist',
             'title' => 'Select Date Range for Lists',
         ]);
+    }
+
+    /**
+     * @param $flock_number
+     * @param $serial_number
+     * @return mixed
+     */
+    public function getByEarNumbers($flock_number, $serial_number)
+    {
+        $ewe = Sheep::where('owner', $this->user())
+            ->where('flock_number', $flock_number)
+            ->where('serial_number', $serial_number)->first();
+        return $ewe;
     }
 }
