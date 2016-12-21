@@ -385,12 +385,8 @@ class Sheep extends Model
         $this->attributes['supplementary_tag_flock_number'] = $flock_number;
     }
 
-
     /**
-     * @param integer
-     *
-     * @return array
-     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -535,22 +531,15 @@ class Sheep extends Model
         $count = $query->where('owner',$id)->count();
         return [$ewes,$count];
     }
-
-    /**
-     * @param $query
-     * @param $flock_number
-     * @param $serial_number
-     * @return mixed
-     */
     public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
     {
         return $query->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
     }
-
     public function scopePermanentDelete($query,$id,$date)
     {
-        return $query->withTrashed()->where('owner',$id)->where('move_on','<=',$date)
+        return $query->onlyTrashed()->where('owner',$id)
+            ->where('move_on','<=',$date)
             ->forceDelete();
     }
     private function dateRange()

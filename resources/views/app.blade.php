@@ -28,7 +28,7 @@ if(Request::path() === ('home')){
 else
     {$help_page = $elements[1];}
 
-		if (Auth::check()){$home_flock = Auth::user()->flock;}
+		if (Auth::check()){$home_flock = Auth::user()->getFlock();}
 		else{$home_flock = 'false';}
 ?>
 <body>
@@ -116,7 +116,7 @@ else
 								<li><a href="/auth/logout">Logout</a></li>
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/sheep/search">Search</a></li>
-								<li><a href="/sheep/datesetter">Select Date Range</a></li>
+								<li><a href="/sheep/datesetter" target="_blank">Select Date Range</a></li>
 							</ul>
 						</li>
 					@endif

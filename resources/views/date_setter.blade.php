@@ -33,10 +33,15 @@
         {!!$errors->first('day_to','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('month_to','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year_to','<small style="color:#f00">:message</small>')!!}<br>
-        {!! Form::input('hidden','target',$target) !!}
         <h4>or</h4>
         {!! Form::label('text','Select one year prior to 1st December this year') !!}
         {!! Form::input('checkbox','oneyear') !!}<br><br>
-        {!!Form::submit($title,['target'=>'_blank','class'=>'btn btn-info btn-xs'])!!}
+        {!!Form::submit($title,['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}
     </div>
+<!--<script>
+            window.onunload = refreshParent;
+            function refreshParent() {
+            window.opener.location.reload();
+            }
+</script>-->
 @stop

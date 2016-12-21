@@ -121,7 +121,7 @@ class SheepController extends Controller {
         $date = Carbon::create($year,11,30,23,59,59,'UTC');
         $date = $date->toDateTimeString();
         Sheep::permanentDelete($this->user(),$date);
-        return Redirect::to('sheep/ewes');
+        return Redirect::to('sheep/ewes/screen');
 
     }
 
@@ -404,11 +404,8 @@ class SheepController extends Controller {
 
         return Redirect::back()->with([
             'title'     => 'Single '.ucwords($ewe->getSex()).' Sheep Off',
-            'id'        => $this->user(),
-            'e_flock'   => NULL,
-            'e_tag'     => NULL,
-            'sex'       => $ewe->getSex()
-        ]);
+            ])
+            ->withInput(Input::except('e_tag'));
 
     }
 
@@ -583,12 +580,11 @@ class SheepController extends Controller {
         $year_to = Input::get('year_to');
         $month_to = Input::get('month_to');
         $day_to = Input::get('day_to');
-        $target = Input::get('target');
 
         Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
         Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
         }
-        return Redirect::to('sheep/ewes/screen');
+        return ;
     }
 
     /**
@@ -597,7 +593,6 @@ class SheepController extends Controller {
     public function getDatesetter()
     {
         return View('date_setter')->with([
-            'target' => 'sheeplist',
             'title' => 'Select Date Range for Movement \'OFF\' Lists',
         ]);
     }

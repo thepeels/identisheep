@@ -92,7 +92,7 @@ $elements = explode('/', $url);
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
                     <td class="no-print">
-                        <a href="edit/{{$ewe->id}}"
+                        <a href="../edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"
                            title="Edit this Sheep">Edit Sheep
