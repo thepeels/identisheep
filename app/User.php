@@ -1,6 +1,5 @@
 <?php namespace App;
 
-use bar\baz\source_with_namespace;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -27,9 +26,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	    'name',
         'email',
         'password',
-        'flock'
+        'flock',
+        'address',
+        'business'
     ];
-
+    /**
+     * @var int
+     */
+    protected $flock;
+    /**
+     * @var string
+     */
+    protected $address;
+    /**
+     * @var string
+     */
+    protected $business;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -37,50 +49,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
     /**
-     * @var string
+     * @return int 
      */
-    protected $name;
-    protected $email;
-    protected $password;
-    /**
-     * @var int
-     */
-    protected $flock;
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->attributes['name'] = $name;
-    }
-    /**
-     * @return string 
-     */
-    public function getName(){
-        return $this->attributes['name'];
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->attributes['email'] = $email;
-    }
-    /**
-     * @return string
-     */
-    public function getEmail(){
-        return $this->attributes['email'];
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->attributes['password'] = $password;
+    public function getFlock(){
+        return $this->attributes['flock'];
     }
 
     /**
@@ -91,11 +63,34 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['flock'] = $flock;
     }
     /**
-     * @return int
+     * @return string 
      */
-    public function getFlock(){
-        return $this->attributes['flock'];
+    public function getAddress(){
+        return $this->attributes['address'];
     }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->attributes['address'] = $address;
+    }
+    /**
+     * @return string
+     */
+    public function getBusiness(){
+        return $this->attributes['business'];
+    }
+
+    /**
+     * @param string $business
+     */
+    public function setBusiness($business)
+    {
+        $this->attributes['business'] = $business;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

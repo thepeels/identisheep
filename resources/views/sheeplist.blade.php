@@ -18,7 +18,8 @@ $elements = explode('/', $url);
 ?>
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
-    <h4>{{$title}}
+    <h4><p class="no-screen"> {{Auth::user()->getBusiness()}}, {{Auth::user()->getAddress()}}</p><br>
+        {{$title}}
 
         @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
             - (number of records = {{$count}})
