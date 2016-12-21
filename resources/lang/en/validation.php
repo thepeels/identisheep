@@ -109,6 +109,8 @@ return [
         'colour_of_tag' =>  'Tag Colour',
         'start_tag'     =>  'Start Tag Number',
         'end_tag'       =>  'Finish Number',
+        'business'      =>  'Business Name',
+        'address'       =>  'Farm Address and Post Code'
     ],
 
 ];
