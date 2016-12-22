@@ -515,7 +515,7 @@ class Sheep extends Model
         return $query->onlyTrashed()->where('owner',$id)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
-            ->where('destination','like','died'.'%')->orderBy('flock_number')->paginate(20);
+            ->where('destination','like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
     public function scopeDeadPrint($query,$id)
     {
@@ -523,7 +523,7 @@ class Sheep extends Model
         return $query->onlyTrashed()->where('owner',$id)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
-            ->where('destination','like','died'.'%')->orderBy('flock_number')->get();
+            ->where('destination','like','died'.'%')->orderBy('move_off','DESC')->get();
     }
     public function scopeTotal($query,$id)
     {

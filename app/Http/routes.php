@@ -23,7 +23,10 @@ Route::controllers([
 ]);
 Route::get('login','Auth\AuthController@index');
 
+//Route::get('sheep/{print?}', ['as'=>'sheep','uses'=> 'SheepController@getEwes']);
+
 Route::controller('sheep','SheepController');
+
 
 Route::controller('batch','BatchController');
 
@@ -33,4 +36,5 @@ Route::get('singles','Singles@index');
 //Route::get('list','SheepController@index');
 
 Route::get('back',function(){return redirect()->back();});
+
 

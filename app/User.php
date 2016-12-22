@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Psy\Util\String;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -28,7 +29,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'password',
         'flock',
         'address',
-        'business'
+        'business',
+        'holding'
     ];
     /**
      * @var int
@@ -42,6 +44,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var string
      */
     protected $business;
+    /** 
+     * @var string 
+     */
+    protected $holding;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -89,6 +95,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function setBusiness($business)
     {
         $this->attributes['business'] = $business;
+    }
+    /**
+     * @return string 
+     */
+    public function getHolding(){
+        return $this->attributes['holding'];
+    }
+    /**
+     * @param string $holding
+     */
+    public function setHolding($holding)
+    {
+        $this->attributes['holding'] = $holding;
     }
 
     /**

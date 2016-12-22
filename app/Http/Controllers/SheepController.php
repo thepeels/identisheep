@@ -41,6 +41,7 @@ class SheepController extends Controller {
     }
     public function getEwes($print)
     {
+        if ($print == NULL)$print = 'screen';
         if ($print == 'print'){
             $ewes = Sheep::stockPrint($this->user(),'female');
         }
