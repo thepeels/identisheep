@@ -110,7 +110,8 @@ return [
         'start_tag'     =>  'Start Tag Number',
         'end_tag'       =>  'Finish Number',
         'business'      =>  'Business Name',
-        'address'       =>  'Farm Address and Post Code'
+        'address'       =>  'Farm Address and Post Code',
+        'holding'       =>  'Holding Number (CPH)'
     ],
 
 ];
