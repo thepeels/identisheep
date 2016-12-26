@@ -585,7 +585,9 @@ class SheepController extends Controller {
         Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
         Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
         }
-        return Redirect::to(URL::current())->withErrors(['date_set'=>'The dates have been set click \'Finished\' to go back']);
+        return Redirect::to(URL::current())->withErrors(['date_set'=>'The date range has been set at<br> 
+            between '.date('d-m-Y',strtotime(Session::get('date_from'))).'
+            and '.date('d-m-Y',strtotime(Session::get('date_to'))).'<br>  click \'Finished\' to go continue']);
     }
 
     /**
