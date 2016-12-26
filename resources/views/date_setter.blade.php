@@ -36,7 +36,9 @@
         <h4>or</h4>
         {!! Form::label('text','Select one year prior to 1st December this year') !!}
         {!! Form::input('checkbox','oneyear') !!}<br><br>
-        {!!Form::submit($title,['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}
+        {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}<br>
+        {!!$errors->first('date_set') !!}<br>
+        {!!Form::submit('Finished',['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}<br>
     </div>
 <!--<script>
             window.onunload = refreshParent;

@@ -10,6 +10,7 @@ use Illuminate\Pagination\Paginator;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class SheepController extends Controller {
     /**
@@ -572,7 +573,6 @@ class SheepController extends Controller {
         if (Input::get('oneyear') == "on") {
             Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december this year')));
             Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 december last year')));
-            //dd(Session::get('date_to'));
         } else {
 
         $year_from = Input::get('year');
@@ -585,7 +585,7 @@ class SheepController extends Controller {
         Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
         Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
         }
-        return ;
+        return Redirect::to(URL::current())->withErrors(['date_set'=>'The dates have been set click \'Finished\' to go back']);
     }
 
     /**
@@ -594,6 +594,7 @@ class SheepController extends Controller {
     public function getDatesetter()
     {
         return View('date_setter')->with([
+
             'title' => 'Select Date Range for Movement \'OFF\' Lists',
         ]);
     }
