@@ -1,6 +1,10 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Request;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -11,9 +15,39 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		//
-	}
+        view()->composer('*', function($view)
+        {
+            if (Auth::check()){
+                $home_flock = Auth::user()->getFlock();
+            }
+            else{
+                $home_flock = 'false';
+            }
+            //************ logic from app.blade ************//
+            $url = Request::path();
+            $elements = explode('/', $url);
+            if(Request::path() === ('home')){
+                $help_page = $elements[0];
+            }
+            else{
+                $help_page = $elements[1];
+            }
+            //**************//
+            //********* logic from sheeplist page***********//
+            $string = array_slice($elements,0,-1);
+            $print = implode("/",$string).'/print';
+            $filtered_pages = array('ewes','tups');
+            //***********//
+            $view->with([
+                'home_flock'    => $home_flock,
+                'help_page'     => $help_page,
+                'filtered_pages'=> $filtered_pages,
+                'print'         => $print,
+                'elements'      => $elements
+            ]);
+        });
 
+	}
 	/**
 	 * Register any application services.
 	 *

@@ -18,19 +18,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<?
-$url = Request::path();
-$elements = explode('/', $url);
-//$help_page = $elements[sizeof($elements)-1];
-		//dd($elements);
-if(Request::path() === ('home')){
-    $help_page = $elements[0];}
-else
-    {$help_page = $elements[1];}
 
-		if (Auth::check()){$home_flock = Auth::user()->getFlock();}
-		else{$home_flock = 'false';}
-?>
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">

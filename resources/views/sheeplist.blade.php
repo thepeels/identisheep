@@ -9,13 +9,6 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
-<?
-$url = Request::path();
-$elements = explode('/', $url);
-        $string = array_slice($elements,0,-1);
-        $print = implode("/",$string).'/print';
-        $filtered_pages = array('ewes','tups');
-?>
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
     <h4><p class="no-screen"> {{Auth::user()->getBusiness()}}, {{Auth::user()->getAddress()}}</p><br>

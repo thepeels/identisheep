@@ -4,13 +4,20 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Homebred;
 use App\Models\Sheep;
-use App\user;
-use Auth,View,Input,Redirect,Validator,Session,Carbon\Carbon,DB;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class SheepController extends Controller {
     /**
@@ -20,6 +27,7 @@ class SheepController extends Controller {
      */
     public function __construct(){
         $this->middleware('auth');
+        $this->home_flock = Auth::user()->getFlock();
     }
 	/**
 	 * Display a listing of the resource.
@@ -33,8 +41,8 @@ class SheepController extends Controller {
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
             'title'=>'All Female Sheep',
-            'count'=>$ewes[1]
-            ]);
+            'count'=>$ewes[1],
+        ]);
 	}
     private static function user()
     {
@@ -52,7 +60,8 @@ class SheepController extends Controller {
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
             'title'=>'All Female Sheep',
-            'count'=>$ewes[1]
+            'count'=>$ewes[1],
+
         ]);
     }
     public function getTups($print)
@@ -66,7 +75,7 @@ class SheepController extends Controller {
         return view('sheeplist')->with([
             'ewes'=>$ewes[0],
             'title'=>'All Tups ',
-            'count'=>$ewes[1]
+            'count'=>$ewes[1],
         ]);
 	}
     public function getOfflist($print)
@@ -612,5 +621,11 @@ class SheepController extends Controller {
             ->where('flock_number', $flock_number)
             ->where('serial_number', $serial_number)->first();
         return $ewe;
+    }
+
+    public function getFlock($id)
+    {
+        $flock_number = 0!= User::where('id',$id)->getFlock()?User::where('id',$id)->getFlock():'false';
+        return $flock_number;
     }
 }
