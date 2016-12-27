@@ -587,7 +587,7 @@ class SheepController extends Controller {
         }
         return Redirect::to(URL::current())->withErrors(['date_set'=>'The date range has been set at<br> 
             between '.date('d-m-Y',strtotime(Session::get('date_from'))).'
-            and '.date('d-m-Y',strtotime(Session::get('date_to'))).'<br>  click \'Finished\' to go continue']);
+            and '.date('d-m-Y',strtotime(Session::get('date_to'))).'<br>  click \'Finished\' to continue']);
     }
 
     /**
@@ -597,7 +597,7 @@ class SheepController extends Controller {
     {
         return View('date_setter')->with([
 
-            'title' => 'Select Date Range for Movement \'OFF\' Lists',
+            'title' => 'Change the Date Range for Movement \'OFF\' Lists',
         ]);
     }
 

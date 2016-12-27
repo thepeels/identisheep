@@ -14,8 +14,9 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{{$title}}</h4><br>
-        <h4>Either choose a custom date range</h4>
-        {!!  date('Y-m-d H:i:s',strtotime('1 december last year'))!!}
+        <h4>Either accept the default 'Last 10 years' date range</h4>
+        <h4>or change this range to your needs</h4>
+
         {!!Form::open(array('url' => '/sheep/datesetter','class'=>'form-inline'))!!}
 
         {!!Form::label('text','Start Date') !!}

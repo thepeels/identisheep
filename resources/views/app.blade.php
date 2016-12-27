@@ -41,7 +41,7 @@ else
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Flock Ninja</a>
+				<a class="navbar-brand" href="#"><span class="red">Identi</span><span class="blue">Sheep</span></a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
