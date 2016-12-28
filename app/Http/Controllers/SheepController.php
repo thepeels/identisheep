@@ -388,35 +388,19 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $e_flock = Input::get('e_flock');
-        $e_flock_number = $e_flock;
-        $e_tag = Input::get('e_tag');
-        $d = Input::get('day');
-        $m = Input::get('month');
-        $y = Input::get('year');
-        $move_off = $y . '-' . $m . '-' . $d . ' ' . '00:00:00';
-        $destination = Input::get('destination');
-        $sex = Input::get('sex');
+        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $dateOfMovement = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $destination    = Input::get('destination');
+        $sex            = new Sex(Input::get('sex'));
+        $owner          = $this->user();
 
-        $ewe = Sheep::firstOrNew([
-            'flock_number' => $e_flock_number,
-            'serial_number' => $e_tag,
-            'owner' => $this->user()
-        ]);
-        $ewe->setOriginalFlockNumber($e_flock_number);
-        $ewe->setSupplementaryTagFlockNumber($e_flock_number);
-        $ewe->setSerialNumber($e_tag);
-        $ewe->setMoveOff($move_off);
-        $ewe->setDestination($destination);
-        $ewe->setSex($sex);
-        $ewe->save();
-        $ewe->delete();
+        $sheepService = new SheepService();
+        $sheepService->recordMovement($tagNumber, $dateOfMovement, $destination, $sex, $owner);
 
-        return Redirect::back()->with([
-            'title' => 'Single ' . ucwords($ewe->getSex()) . ' Sheep Off',
-        ])
-            ->withInput(Input::except('e_tag'));
+        Session::flash('message', 'Sheep - Tag No. ' . $tagNumber->getCountryCode() . ' ' .
+            $tagNumber->getFlockNumber() . ' ' . $tagNumber->getSerialNumber() . ' moved off.');
 
+        return Redirect::to('sheep/sheepoff/'.$sex);
     }
 
     /**
@@ -469,8 +453,9 @@ class SheepController extends Controller
         $sheepService   = new SheepService();
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
 
-        Session::flash('record_death', 'Death of ' . $tagNumber . ' recorded');
-        /** Todo: make this message load into header for every page with generic name to suit */
+        Session::flash('message', 'Death of ' . $tagNumber->getCountryCode() . ' ' .
+            $tagNumber->getFlockNumber() . ' ' . $tagNumber->getSerialNumber() . ' recorded');
+
         return Redirect::to('sheep/death');
     }
 
