@@ -548,4 +548,14 @@ class Sheep extends Model
         $date_to = Null !=  (Session::get('date_to'))?Session::get('date_to'):Carbon::now();
         return [$date_from,$date_to];
     }
+
+    public function scopeTrashOrNew($query,$flock_number,$serial_number,$id)
+    {
+        $ewe = $query->withTrashed()->where('owner',$id)
+            ->where('flock_number',$flock_number)
+            ->where('serial_number',$serial_number)
+            ->firstOrNew();
+        return $ewe;
+
+    }
 }

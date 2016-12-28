@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Domain\TagNumber;
+use App\Domain\Sheep\TagNumber;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-use App\Models\Sheep;
+use App\Domain\Sheep;
 use App\Models\Single;
 use App\Models\Homebred;
 use Auth,View,Input,Redirect,Validator,Session,DB;

@@ -1,9 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Domain\Sheep\Sex;
+use App\Domain\Sheep\TagNumber;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Homebred;
 use App\Models\Sheep;
+use App\Domain\Sheep\SheepService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
@@ -200,14 +203,14 @@ class SheepController extends Controller {
      */
     public function getEditmore($flock_old,$flock_new)
     {
-        $ewe = Sheep::getById($id);
+        /*$ewe = Sheep::getById($id);
         //return $ewe->id;
         return View::make('sheepeditmore')->with([
             'id'        =>$id,
             'title'     => 'Change more Tags',
             'e_flock'   =>$ewe->getFlockNumber(),
             'e_tag'     =>$ewe->getSerialNumber()
-        ]);
+        ]);*/
     }
 
     /**
@@ -426,12 +429,12 @@ class SheepController extends Controller {
     public function getDeath()
     {
         return View::make('sheepdeath')->with([
-            'title'     => 'Record a Death',
-            'id'        => $this->user(),
-            'sex'       =>'female',
-            'e_flock'   => NULL,
-            'e_tag'     => NULL
-        ]);
+        'title'         => 'Record a Death',
+        'id'            => $this->user(),
+        'sex'           =>'female',
+        'e_flock'       => NULL,
+        'e_tag'         => NULL
+    ]);
     }
 
     /**
@@ -461,29 +464,16 @@ class SheepController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $e_flock        = Input::get('e_flock');
-        $e_tag          = Input::get('e_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $how_died       = ' - '.Input::get('how_died');
-        $sex            = Input::get('sex');
+        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $dateOfDeath = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $reason       = ' - ' . Input::get('how_died');
+        $sex            = new Sex(Input::get('sex'));
+        $owner          = $this->user();
 
-        $ewe = Sheep::firstOrNew([
-            'flock_number'    =>  $e_flock,
-            'serial_number'   =>  $e_tag,
-            'owner'           =>  $this->user()
-        ]);
-        //dd($ewe->getSerialNumber());
-        $ewe->setOriginalFlockNumber($e_flock);
-        $ewe->setSupplementaryTagFlockNumber($e_flock);
-        $ewe->setSerialNumber($e_tag);
-        $ewe->setMoveOff($move_off);
-        $ewe->setDestination('died'.$how_died);
-        $ewe->setSex($sex);
-        $ewe->save();
-        $ewe->delete();
+        $sheepService = new SheepService();
+        $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
+        Session::flash('record_death','Death recorded');
+        # TODO: set flash data for a message to user and redirect to route that displays the death record form
 
         return View::make('sheepdeath')->with([
             'title'     => 'Record a Death',

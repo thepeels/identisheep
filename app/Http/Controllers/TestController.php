@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Domain\TagNumber;
+use App\Domain\Sheep\TagNumber;
 
 class TestController extends Controller
 {

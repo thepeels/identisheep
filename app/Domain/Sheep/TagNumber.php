@@ -6,7 +6,9 @@
  * Time: 18:29
  */
 
-namespace App\Domain;
+namespace App\Domain\Sheep;
+
+use App\Domain\DomainException;
 
 class TagNumber
 {

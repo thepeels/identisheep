@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Sheep;
+use App\Domain\Sheep;
 class SheepSeeder extends DatabaseSeeder
 
 {
