@@ -28,16 +28,18 @@ class SheepService
         $ewe = Sheep::firstOrNew([
             'flock_number'    =>  $tagNumber->getFlockNumber(),
             'serial_number'   =>  $tagNumber->getSerialNumber(),
-            'owner'           =>  $owner
+            'owner'           =>  $owner,
+            //'alive'           =>  TRUE,
         ]);
         $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
         $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
         $ewe->setSerialNumber($tagNumber->getSerialNumber());
+        $ewe->setAlive(FALSE);
         $ewe->setMoveOff($dateOfDeath->format('Y-m-d'));
         $ewe->setDestination('died' . $reasonForDeath);
         $ewe->setSex($sex);
         $ewe->save();
         // TODO: refactor delete() to recordDeath() or something
-        $ewe->delete();
+
     }
 }

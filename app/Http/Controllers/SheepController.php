@@ -1,18 +1,14 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Domain\Sheep\Sex;
 use App\Domain\Sheep\TagNumber;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Models\Homebred;
 use App\Models\Sheep;
 use App\Domain\Sheep\SheepService;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Pagination\Paginator;
-
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -22,109 +18,116 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
-class SheepController extends Controller {
+class SheepController extends Controller
+{
     /**
      * SheepController constructor.
      *
      * cause to be Auth filtered before use
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->home_flock = Auth::user()->getFlock();
     }
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function getIndex()
-	{
-		$ewes = Sheep::females($this->user());
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function getIndex()
+    {
+        $ewes = Sheep::females($this->user());
 
         return view('sheeplist')->with([
-            'ewes'=>$ewes[0],
-            'title'=>'All Female Sheep',
-            'count'=>$ewes[1],
+            'ewes' => $ewes[0],
+            'title' => 'All Female Sheep',
+            'count' => $ewes[1],
         ]);
-	}
+    }
+
     private static function user()
     {
         return Auth::user()->id;
     }
+
     public function getEwes($print)
     {
-        if ($print == NULL)$print = 'screen';
-        if ($print == 'print'){
-            $ewes = Sheep::stockPrint($this->user(),'female');
-        }
-        else {
+        if ($print == NULL) $print = 'screen';
+        if ($print == 'print') {
+            $ewes = Sheep::stockPrint($this->user(), 'female');
+        } else {
             $ewes = Sheep::stock($this->user(), 'female');
         }
         return view('sheeplist')->with([
-            'ewes'=>$ewes[0],
-            'title'=>'All Female Sheep',
-            'count'=>$ewes[1],
+            'ewes' => $ewes[0],
+            'title' => 'All Female Sheep',
+            'count' => $ewes[1],
 
         ]);
     }
+
     public function getTups($print)
-	{
-        if ($print == 'print'){
-            $ewes = Sheep::stockPrint($this->user(),'male');
-        }
-        else {
+    {
+        if ($print == 'print') {
+            $ewes = Sheep::stockPrint($this->user(), 'male');
+        } else {
             $ewes = Sheep::stock($this->user(), 'male');
         }
         return view('sheeplist')->with([
-            'ewes'=>$ewes[0],
-            'title'=>'All Tups ',
-            'count'=>$ewes[1],
+            'ewes' => $ewes[0],
+            'title' => 'All Tups ',
+            'count' => $ewes[1],
         ]);
-	}
+    }
+
     public function getOfflist($print)
     {
-        if ($print == 'print'){
+        if ($print == 'print') {
             $ewes = Sheep::offListPrint($this->user());
-        }
-        else {
+        } else {
             $ewes = Sheep::offList($this->user());
         }
 
         return view('sheeplist')->with([
-            'ewes'  =>  $ewes,
-            'title' =>  'Sheep Moved Off'
+            'ewes' => $ewes,
+            'title' => 'Sheep Moved Off'
         ]);
     }
+
     public function getDeadlist($print)
     {
-        if ($print == 'print'){
+        if ($print == 'print') {
             $ewes = Sheep::deadPrint($this->user());
-        }
-        else {
+        } else {
             $ewes = Sheep::dead($this->user());
         }
         //$ewes = Sheep::dead($this->user());
 
         return view('sheeplist')->with([
-            'ewes'=>$ewes,
-            'title'=>'Dead List'
+            'ewes' => $ewes,
+            'title' => 'Dead List'
         ]);
     }
-	/**
-	 * Show the form for deleting records.
-	 *
-	 * @return Response
-	 */
-	public function getDelete()
-	{
+
+    /**
+     * Show the form for deleting records.
+     *
+     * @return Response
+     */
+    public function getDelete()
+    {
         $year = date('Y', strtotime('-10 years'));
+
         return View::make('delete_old')->with([
-            'title'         => 'Delete old Records',
-            'year'          => $year
+            'title' => 'Delete old Records',
+            'year' => $year
 
         ]);
-	}
-	public function postDelete()
+    }
+
+    public function postDelete()
     {
         $rules = Sheep::$rules['old_dates'];
         $validation = Validator::make(Input::all(), $rules);
@@ -132,21 +135,21 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $year = Input::get('year');
-        $date = Carbon::create($year,11,30,23,59,59,'UTC');
+        $date = Carbon::create($year, 11, 30, 23, 59, 59, 'UTC');
         $date = $date->toDateTimeString();
-        Sheep::permanentDelete($this->user(),$date);
-        return Redirect::to('sheep/ewes/screen');
+        Sheep::permanentDelete($this->user(), $date);
 
+        return Redirect::to('sheep/ewes/screen');
     }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  none
-	 * @return Response
-	 */
-	public function postChangetags()
-	{
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  none
+     * @return Response
+     */
+    public function postChangetags()
+    {
         $rules = Sheep::$rules['death'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
@@ -154,7 +157,7 @@ class SheepController extends Controller {
         }
         $id = Input::get('id');
         $old_e_flock = Input::get('old_e_flock');
-		$ewe = Sheep::where('id',$id)->first();
+        $ewe = Sheep::where('id', $id)->first();
         if ($ewe->serial_number != Input::get('e_tag')) {
             $ewe->older_serial_number = $ewe->old_serial_number;
             $ewe->old_serial_number = $ewe->serial_number;
@@ -162,21 +165,12 @@ class SheepController extends Controller {
         }
         $ewe->flock_number = Input::get('e_flock');
         $ewe->save();
-        return View::make('sheepfinder')->with([
-            'title'     => 'Find another sheep',
-            'e_flock'   => $old_e_flock]);
-	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-        //
-	}
+        return View::make('sheepfinder')->with([
+            'title' => 'Find another sheep',
+            'e_flock' => $old_e_flock]);
+    }
+
     /**
      * Update Tag numbers
      *
@@ -189,10 +183,10 @@ class SheepController extends Controller {
         $ewe = Sheep::getById($id);
 
         return View::make('sheepedit')->with([
-            'id'        =>$id,
-            'title'     => 'Change Tags',
-            'e_flock'   =>$ewe->getFlockNumber(),
-            'e_tag'     =>$ewe->getSerialNumber()
+            'id' => $id,
+            'title' => 'Change Tags',
+            'e_flock' => $ewe->getFlockNumber(),
+            'e_tag' => $ewe->getSerialNumber()
         ]);
     }
 
@@ -201,7 +195,7 @@ class SheepController extends Controller {
      * @param $flock_new
      * @return mixed
      */
-    public function getEditmore($flock_old,$flock_new)
+    public function getEditmore($flock_old, $flock_new)
     {
         /*$ewe = Sheep::getById($id);
         //return $ewe->id;
@@ -224,41 +218,43 @@ class SheepController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $flock_number = Input::get('e_flock');
-        $serial_number    =Input::get('e_tag');
-        /**@var $ewe Sheep*/
+        $serial_number = Input::get('e_tag');
+        /**@var $ewe Sheep */
         $ewe = $this->getByEarNumbers($flock_number, $serial_number);
         //$ewe = Sheep::getByEarNumbers($flock_number,$serial_number);
         //above as 'Sheep::getByEarNumbers()'returns empty model instead of NULL ???
-        if ($ewe == NULL){Session::put('find_error','Sheep not found, check numbers and re-try.');
+        if ($ewe == NULL) {
+            Session::put('find_error', 'Sheep not found, check numbers and re-try.');
             return Redirect::to('sheep/seek')->withInput();
         }
-        if (Input::get('find')){
+        if (Input::get('find')) {
             return View::make('sheepedit')->with([
-                'id'            =>$ewe->getId(),
-                'title'         => 'Change Tags',
-                'e_flock'       =>$flock_number,
-                'e_tag'         =>$ewe->getSerialNumber(),
-                'original_e_flock'=>$ewe->getOriginalFlockNumber(),
-                'colour_flock'  => $ewe->getSupplementaryTagFlockNumber(),
+                'id' => $ewe->getId(),
+                'title' => 'Change Tags',
+                'e_flock' => $flock_number,
+                'e_tag' => $ewe->getSerialNumber(),
+                'original_e_flock' => $ewe->getOriginalFlockNumber(),
+                'colour_flock' => $ewe->getSupplementaryTagFlockNumber(),
             ]);
         }
         //**@var $ewe Sheep*/
-        if (Input::get('view')){
+        if (Input::get('view')) {
             return View::make('sheepview')->with([
-                'id'                =>$ewe->getId(),
-                'title'             =>'Details for Sheep number ',
-                'e_flock'           =>$flock_number,
-                'e_tag'             =>$ewe->getSerialNumber(),
-                'e_tag_1'           =>$ewe->getOldSerialNumber(),
-                'e_tag_2'           =>$ewe->getOlderSerialNumber(),
-                'original_e_flock'  =>$ewe->getOriginalFlockNumber(),
-                'original_e_tag'    =>$ewe->getOriginalSerialNumber(),
-                'colour_of_tag'     =>$ewe->getTagColour(),
-                'move_on'           =>$ewe->getMoveOn(),
-                'sex'               =>$ewe->getSex()
+                'id' => $ewe->getId(),
+                'title' => 'Details for Sheep number ',
+                'e_flock' => $flock_number,
+                'e_tag' => $ewe->getSerialNumber(),
+                'e_tag_1' => $ewe->getOldSerialNumber(),
+                'e_tag_2' => $ewe->getOlderSerialNumber(),
+                'original_e_flock' => $ewe->getOriginalFlockNumber(),
+                'original_e_tag' => $ewe->getOriginalSerialNumber(),
+                'colour_of_tag' => $ewe->getTagColour(),
+                'move_on' => $ewe->getMoveOn(),
+                'sex' => $ewe->getSex()
             ]);
         }
     }
+
     /**
      * Find sheep page
      *
@@ -268,7 +264,7 @@ class SheepController extends Controller {
     public function getSeek()
     {
         return View::make('sheepfinder')->with([
-            'title'     => 'Find a sheep'
+            'title' => 'Find a sheep'
         ]);
     }
 
@@ -278,7 +274,7 @@ class SheepController extends Controller {
     public function getBatch()
     {
         return View::make('sheepbatch')->with([
-            'id'=>$this->user(),
+            'id' => $this->user(),
             'title' => 'Enter Batch of tags'
         ]);
     }
@@ -291,10 +287,10 @@ class SheepController extends Controller {
     {
         return View::make('sheepaddewe')
             ->with([
-                'title'     => 'Add a Ewe',
+                'title' => 'Add a Ewe',
                 'alt_title' => 'Add a Home Bred Ewe',
-                'id'        =>  $this->user(),
-                'sex'       => 'female',
+                'id' => $this->user(),
+                'sex' => 'female',
                 'home_bred' => $home_bred
             ]);
     }
@@ -307,11 +303,11 @@ class SheepController extends Controller {
     {
         return View::make('sheepaddewe')
             ->with([
-                'title'     => 'Add a Tup',
-                'alt_title'     => 'Add a Home Bred Tup',
-                'id'        =>  $this->user(),
-                'sex'       => 'male',
-                'home_bred'  => $home_bred
+                'title' => 'Add a Tup',
+                'alt_title' => 'Add a Home Bred Tup',
+                'id' => $this->user(),
+                'sex' => 'male',
+                'home_bred' => $home_bred
             ]);
     }
 
@@ -325,19 +321,19 @@ class SheepController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $user_id        = $this->user();
-        $home_bred      = Input::get('home_bred');
-        $e_flock        = Input::get('e_flock');
+        $user_id = $this->user();
+        $home_bred = Input::get('home_bred');
+        $e_flock = Input::get('e_flock');
         $e_flock_number = $e_flock;
-        $e_tag          = Input::get('e_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $colour_of_tag  = Input::get('colour_of_tag');
-        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $sex            = Input::get('sex');
-        $l              = DB::table('sheep')->where('owner',$user_id)->max('local_id');
-        $sheep_exists   = Sheep::check($e_flock_number,$e_tag,$user_id);
+        $e_tag = Input::get('e_tag');
+        $d = Input::get('day');
+        $m = Input::get('month');
+        $y = Input::get('year');
+        $colour_of_tag = Input::get('colour_of_tag');
+        $move_on = $y . '-' . $m . '-' . $d . ' ' . '00:00:00';
+        $sex = Input::get('sex');
+        $l = DB::table('sheep')->where('owner', $user_id)->max('local_id');
+        $sheep_exists = Sheep::check($e_flock_number, $e_tag, $user_id);
         if (NULL === $sheep_exists) {
             $l++;
             $ewe = new Sheep();
@@ -354,7 +350,7 @@ class SheepController extends Controller {
             $ewe->setSex($sex);
             $ewe->save();
 
-            if($home_bred !== FALSE){
+            if ($home_bred !== FALSE) {
                 $tag = new Homebred();
                 $tag->setFlockNumber($home_bred);
                 $tag->setDateApplied($move_on);
@@ -374,11 +370,11 @@ class SheepController extends Controller {
     public function getSheepoff($sex)
     {
         return View::make('sheepoff')->with([
-            'title'     => 'Single '.ucwords($sex).' Sheep Off',
-            'id'        => $this->user(),
-            'sex'       => $sex,
-            'e_flock'   => NULL,
-            'e_tag'     => NULL
+            'title' => 'Single ' . ucwords($sex) . ' Sheep Off',
+            'id' => $this->user(),
+            'sex' => $sex,
+            'e_flock' => NULL,
+            'e_tag' => NULL
         ]);
     }
 
@@ -392,20 +388,20 @@ class SheepController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $e_flock        = Input::get('e_flock');
+        $e_flock = Input::get('e_flock');
         $e_flock_number = $e_flock;
-        $e_tag          = Input::get('e_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $destination    = Input::get('destination');
-        $sex            = Input::get('sex');
+        $e_tag = Input::get('e_tag');
+        $d = Input::get('day');
+        $m = Input::get('month');
+        $y = Input::get('year');
+        $move_off = $y . '-' . $m . '-' . $d . ' ' . '00:00:00';
+        $destination = Input::get('destination');
+        $sex = Input::get('sex');
 
         $ewe = Sheep::firstOrNew([
-            'flock_number'           =>  $e_flock_number,
-            'serial_number'             =>  $e_tag,
-            'owner'           =>  $this->user()
+            'flock_number' => $e_flock_number,
+            'serial_number' => $e_tag,
+            'owner' => $this->user()
         ]);
         $ewe->setOriginalFlockNumber($e_flock_number);
         $ewe->setSupplementaryTagFlockNumber($e_flock_number);
@@ -417,8 +413,8 @@ class SheepController extends Controller {
         $ewe->delete();
 
         return Redirect::back()->with([
-            'title'     => 'Single '.ucwords($ewe->getSex()).' Sheep Off',
-            ])
+            'title' => 'Single ' . ucwords($ewe->getSex()) . ' Sheep Off',
+        ])
             ->withInput(Input::except('e_tag'));
 
     }
@@ -429,12 +425,12 @@ class SheepController extends Controller {
     public function getDeath()
     {
         return View::make('sheepdeath')->with([
-        'title'         => 'Record a Death',
-        'id'            => $this->user(),
-        'sex'           =>'female',
-        'e_flock'       => NULL,
-        'e_tag'         => NULL
-    ]);
+            'title' => 'Record a Death',
+            'id' => $this->user(),
+            'sex' => 'female',
+            'e_flock' => NULL,
+            'e_tag' => NULL
+        ]);
     }
 
     /**
@@ -443,14 +439,14 @@ class SheepController extends Controller {
      * @param $sex
      * @return mixed
      */
-    public function getDeathsearch($flock_number,$serial_number,$sex)
+    public function getDeathsearch($flock_number, $serial_number, $sex)
     {
         return View::make('sheepdeath')->with([
-            'title'     => 'Record this Sheep Death (correct date?)',
-            'id'        => $this->user(),
-            'sex'       => $sex,
-            'e_flock'   => $flock_number,
-            'e_tag'     => $serial_number
+            'title' => 'Record this Sheep Death (correct date?)',
+            'id' => $this->user(),
+            'sex' => $sex,
+            'e_flock' => $flock_number,
+            'e_tag' => $serial_number
         ]);
     }
 
@@ -466,22 +462,16 @@ class SheepController extends Controller {
         }
         $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
         $dateOfDeath = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $reason       = ' - ' . Input::get('how_died');
-        $sex            = new Sex(Input::get('sex'));
-        $owner          = $this->user();
+        $reason = ' - ' . Input::get('how_died');
+        $sex = new Sex(Input::get('sex'));
+        $owner = $this->user();
 
         $sheepService = new SheepService();
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
-        Session::flash('record_death','Death recorded');
-        # TODO: set flash data for a message to user and redirect to route that displays the death record form
 
-        return View::make('sheepdeath')->with([
-            'title'     => 'Record a Death',
-            'id'        => $this->user(),
-            'e_flock'   => NULL,
-            'e_tag'     => NULL,
-            'sex'       => $sex
-        ]);
+        Session::flash('record_death', 'Death recorded');
+
+        return Redirect::to('death');
     }
 
     /**
@@ -491,14 +481,14 @@ class SheepController extends Controller {
      * @param $sex
      * @return mixed
      */
-    public function getEnterdeath($id,$e_flock,$e_tag,$sex)
+    public function getEnterdeath($id, $e_flock, $e_tag, $sex)
     {
         return View::make('sheepdeath')->with([
-            'title'     => 'Record a Death',
-            'id'        => $id,
-            'e_flock'   => $e_flock,
-            'e_tag'     => $e_tag,
-            'sex'       => $sex
+            'title' => 'Record a Death',
+            'id' => $id,
+            'e_flock' => $e_flock,
+            'e_tag' => $e_tag,
+            'sex' => $sex
         ]);
     }
 
@@ -507,9 +497,9 @@ class SheepController extends Controller {
      */
     public function getSearch()
     {
-         return View::make('search')->with([
-             'title'=>'Search for a Tag'
-         ]);
+        return View::make('search')->with([
+            'title' => 'Search for a Tag'
+        ]);
     }
 
     /**
@@ -520,9 +510,9 @@ class SheepController extends Controller {
         $ewes = Sheep::replaced($this->user());
 
         return View::make('replacement_tags')->with([
-            'ewes'=>$ewes[0],
-            'count'=>$ewes[1],
-            'title'=>'Tag Replacements List'
+            'ewes' => $ewes[0],
+            'count' => $ewes[1],
+            'title' => 'Tag Replacements List'
         ]);
     }
 
@@ -534,19 +524,20 @@ class SheepController extends Controller {
         $tag = Input::get('tag');
 
         //$ewes = Sheep::searchByTag($this->user(),$tag);
-        $ewes = Sheep::withTrashed('owner',$this->user())
-            ->where('serial_number',$tag)
-            ->orWhere('old_serial_number',$tag)
-            ->orWhere('older_serial_number',$tag)
+        $ewes = Sheep::withTrashed('owner', $this->user())
+            ->where('serial_number', $tag)
+            ->orWhere('old_serial_number', $tag)
+            ->orWhere('older_serial_number', $tag)
             ->get();
         //dd($ewes);
-        if ($ewes->isEmpty()){Session::put('find_error','Sheep not found, check number and re-try.');
+        if ($ewes->isEmpty()) {
+            Session::put('find_error', 'Sheep not found, check number and re-try.');
             return Redirect::to('sheep/search')->withInput();
         }
 
         return View::make('searchresult')->with([
-            'ewes'=>$ewes,
-            'title'=>'Search Results for Tag '.$tag
+            'ewes' => $ewes,
+            'title' => 'Search Results for Tag ' . $tag
         ]);
     }
 
@@ -558,9 +549,9 @@ class SheepController extends Controller {
         $ewes = Sheep::total($this->user());
 
         return view('sheeplist')->with([
-            'ewes'=>$ewes[0],
-            'title'=>'All Tagged Sheep',
-            'count'=>$ewes[1]
+            'ewes' => $ewes[0],
+            'title' => 'All Tagged Sheep',
+            'count' => $ewes[1]
         ]);
     }
 
@@ -574,19 +565,19 @@ class SheepController extends Controller {
             Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 december last year')));
         } else {
 
-        $year_from = Input::get('year');
-        $month_from = Input::get('month');
-        $day_from = Input::get('day');
-        $year_to = Input::get('year_to');
-        $month_to = Input::get('month_to');
-        $day_to = Input::get('day_to');
+            $year_from = Input::get('year');
+            $month_from = Input::get('month');
+            $day_from = Input::get('day');
+            $year_to = Input::get('year_to');
+            $month_to = Input::get('month_to');
+            $day_to = Input::get('day_to');
 
-        Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
-        Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
+            Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
+            Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
         }
-        return Redirect::to(URL::current())->withErrors(['date_set'=>'The date range has been set at<br> 
-            between '.date('d-m-Y',strtotime(Session::get('date_from'))).'
-            and '.date('d-m-Y',strtotime(Session::get('date_to'))).'<br>  click \'Finished\' to continue']);
+        return Redirect::to(URL::current())->withErrors(['date_set' => 'The date range has been set at<br> 
+            between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
+            and ' . date('d-m-Y', strtotime(Session::get('date_to'))) . '<br>  click \'Finished\' to continue']);
     }
 
     /**
@@ -615,7 +606,7 @@ class SheepController extends Controller {
 
     public function getFlock($id)
     {
-        $flock_number = 0!= User::where('id',$id)->getFlock()?User::where('id',$id)->getFlock():'false';
+        $flock_number = 0 != User::where('id', $id)->getFlock() ? User::where('id', $id)->getFlock() : 'false';
         return $flock_number;
     }
 }

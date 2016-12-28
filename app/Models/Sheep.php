@@ -50,6 +50,10 @@ class Sheep extends Model
      */
     protected $move_on;
     /**
+     * @var bool
+     */
+    protected $alive;
+    /**
      * @var string
      */
     protected $move_off;
@@ -102,6 +106,7 @@ class Sheep extends Model
         'local_id',
         'owner',
         'move_on',
+        'alive',
         'move_off',
         'destination',
         'flock_number',
@@ -384,7 +389,21 @@ class Sheep extends Model
     {
         $this->attributes['supplementary_tag_flock_number'] = $flock_number;
     }
+    /**
+     * @return bool 
+     */
+    public function getAlive(){
+        return $this->attributes['alive'];
+    }
 
+    /**
+     * @param bool $alive
+     */
+    public function setAlive($alive)
+    {
+        $this->attributes['alive'] = $alive;
+    }
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -471,32 +490,32 @@ class Sheep extends Model
     ];
     public function scopeReplaced($query,$id)
     {
-        $ewes = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->whereRaw('`serial_number`!=`original_serial_number`')
             ->orderBy('updated_at')->paginate(20);
         $count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         return [$ewes,$count];
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
-        return $query->withTrashed('owner',$id)->where('serial_number',$tag )
+        return $query->where('owner',$id)->where('serial_number',$tag )
             ->orWhere('old_serial_number',$tag )->orWhere('older_serial_number',$tag )->paginate(20);
     }
     public function scopeStock($query,$id,$sex)
     {
-        $ewes = $query->where('owner',$id)->where('sex',$sex)->orderBy('move_on')->paginate(20);
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->paginate(20);
         $count = $query->where('owner',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
     public function scopeStockPrint($query,$id,$sex)
     {
-        $ewes = $query->where('owner',$id)->where('sex',$sex)->orderBy('move_on')->get();
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->get();
         $count = $query->where('owner',$id)->where('sex',$sex)->count();
         return [$ewes,$count];
     }
     public function scopeOffList($query,$id)
     {
         $dates = $this->dateRange();
-        return $query->onlyTrashed()->where('owner',$id)
+        return $query->where('owner',$id)->where('alive',FALSE)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
@@ -504,7 +523,7 @@ class Sheep extends Model
     public function scopeOffListPrint($query,$id)
     {
         $dates = $this->dateRange();
-        return $query->onlyTrashed()->where('owner',$id)
+        return $query->where('owner',$id)->where('alive',FALSE)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->get();
@@ -512,7 +531,7 @@ class Sheep extends Model
     public function scopeDead($query,$id)
     {
         $dates = $this->dateRange();
-        return $query->onlyTrashed()->where('owner',$id)
+        return $query->where('owner',$id)->where('alive',FALSE)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
             ->where('destination','like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
@@ -520,25 +539,25 @@ class Sheep extends Model
     public function scopeDeadPrint($query,$id)
     {
         $dates = $this->dateRange();
-        return $query->onlyTrashed()->where('owner',$id)
+        return $query->where('owner',$id)->where('alive',FALSE)
             ->where('move_off','>=',$dates[0])
             ->where('move_off','<=',$dates[1])
             ->where('destination','like','died'.'%')->orderBy('move_off','DESC')->get();
     }
     public function scopeTotal($query,$id)
     {
-        $ewes = $query->where('owner',$id)->paginate(20);
-        $count = $query->where('owner',$id)->count();
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->paginate(20);
+        $count = $query->where('owner',$id)->where('alive',TRUE)->count();
         return [$ewes,$count];
     }
     public function scopeGetByEarNumbers($query,$flock_number,$serial_number)
     {
-        return $query->where('flock_number',$flock_number)
+        return $query->where('alive',TRUE)->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
     }
     public function scopePermanentDelete($query,$id,$date)
     {
-        return $query->onlyTrashed()->where('owner',$id)
+        return $query->where('alive',TRUE)->where('owner',$id)
             ->where('move_on','<=',$date)
             ->forceDelete();
     }
