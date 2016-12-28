@@ -10,7 +10,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Redirect,Auth,Collection,DB;
+use Redirect,Auth,Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\Paginator;
@@ -490,16 +491,19 @@ class Sheep extends Model
     ];
     public function scopeReplaced($query,$id)
     {
-        $ewes = $query->where('owner',$id)->where('alive',TRUE)->whereRaw('`serial_number`!=`original_serial_number`')
+        $ewes = $query->where('owner','=',$id)->where('alive',TRUE)->whereRaw('`serial_number`!=`original_serial_number`')
             ->orderBy('updated_at')->paginate(20);
         $count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         return [$ewes,$count];
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
-        return $query->where('owner',$id)->where('serial_number',$tag )
-            ->orWhere('old_serial_number',$tag )->orWhere('older_serial_number',$tag )->paginate(20);
+        $query = (DB::select(DB::raw("select * FROM `sheep` WHERE `owner`= $id 
+                and (`serial_number`= $tag or `old_serial_number`= $tag or`older_serial_number` = $tag)")));
+        $ewes = collect($query);
+        return $ewes;
     }
+
     public function scopeStock($query,$id,$sex)
     {
         $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->paginate(20);

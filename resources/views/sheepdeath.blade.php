@@ -44,7 +44,6 @@ else {$m =1;} ?>
         {!!Form::input('text','how_died',NULL,['class'=>'new_class input-xs','placeholder'=>'Optional','size' => '10'])!!}<br>
         <br>
         {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
-        {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}<br>
         {!!Session::pull('record_death') !!}<br>
 
         {!!Form::close()!!}<br>

@@ -460,18 +460,18 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
-        $dateOfDeath = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $reason = ' - ' . Input::get('how_died');
-        $sex = new Sex(Input::get('sex'));
-        $owner = $this->user();
+        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $dateOfDeath    = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $reason         = ' - ' . Input::get('how_died');
+        $sex            = new Sex(Input::get('sex'));
+        $owner          = $this->user();
 
-        $sheepService = new SheepService();
+        $sheepService   = new SheepService();
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
 
-        Session::flash('record_death', 'Death recorded');
-
-        return Redirect::to('death');
+        Session::flash('record_death', 'Death of ' . $tagNumber . ' recorded');
+        /** Todo: make this message load into header for every page with generic name to suit */
+        return Redirect::to('sheep/death');
     }
 
     /**
@@ -523,13 +523,7 @@ class SheepController extends Controller
     {
         $tag = Input::get('tag');
 
-        //$ewes = Sheep::searchByTag($this->user(),$tag);
-        $ewes = Sheep::withTrashed('owner', $this->user())
-            ->where('serial_number', $tag)
-            ->orWhere('old_serial_number', $tag)
-            ->orWhere('older_serial_number', $tag)
-            ->get();
-        //dd($ewes);
+        $ewes = Sheep::searchByTag($this->user(),$tag);
         if ($ewes->isEmpty()) {
             Session::put('find_error', 'Sheep not found, check number and re-try.');
             return Redirect::to('sheep/search')->withInput();
@@ -548,7 +542,7 @@ class SheepController extends Controller
     {
         $ewes = Sheep::total($this->user());
 
-        return view('sheeplist')->with([
+        return View::make('sheeplist')->with([
             'ewes' => $ewes[0],
             'title' => 'All Tagged Sheep',
             'count' => $ewes[1]
@@ -585,7 +579,7 @@ class SheepController extends Controller
      */
     public function getDatesetter()
     {
-        return View('date_setter')->with([
+        return View::make('date_setter')->with([
 
             'title' => 'Change the Date Range for Movement \'OFF\' Lists',
         ]);
