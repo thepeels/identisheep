@@ -13,7 +13,7 @@ class AddFlockFieldToUsers extends Migration {
 	 */
 	public function up()
 	{
-        Schema::table('users',function(Blueprint $table){
+        Schema::table('users',function($table){
             $table->integer('flock')->after('email');
         });
 	}
@@ -25,7 +25,7 @@ class AddFlockFieldToUsers extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table('users',function(Blueprint $table){
+        Schema::table('users',function($table){
             $table->dropColumn('flock');
         });
 	}

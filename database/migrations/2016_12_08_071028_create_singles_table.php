@@ -13,7 +13,7 @@ class CreateSinglesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('singles', function(Blueprint $table)
+		Schema::create('singles', function($table)
 		{
             $table->increments('id');
             $table->integer('user_id');

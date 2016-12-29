@@ -13,7 +13,7 @@ class CreateHomebredsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('homebreds', function(Blueprint $table)
+		Schema::create('homebreds', function($table)
 		{
 			$table->increments('id');
             $table->integer('user_id');
