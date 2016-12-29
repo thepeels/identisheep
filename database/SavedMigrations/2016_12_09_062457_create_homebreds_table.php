@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSinglesTable extends Migration {
+class CreateHomebredsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,16 +13,15 @@ class CreateSinglesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('singles', function($table)
+		Schema::create('homebreds', function(Blueprint $table)
 		{
-            $table->increments('id');
+			$table->increments('id');
             $table->integer('user_id');
-            $table->dateTime('date_applied');
+            $table->integer('e_flock');
             $table->integer('count');
-            $table->integer('flock_number');
-            $table->string('destination');
-
-            $table->timestamps();
+            $table->dateTime('date_applied');
+			$table->timestamps();
+            $table->index('user_id');
 		});
 	}
 
@@ -33,7 +32,7 @@ class CreateSinglesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('singles');
+		Schema::drop('homebreds');
 	}
 
 }

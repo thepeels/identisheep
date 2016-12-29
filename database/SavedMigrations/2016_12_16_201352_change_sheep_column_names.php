@@ -13,7 +13,7 @@ class ChangeSheepColumnNames extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('sheep', function($table)
+		Schema::table('sheep', function(Blueprint $table)
         {
             $table->renameColumn('user_id','owner');
             $table->renameColumn('e_flock','flock_number');
@@ -36,7 +36,7 @@ class ChangeSheepColumnNames extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table('sheep', function($table)
+        Schema::table('sheep', function(Blueprint $table)
         {
             $table->renameColumn('owner','user_id');
             $table->renameColumn('flock_number','e_flock');
