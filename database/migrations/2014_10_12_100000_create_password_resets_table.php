@@ -3,6 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 //use Illuminate\Support\Facades\Schema;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreatePasswordResetsTable extends Migration {
 
