@@ -36,7 +36,7 @@ class ChangeSheepColumnNames extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table('sheep', function($table)
+        Schema::table('sheep', function(Blueprint $table)
         {
             $table->renameColumn('owner','user_id');
             $table->renameColumn('flock_number','e_flock');

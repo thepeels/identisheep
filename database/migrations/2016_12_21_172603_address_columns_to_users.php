@@ -28,7 +28,7 @@ class AddressColumnsToUsers extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table('users',function($table){
+        Schema::table('users',function(Blueprint $table){
             $table->dropColumn('business');
             $table->dropColumn('address');
             $table->dropColumn('holding');
