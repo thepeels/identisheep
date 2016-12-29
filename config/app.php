@@ -187,7 +187,7 @@ return [
 		'Request'   => 'Illuminate\Support\Facades\Request',
 		'Response'  => 'Illuminate\Support\Facades\Response',
 		'Route'     => 'Illuminate\Support\Facades\Route',
-		'Schema'    => 'Illuminate\Support\Facades\Schema',
+		'Schema'    => 'Doctrine\DBAL\Schema\Schema',
 		'Session'   => 'Illuminate\Support\Facades\Session',
 		'Storage'   => 'Illuminate\Support\Facades\Storage',
 		'URL'       => 'Illuminate\Support\Facades\URL',
