@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider {
             else{
                 $home_flock = 'false';
             }
-            //************ logic from app.blade ************//
+            /* *********** logic from app.blade *********** */
             $url = Request::path();
             $elements = explode('/', $url);
             if(Request::path() === ('home')){
@@ -32,12 +32,12 @@ class AppServiceProvider extends ServiceProvider {
             else{
                 $help_page = $elements[1];
             }
-            //**************//
-            //********* logic from sheeplist page***********//
+            /* ************ */
+            /* ******** logic from sheeplist page********** */
             $string = array_slice($elements,0,-1);
             $print = implode("/",$string).'/print';
             $filtered_pages = array('ewes','tups');
-            //***********//
+            /* ********* */
             $view->with([
                 'home_flock'    => $home_flock,
                 'help_page'     => $help_page,

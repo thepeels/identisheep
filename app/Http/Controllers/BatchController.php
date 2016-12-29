@@ -379,7 +379,7 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $destination    = Input::get('destination');
         $count          = Input::get('count');
-        $date_applied   = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $date_applied   = new \DateTime($y.'-'.$m.'-'.$d.' '.'00:00:00');
 
                 $tags = New Single;
                 $tags->setUserId($id);
@@ -413,10 +413,11 @@ class BatchController extends Controller {
     {
         $count  = Homebred::howmany($this->user());
         $tags   = Homebred::numbers($this->user());
-
+        if (!is_numeric($count)) { $count = 0;
+            Session::flash('message', 'There were no home-bred tag applications in this time period, Reset the date range?');
+        }
         return view('homebredlist')->with([
             'title'=>'Home Bred Sheep, EID Tags Applied (total = '.$count.')',
-            //'count'=>$count,
             'tags'  => $tags
         ]);
     }
