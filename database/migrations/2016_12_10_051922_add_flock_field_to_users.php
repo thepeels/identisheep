@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AddFlockFieldToUsers extends Migration {
 
@@ -12,7 +13,7 @@ class AddFlockFieldToUsers extends Migration {
 	 */
 	public function up()
 	{
-        Schema::table('users',function($table){
+        Schema::table('users',function(Blueprint $table){
             $table->integer('flock')->after('email');
         });
 	}
@@ -24,9 +25,9 @@ class AddFlockFieldToUsers extends Migration {
 	 */
 	public function down()
 	{
-        /*Schema::table('users',function($table){
+        Schema::table('users',function($table){
             $table->dropColumn('flock');
-        });*/
+        });
 	}
 
 }

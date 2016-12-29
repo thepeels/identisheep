@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AddressColumnsToUsers extends Migration {
 
@@ -12,7 +13,7 @@ class AddressColumnsToUsers extends Migration {
 	 */
 	public function up()
 	{
-        Schema::table('users',function($table){
+        Schema::table('users',function(Blueprint $table){
             $table->string('business')->after('flock');
             $table->string('address')->after('business');
             $table->string('holding')->after('address');

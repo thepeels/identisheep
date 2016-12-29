@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class SheepAliveColumn extends Migration
 {
@@ -12,7 +13,7 @@ class SheepAliveColumn extends Migration
      */
     public function up()
     {
-        Schema::table('sheep',function($table){
+        Schema::table('sheep',function(Blueprint $table){
             $table->boolean('alive')->default(TRUE)->after('move_on');
             $table->index('alive');
         });

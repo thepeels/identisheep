@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSheepTable extends Migration {
 
@@ -33,7 +34,7 @@ class CreateSheepTable extends Migration {
             $table->string('sex')->default('female');
             $table->string('colour_of_tag',20);
             $table->timestamps();
-            $table->softdeletes();
+            $table->softDeletes();
             $table->index('user_id');
             $table->index('local_id');
             $table->index('deleted_at');
