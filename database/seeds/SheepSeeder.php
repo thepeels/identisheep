@@ -1,6 +1,6 @@
 <?php
 
-use App\Domain\Sheep;
+use App\Models\Sheep;
 class SheepSeeder extends DatabaseSeeder
 
 {
@@ -8,68 +8,73 @@ class SheepSeeder extends DatabaseSeeder
     {
         $ewes = [
             [
-                'user_id'       =>  "1",
+                'owner'       =>  "1",
                 'local_id'      =>  "1",
                 'move_on'       =>  date('Y-m-d'),
+                'alive'         =>  "1",
                 'move_off'      =>  "0000-00-00 00:00:00",
-                'e_flock'       =>  '109680',
-                'original_e_flock'  =>'109680',
-                'colour_flock'      =>'109680',
-                'e_tag'         =>  "1",
-                'original_e_tag'=>  "1",
-                'colour_tag'    =>  "1",
+                'flock_number'       =>  '109680',
+                'original_flock_number'  =>'109680',
+                'supplementary_tag_flock_number'      =>'109680',
+                'serial_number'         =>  "1",
+                'original_serial_number'=>  "1",
+                'tag_colour'    =>  "Green",
                 'sex'           =>  'female'
             ],
             [
-                'user_id'       =>  "2",
+                'owner'       =>  "2",
                 'local_id'      =>  "1",
                 'move_on'       =>  date('Y-m-d'),
+                'alive'         =>  "1",
                 'move_off'      =>  "0000-00-00 00:00:00",
-                'e_flock'       =>  '106374',
-                'original_e_flock'  =>'106374',
-                'colour_flock'      =>'106374',
-                'e_tag'         =>  "1",
-                'original_e_tag'=>  "1",
-                'colour_tag'    =>  "1",
+                'flock_number'       =>  '106374',
+                'original_flock_number'  =>'106374',
+                'supplementary_tag_flock_number'      =>'106374',
+                'serial_number'         =>  "1",
+                'original_serial_number'=>  "1",
+                'tag_colour'    =>  "Green",
                 'sex'           =>  'female'
             ],
             [
-                'user_id'       =>  "2",
+                'owner'       =>  "2",
                 'local_id'      =>  "2",
                 'move_on'       =>  date('Y-m-d'),
+                'alive'         =>  "1",
                 'move_off'      =>  "0000-00-00 00:00:00",
-                'e_flock'       =>  '106374',
-                'original_e_flock'  =>'106374',
-                'colour_flock'      =>'106374',
-                'e_tag'         =>  "2",
-                'original_e_tag'=>  "2",
-                'colour_tag'    =>  "2",
+                'flock_number'       =>  '106374',
+                'original_flock_number'  =>'106374',
+                'supplementary_tag_flock_number'      =>'106374',
+                'serial_number'         =>  "2",
+                'original_serial_number'=>  "2",
+                'tag_colour'    =>  "Green",
                 'sex'           =>  'female'
             ],
             [
-                'user_id'       =>  "1",
+                'owner'       =>  "1",
                 'local_id'      =>  "2",
                 'move_on'       =>  date('Y-m-d'),
+                'alive'         =>  "1",
                 'move_off'      =>  "0000-00-00 00:00:00",
-                'e_flock'       =>  '106374',
-                'original_e_flock'  =>'106374',
-                'colour_flock'      =>'106374',
-                'e_tag'         =>  "3",
-                'original_e_tag'=>  "3",
-                'colour_tag'    =>  "3",
+                'flock_number'       =>  '106374',
+                'original_flock_number'  =>'106374',
+                'supplementary_tag_flock_number'      =>'106374',
+                'serial_number'         =>  "3",
+                'original_serial_number'=>  "3",
+                'tag_colour'    =>  "Green",
                 'sex'           =>  'female'
             ],
             [
-                'user_id'       =>  "1",
+                'owner'       =>  "1",
                 'local_id'      =>  "3",
                 'move_on'       =>  date('Y-m-d'),
+                'alive'         =>  "1",
                 'move_off'      =>  "0000-00-00 00:00:00",
-                'e_flock'       =>  '109680',
-                'original_e_flock'  =>'109680',
-                'colour_flock'      =>'109680',
-                'e_tag'         =>  "2",
-                'original_e_tag'=>  "2",
-                'colour_tag'    =>  "2",
+                'flock_number'       =>  '109680',
+                'original_flock_number'  =>'109680',
+                'supplementary_tag_flock_number'      =>'109680',
+                'serial_number'         =>  "2",
+                'original_serial_number'=>  "2",
+                'tag_colour'    =>  "Green",
                 'sex'           =>  'female'
             ]
         ];
