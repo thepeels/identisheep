@@ -559,11 +559,11 @@ class Sheep extends Model
         return $query->where('alive',TRUE)->where('flock_number',$flock_number)
             ->where('serial_number',$serial_number)->first();
     }
-    public function scopePermanentDelete($query,$id,$date)
+    public function scopeDelete($query,$id,$date)
     {
-        return $query->where('alive',TRUE)->where('owner',$id)
+        return $query->where('owner',$id)
             ->where('move_on','<=',$date)
-            ->forceDelete();
+            ->delete();
     }
     private function dateRange()
     {
