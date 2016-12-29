@@ -398,7 +398,7 @@ class SheepController extends Controller
         $sheepService->recordMovement($tagNumber, $dateOfMovement, $destination, $sex, $owner);
 
         Session::flash('message', 'Sheep - Tag No. ' . $tagNumber->getCountryCode() . ' ' .
-            $tagNumber->getFlockNumber() . ' ' . $tagNumber->getSerialNumber() . ' moved off.');
+            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d',$tagNumber->getSerialNumber()) . ' moved off.');
 
         return Redirect::to('sheep/sheepoff/'.$sex);
     }
@@ -454,7 +454,7 @@ class SheepController extends Controller
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
 
         Session::flash('message', 'Death of ' . $tagNumber->getCountryCode() . ' ' .
-            $tagNumber->getFlockNumber() . ' ' . $tagNumber->getSerialNumber() . ' recorded');
+            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d',$tagNumber->getSerialNumber()) . ' recorded');
 
         return Redirect::to('sheep/death');
     }

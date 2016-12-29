@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-use App\Domain\Sheep;
+use App\Models\Sheep;
 use App\Models\Single;
 use App\Models\Homebred;
 use Auth,View,Input,Redirect,Validator,Session,DB;
@@ -72,25 +72,26 @@ class BatchController extends Controller {
             exit();
         }
         if(Input::get('load')) {
+
+            $added = 0;
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe,-5);
                 $ewe = Sheep::firstOrNew([
-                    'e_flock' => $e_flock,
-                    'e_tag' => $e_tag]);
-                //if($ewe->trashed()){
+                    'flock_number' => $e_flock,
+                    'serial_number' => $e_tag]);
                     $ewe->setOwner($user);
                     $ewe->setFlockNumber($e_flock);
                     $ewe->setSerialNumber($e_tag);
                     $ewe->setMoveOff($move_off);
                     $ewe->setDestination($destination);
-                    
+                    $ewe->setAlive(FALSE);
                     $ewe->save();
-                    $ewe->delete();
-                //}
+                $added++;
             }
         }
-        return Redirect::to('sheep/ewes');
+        Session::flash('message', $added .' Tags processed, Sheep moved to Off List.');
+        return Redirect::to('batch/batchops');
     }
     public function getBatchopson()
     {
@@ -140,6 +141,7 @@ class BatchController extends Controller {
         }
         if(Input::get('load')) {
 
+            $added = 0;
             foreach ($ewelist[2] as $ewe) {
                 $e_flock = substr($ewe, -11, 6);
                 $e_tag = substr($ewe, -5);
@@ -147,9 +149,10 @@ class BatchController extends Controller {
                 if($e_tag != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
+                        $added++;
                         $ewe = Sheep::firstOrNew([
-                            'e_flock' => $e_flock,
-                            'e_tag' => $e_tag
+                            'flock_number' => $e_flock,
+                            'serial_number' => $e_tag
                         ]);
                         $ewe->setOwner($userId);
                         $ewe->setLocalId($l);
@@ -164,7 +167,8 @@ class BatchController extends Controller {
                 }
             }
         }
-        return Redirect::to('sheep/ewes');
+        Session::flash('message', $added .' Tags processed, Sheep Added.');
+        return Redirect::to('batch/batchopson');
     }
     /**
      * Load Batch entry form
