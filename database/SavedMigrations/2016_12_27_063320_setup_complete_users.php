@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class SetupCompleteUsers extends Migration
 {
@@ -12,7 +13,7 @@ class SetupCompleteUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users',function($table){
+        Schema::table('users',function(Blueprint $table){
             $table->boolean('setup',FALSE)->after('email');
         });
     }
@@ -24,7 +25,7 @@ class SetupCompleteUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users',function($table){
+        Schema::table('users',function(Blueprint $table){
             $table->dropColumn('setup');
         });
     }
