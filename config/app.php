@@ -197,7 +197,6 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
-        'Gate'      => 'Illuminate\Support\Facades\Gate',//::class,
 
 	],
 
