@@ -33,3 +33,5 @@ if (file_exists($compiledPath))
 {
 	require $compiledPath;
 }
+
+require __DIR__.'/../app/domain/password.php';
