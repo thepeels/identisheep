@@ -70,11 +70,11 @@
                     {{sprintf('%05d',$ewe->older_serial_number)}}
                 </td>
                 <td>
-                    {{$date_on}}
+                    {{date('d-M-Y',strtotime($date_on))}}
                 </td>
                 @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
                     <td class="move-off">
-                    {{$date_off}}
+                    {{date('d-M-Y',strtotime($date_off))}}
                     </td>
                     <td>
                         {{$ewe->destination}}
@@ -84,7 +84,7 @@
                     </td>
                 @else
                     <td>
-                        {{date('Y-m-d',strtotime($ewe->updated_at))}}
+                        {{date('d-M-Y',strtotime($ewe->updated_at))}}
                     </td>
                     <td class="no-print">
                         <a href="../edit/{{$ewe->id}}"

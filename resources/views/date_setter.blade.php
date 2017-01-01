@@ -34,9 +34,11 @@
         {!!$errors->first('day_to','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('month_to','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('year_to','<small style="color:#f00">:message</small>')!!}<br>
-        <h4>or</h4>
-        {!! Form::label('text','Select one year prior to 1st December this year') !!}
-        {!! Form::input('checkbox','oneyear') !!}<br><br>
+        <h4>or one of the options below</h4>
+        {!! Form::input('checkbox','thisyear') !!}
+        {!! Form::label('text','Select one year prior to 1st December THIS year') !!}<br>
+        {!! Form::input('checkbox','lastyear') !!}
+        {!! Form::label('text','Select one year prior to 1st December LAST year') !!}<br><br>
         {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}<br>
         {!!$errors->first('date_set') !!}<br>
         {!!Form::submit('Finished',['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}<br>

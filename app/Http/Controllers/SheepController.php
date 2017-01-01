@@ -339,12 +339,9 @@ class SheepController extends Controller
             $sheep_service->movementOn($tagNumber,$move_on,$colour_of_tag,$sex,$owner,$local_index);           $ewe = new Sheep();
 
             if ($home_bred !== FALSE) {
-                $tag = new Homebred();
-                $tag->setFlockNumber($home_bred);
-                $tag->setDateApplied($move_on);
-                $tag->setUserId($owner);
-                $tag->setCount(1);
-                $tag->save();
+                $home_bred_number = new TagNumber('UK0' . $home_bred . Input::get('e_tag'));
+                $tag = new SheepOnService();
+                $tag->homeBredOn($home_bred_number,$move_on,1,$owner);
             }
         }
 
@@ -527,9 +524,13 @@ class SheepController extends Controller
      */
     public function postDatesetter()
     {
-        if (Input::get('oneyear') == "on") {
+        if (Input::get('thisyear') == "on") {
             Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december this year')));
             Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 december last year')));
+        }
+        elseif (Input::get('lastyear') == "on") {
+            Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december last year')));
+            Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 year ago',strtotime('1 december last year'))));
         } else {
 
             $year_from = Input::get('year');

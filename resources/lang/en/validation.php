@@ -112,7 +112,10 @@ return [
         'end_tag'       =>  'Finish Number',
         'business'      =>  'Business Name',
         'address'       =>  'Farm Address and Post Code',
-        'holding'       =>  'Holding Number (CPH)'
+        'holding'       =>  'Holding Number (CPH)',
+        'email'         =>  'E-mail address',
+        'name'          =>  'User name'
+
     ],
 
 ];

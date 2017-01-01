@@ -13,6 +13,7 @@ use App\Domain\Sheep\TagNumber;
 use App\Models\Sheep;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use App\Models\Homebred;
 
 class SheepOnService
 {
@@ -44,7 +45,23 @@ class SheepOnService
         $ewe->setTagColour($colour_of_tag);
         $ewe->setSex($sex);
         $ewe->save();
+    }
 
+    /**
+     * @param \App\Domain\Sheep\TagNumber $tagNumber
+     * @param \DateTime $move_on
+     * @param int $count
+     * @param $owner
+     */
+    public function homeBredOn(TagNumber $tagNumber, \DateTime $move_on, $count, $owner)
+    {
+        $ewe = new HomeBred();
+        $ewe->setFlockNumber($tagNumber->getFlockNumber());
+        $ewe->setCount($count);
+        $ewe->setUserId($owner);
+        $ewe->setDateApplied($move_on);
+        $ewe->setUpdatedAt($move_on);
+        $ewe->save();
     }
 
 }
