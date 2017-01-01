@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Domain\Sheep\SheepOffService;
 use App\Domain\Sheep\TagNumber;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -9,7 +10,12 @@ use Illuminate\Http\Request;
 use App\Models\Sheep;
 use App\Models\Single;
 use App\Models\Homebred;
-use Auth,View,Input,Redirect,Validator,Session,DB;
+use View,Session,DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use App\Domain\Sheep\Sex;
 
 class BatchController extends Controller {
 
@@ -291,55 +297,43 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $user_id        = Input::get('id');
+
+        $owner        = Input::get('id');
         $home_bred      = Input::get('home_bred');
         $flock_number   = Input::get('flock_number');
         $start_tag      = Input::get('start_tag');
         $end_tag        = Input::get('end_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
+        $dateOfMovement = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
         $colour_of_tag  = Input::get('colour_of_tag');
         $destination    = Input::get('destination');
-        $move_off        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $sex            = new Sex('Female');
         if ($start_tag <= $end_tag){
             $i = $start_tag;
             $home_bred_count = 0;
             while ($i <= $end_tag){
-                $ewe = Sheep::firstOrNew([
-                    'flock_number'    =>  $flock_number,
-                    'serial_number'   =>  $i,
-                    'owner'           =>  $user_id
-                ]);
-                $home_bred_count++;
-                $ewe->setOriginalFlockNumber($flock_number);
-                $ewe->setSupplementaryTagFlockNumber($flock_number);
-                $ewe->setOriginalSerialNumber($i);
-                $ewe->setSupplementarySerialNumber($i);
-                $ewe->setMoveOff($move_off);
-                $ewe->setTagColour($colour_of_tag);
-                $ewe->setDestination($destination);
-
-                $ewe->save();
-                $ewe->delete();
+                $tagNumber = new TagNumber('UK0' . Input::get('flock_number') . sprintf('%05d',$i));
+                $sheep = new SheepOffService();
+                $sheep->recordMovement($tagNumber,$dateOfMovement,$destination,$sex,$owner,$colour_of_tag);
+                $home_bred_count ++;
                 $i++;
 
             }
-            /*if($home_bred !== 'false'){
-                $batch_of_tags = new Homebred();
-                $batch_of_tags->setFlockNumber($home_bred);
-                $batch_of_tags->setDateApplied($move_on);
-                $batch_of_tags->setUserId($id);
-                $batch_of_tags->setCount($home_bred_count);
-                //dd($home_bred_count);
-                $batch_of_tags->save();
-            }*/
         }
+        if($home_bred !== 'false' && $home_bred_count >= 1){
+            $batch_of_tags = new Homebred();
+            $batch_of_tags->setFlockNumber($tagNumber->getFlockNumber());
+            $batch_of_tags->setDateApplied($dateOfMovement);
+            $batch_of_tags->setUserId($owner);
+            $batch_of_tags->setCount($home_bred_count);
+            //dd($home_bred_count);
+            $batch_of_tags->save();
+        }
+
         return Redirect::back()->withInput(
             [
-                'day'           =>$d,
-                'month'         =>$m,
-                'year'          =>$y,
+                'day'           => Input::get('day'),
+                'month'         => Input::get('month'),
+                'year'          => Input::get('year'),
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);

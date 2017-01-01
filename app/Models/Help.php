@@ -43,7 +43,11 @@ class Help extends Model {
         'delete'    =>  ['Deleting old records','<p>This option will permanently delete all 
             records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.</p>'],
         'death'     =>  ['Recording a death','<p>This action removes a sheep from the \'Sheep\' lists, 
-            but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number</p>']
+            but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number</p>'],
+        'datesetter'     =>  ['Setting custom dates','<p>This page allows you to choose a range of dates to show in \'Sheep\' lists,<br> 
+            Choose a custom range, either of the previous two years to 1st December ( the official Annual Inventory date).</p>
+            <p>Reset to the default 10 years range by coming back again later.<br> If sheep do not appear in a list when you expected 
+            them to you it may be that you have a custom date set</p>']
     ];
 
 

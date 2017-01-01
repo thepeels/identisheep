@@ -5,7 +5,7 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         @if($home_bred == 'false')
-            <h4>{!! $title !!} - Movement of Double Tagged Sheep Off Holding</h4>
+            <h4>{!! $title !!} - Double Tagged Female Sheep Off Holding</h4>
         @else
             <h4>{!! $alt_title !!} - Movement of Double Tagged Sheep Off Holding</h4>
         @endif

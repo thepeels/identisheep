@@ -48,8 +48,9 @@ class SheepOffService
      * @param $destination
      * @param Sex $sex
      * @param $owner
+     * @param $colour_of_tag
      */
-    public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex, $owner)
+    public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex, $owner, $colour_of_tag = "")
     {
         $ewe = Sheep::firstOrNew([
             'flock_number'    =>  $tagNumber->getFlockNumber(),
@@ -63,6 +64,8 @@ class SheepOffService
         $ewe->setMoveOff($dateOfMovement->format('Y-m-d'));
         $ewe->setDestination($destination);
         $ewe->setSex($sex);
+        $ewe->setTagColour($colour_of_tag);
         $ewe->save();
     }
+
 }

@@ -12,8 +12,11 @@
     <title>{!! $title !!}</title>
 @stop
 @section('content')
-    <div style="width:60%;margin-left:20%;">
-        <h4>{{$title}}</h4>
+    <div style="width:100%;margin-left:20%;">
+        <h4><p class="no-screen"> {{Auth::user()->getBusiness()}}, {{Auth::user()->getAddress()}}</p><br>
+            <p class="no-screen">Holding Number {{Auth::user()->getHolding()}}</p><br>
+            {{$title}}
+        </h4>
         <table class="table table-striped table-bordered table-sm table-condensed print narrow" >
             <thead>
             <tr>
@@ -29,5 +32,6 @@
                 </tr>
             @endforeach
             </tbody>
+        </table>
     </div>
 @stop

@@ -545,6 +545,8 @@ class SheepController extends Controller
         }
         Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');
+        Session::flash('custom_date','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
+            and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'');
 
         return Redirect::to('sheep/datesetter');
     }

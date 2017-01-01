@@ -18,9 +18,9 @@ class HomeBredService
      * @param $move_on
      * @param $owner
      */
-    public function addHomeBred($home_bred,$move_on,$owner)
+    public function addHomeBred($home_bred, $move_on, $owner)
     {
-        $tag = new Homebred($home_bred,$move_on,$owner);
+        $tag = new Homebred($home_bred, $move_on, $owner);
         $tag->setFlockNumber($home_bred);
         $tag->setDateApplied($move_on);
         $tag->setUserId($owner);
