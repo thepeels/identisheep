@@ -11,9 +11,24 @@
 @stop
 @section('content')
     <div style="width:75%;margin-left:12.5%;">
-        <h4>{{$title}}
-            @if(Request::path() === 'sheep/replaced')
+        <h4><p class="no-screen"> {{Auth::user()->getBusiness()}}, {{Auth::user()->getAddress()}}</p><br>
+            <p class="no-screen">Holding Number {{Auth::user()->getHolding()}}</p><br>
+            {{$title}}
+
+            @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
                 - (number of records = {{$count}})
+            @endif
+            @if(Request::path() !== ('sheep'))
+                <div class="no-print" style="margin:0 0 10px;">
+                    @if($elements[sizeof($elements)-1]!='print')
+                        {!! $ewes->render() !!}<br>
+                        <a href="../../{{$print}}"
+                           class="btn btn-default btn-xs"
+                           style="margin-bottom:-1px;"
+                           title="printable version of whole list">Printable Version
+                        </a>
+                    @endif
+                </div>
             @endif
         </h4>
         {!! $ewes->render() !!}
@@ -43,7 +58,7 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                    <td>
+                    <td class="no-print">
                         <a href="edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"

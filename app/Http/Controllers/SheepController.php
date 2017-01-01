@@ -6,7 +6,9 @@ use App\Domain\Sheep\Sex;
 use App\Domain\Sheep\TagNumber;
 use App\Models\Homebred;
 use App\Models\Sheep;
-use App\Domain\Sheep\SheepService;
+use App\Domain\Sheep\SheepOffService;
+use App\Domain\Sheep\SheepOnService;
+use App\Domain\Sheep\HomeBredService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -321,40 +323,26 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $user_id = $this->user();
-        $home_bred = Input::get('home_bred');
-        $e_flock = Input::get('e_flock');
-        $e_flock_number = $e_flock;
-        $e_tag = Input::get('e_tag');
-        $d = Input::get('day');
-        $m = Input::get('month');
-        $y = Input::get('year');
-        $colour_of_tag = Input::get('colour_of_tag');
-        $move_on = $y . '-' . $m . '-' . $d . ' ' . '00:00:00';
-        $sex = Input::get('sex');
-        $l = DB::table('sheep')->where('owner', $user_id)->max('local_id');
-        $sheep_exists = Sheep::check($e_flock_number, $e_tag, $user_id);
+        $owner              = $this->user();
+        $home_bred          = Input::get('home_bred');
+        $colour_of_tag      = Input::get('colour_of_tag');
+        $flock_number       = Input::get('e_flock');
+        $serial_number      = Input::get('e_tag');
+        $sex                = new Sex(Input::get('sex'));
+        $tagNumber          = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $move_on            = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $local_index                  = DB::table('sheep')->where('owner', $owner)->max('local_id');
+        $sheep_exists = Sheep::check($flock_number, $serial_number, $owner);
         if (NULL === $sheep_exists) {
-            $l++;
-            $ewe = new Sheep();
-            $ewe->setOwner($user_id);
-            $ewe->setLocalId($l);
-            $ewe->setFlockNumber($e_flock_number);
-            $ewe->setOriginalFlockNumber($e_flock_number);
-            $ewe->setSupplementaryTagFlockNumber($e_flock_number);
-            $ewe->setSerialNumber($e_tag);
-            $ewe->setOriginalSerialNumber($e_tag);
-            $ewe->setSupplementarySerialNumber($e_tag);
-            $ewe->setMoveOn($move_on);
-            $ewe->setTagColour($colour_of_tag);
-            $ewe->setSex($sex);
-            $ewe->save();
+            $local_index++;
+            $sheep_service = new SheepOnService();
+            $sheep_service->movementOn($tagNumber,$move_on,$colour_of_tag,$sex,$owner,$local_index);           $ewe = new Sheep();
 
             if ($home_bred !== FALSE) {
                 $tag = new Homebred();
                 $tag->setFlockNumber($home_bred);
                 $tag->setDateApplied($move_on);
-                $tag->setUserId($user_id);
+                $tag->setUserId($owner);
                 $tag->setCount(1);
                 $tag->save();
             }
@@ -394,7 +382,7 @@ class SheepController extends Controller
         $sex            = new Sex(Input::get('sex'));
         $owner          = $this->user();
 
-        $sheepService = new SheepService();
+        $sheepService = new SheepOffService();
         $sheepService->recordMovement($tagNumber, $dateOfMovement, $destination, $sex, $owner);
 
         Session::flash('message', 'Sheep - Tag No. ' . $tagNumber->getCountryCode() . ' ' .
@@ -450,7 +438,7 @@ class SheepController extends Controller
         $sex            = new Sex(Input::get('sex'));
         $owner          = $this->user();
 
-        $sheepService   = new SheepService();
+        $sheepService   = new SheepOffService();
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
 
         Session::flash('message', 'Death of ' . $tagNumber->getCountryCode() . ' ' .

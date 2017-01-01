@@ -10,6 +10,7 @@ class AppServiceProvider extends ServiceProvider {
 
 	/**
 	 * Bootstrap any application services.
+     * In case here passing global variables to (selected) views
 	 *
 	 * @return void
 	 */
@@ -23,21 +24,24 @@ class AppServiceProvider extends ServiceProvider {
             else{
                 $home_flock = 'false';
             }
+
             /* *********** logic from app.blade *********** */
-            $url = Request::path();
-            $elements = explode('/', $url);
-            if(Request::path() === ('home')){
-                $help_page = $elements[0];
-            }
-            else{
-                $help_page = $elements[1];
-            }
+                    $url = Request::path();
+                    $elements = explode('/', $url);
+                    if(Request::path() === ('home')){
+                        $help_page = $elements[0];
+                    }
+                    else{
+                        $help_page = $elements[1];
+                    }
             /* ************ */
-            /* ******** logic from sheeplist page********** */
-            $string = array_slice($elements,0,-1);
-            $print = implode("/",$string).'/print';
-            $filtered_pages = array('ewes','tups');
+
+            /* ******** logic from list pages ********** */
+                    $string = array_slice($elements,0,-1);
+                    $print = implode("/",$string).'/print';
+                    $filtered_pages = array('ewes','tups','replaced');
             /* ********* */
+
             $view->with([
                 'home_flock'    => $home_flock,
                 'help_page'     => $help_page,

@@ -73,7 +73,7 @@
                     {{$date_on}}
                 </td>
                 @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
-                    <td>
+                    <td class="move-off">
                     {{$date_off}}
                     </td>
                     <td>

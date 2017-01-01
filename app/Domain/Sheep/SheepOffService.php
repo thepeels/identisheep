@@ -14,7 +14,7 @@ use App\Models\Sheep;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
-class SheepService
+class SheepOffService
 {
     /**
      * @param TagNumber $tagNumber
@@ -39,7 +39,6 @@ class SheepService
         $ewe->setDestination('died' . $reasonForDeath);
         $ewe->setSex($sex);
         $ewe->save();
-        // TODO: refactor delete() to recordDeath() or something
 
     }
 

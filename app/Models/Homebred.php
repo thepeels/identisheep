@@ -107,6 +107,7 @@ public function setFlockNumber($e_flock)
 {
     $this->attributes['e_flock'] = $e_flock;
 }
+
 public function scopeCountByDate($query,$id,$date_from,$date_to)
 {
     return $query->where('user_id',$id)

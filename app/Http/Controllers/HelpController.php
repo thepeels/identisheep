@@ -11,11 +11,11 @@ use Exception;
 
 class HelpController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+    /**
+     * @param $page
+     * @return mixed
+     * @throws DomainException
+     */
 	public function index($page)
 	{
         try{
@@ -23,23 +23,23 @@ class HelpController extends Controller {
         }
         catch (Exception $e){
 
-            //throw new DomainException('help page not published yet');
+            //throw new DomainException('This help page not published yet');
             return View::make('help')->with([
-                'return'=> 'sheep/'.$page,
                 'title' => 'Please be patient...',
                 'text'=> 'This help page not published yet<br><br>'
             ]);
         }
         return View::make('help')->with([
-            'return'=>$help[0],
-            'title'=> $help[1],
-            'text' => $help[2]
+            'title'=> $help[0],
+            'text' => $help[1]
         ]);
 	}
 
+    /**
+     * @var array
+     */
 	public static $help_text= [
-	    'addewe'=>['Help for Add a ewe page','This is the help text <br>
-                    this is after the line break']
+	    'addewe'=>["Help for Add a ewe page","This is the help text <br>this is after the line break"]
     ];
 
 

@@ -53,7 +53,7 @@
                 <td>
                     {{$date_on}}
                 </td>
-                    <td>
+                    <td class="move-off">
                         {{$date_off}}
                     </td>
                     <td>
