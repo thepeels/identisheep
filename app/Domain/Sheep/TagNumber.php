@@ -33,7 +33,10 @@ class TagNumber
      */
     public function __construct($tagNumberString)
     {
-        $tagNumberString = preg_replace('/\s/', '', strtoupper($tagNumberString));
+        $tagNumberString    = preg_replace('/\s/', '', strtoupper($tagNumberString));
+        $tagNumberString    = str_replace(array(",\r\n","\r\n","\n\r", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $tagNumberString);
+        $tagNumberString    = str_replace(array("L","I"), "1", $tagNumberString);
+        $tagNumberString    = str_replace(array("O"), "0", $tagNumberString);
 
         if (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) === false) {
             throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. e.g. UK012345600001');

@@ -113,7 +113,7 @@
 		</div>
 	</nav>
 	<div class="alert-div">
-	@if(Session::has('custom_date'))
+	@if(Session::has('message'))
 		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
 	@elseif(Session::has('custom_date'))
 		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('custom_date') }}</p>

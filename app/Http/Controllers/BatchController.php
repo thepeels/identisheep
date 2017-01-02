@@ -45,21 +45,11 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $file_raw       = Input::file('file_raw');
         $destination    = Input::get('destination');
         $user           = Auth::user()->id;
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $move_off       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $no_spaces = preg_replace('/\s*,\s*/', ',', $file_raw);
-        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $no_spaces);
-        $rawlist = str_replace(array("\r\n,"),"\r\n", $rawlist);
-        $rawlist = str_replace(array("l"), '1', $rawlist);
-        $rawlist = str_replace(array("O"), '0', $rawlist);
-        $ewelist = array_map('str_getcsv', file($rawlist));
-
-        // CsvImporter->import() -- @return TagNumber[]
+        $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
+        $process_file   = file(Input::file('file_raw'));
+            $ewelist    = array_map('str_getcsv', ($process_file));
 
         if(Input::get('check')) {
             $i = 0;
@@ -79,16 +69,17 @@ class BatchController extends Controller {
         }
         if(Input::get('load')) {
 
-            $added = 0;
+            $added = -1;
             foreach ($ewelist[2] as $ewe) {
-                $e_flock = substr($ewe, -11, 6);
-                $e_tag = substr($ewe,-5);
+                $tag = new TagNumber($ewe);
+                $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $user);
+                /**ToDo: check whether this test for dead sheep use to increment added correctly*/
                 $ewe = Sheep::firstOrNew([
-                    'flock_number' => $e_flock,
-                    'serial_number' => $e_tag]);
+                    'flock_number' => $tag->getFlockNumber(),
+                    'serial_number' => $tag->getSerialNumber()]);
                     $ewe->setOwner($user);
-                    $ewe->setFlockNumber($e_flock);
-                    $ewe->setSerialNumber($e_tag);
+                    $ewe->setFlockNumber($tag->getFlockNumber());
+                    $ewe->setSerialNumber($tag->getSerialNumber());
                     $ewe->setMoveOff($move_off);
                     $ewe->setDestination($destination);
                     $ewe->setAlive(FALSE);
@@ -121,25 +112,17 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $l              = DB::table('sheep')->where('owner',$userId)->max('local_id');
-        $no_spaces = preg_replace('/\s*,\s*/', ',', $file_raw);
-        $rawlist = str_replace(array(",\r\n", ",\n\r", ",\n", ",\r", ", ",",¶"), "", $no_spaces);
-        $rawlist = str_replace(array("\r\n,"),"\r\n", $rawlist);
-        $rawlist = str_replace(array("l"), '1', $rawlist);
-        $rawlist = str_replace(array("O"), '0', $rawlist);
-        $ewelist = array_map('str_getcsv', file($rawlist));
+        $process_file   = file(Input::file('file_raw'));
+        $ewelist = array_map('str_getcsv', ($process_file));
 
         if(Input::get('check')) {
             $i = 0;
 
-            echo($ewelist[0][0]."<br>");
-            echo($ewelist[1][0]."<br><br>");
-
             foreach ($ewelist[2] as $ewe) {
-                    $e_flock = substr($ewe, -11, 6);
-                    $e_tag = substr($ewe, -5);
-                if($e_tag != 0) {
+                $tag = new TagNumber($ewe);
+                if($tag->getSerialNumber() != 0) {
                     $i++;
-                    echo($i . ' ' . $e_flock . ' ' . $e_tag . "<br>");
+                    echo("{$i} {$tag->getShortTagNumber()}<br>");
                 }
             }
             echo("<br>".$i.' Tags.');
