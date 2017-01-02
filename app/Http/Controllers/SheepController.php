@@ -30,6 +30,7 @@ class SheepController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        if (Auth::guest()){return Redirect::to('../login');}
         $this->home_flock = Auth::user()->getFlock();
     }
 
@@ -40,13 +41,7 @@ class SheepController extends Controller
      */
     public function getIndex()
     {
-        $ewes = Sheep::females($this->user());
-
-        return view('sheeplist')->with([
-            'ewes' => $ewes[0],
-            'title' => 'All Female Sheep',
-            'count' => $ewes[1],
-        ]);
+        return Redirect::to('sheep/ewes/screen');
     }
 
     private static function user()
@@ -54,9 +49,8 @@ class SheepController extends Controller
         return Auth::user()->id;
     }
 
-    public function getEwes($print)
+    public function getEwes($print = 'screen')
     {
-        if ($print == NULL) $print = 'screen';
         if ($print == 'print') {
             $ewes = Sheep::stockPrint($this->user(), 'female');
         } else {
@@ -70,7 +64,7 @@ class SheepController extends Controller
         ]);
     }
 
-    public function getTups($print)
+    public function getTups($print = 'screen')
     {
         if ($print == 'print') {
             $ewes = Sheep::stockPrint($this->user(), 'male');
@@ -326,13 +320,12 @@ class SheepController extends Controller
         $owner              = $this->user();
         $home_bred          = Input::get('home_bred');
         $colour_of_tag      = Input::get('colour_of_tag');
-        $flock_number       = Input::get('e_flock');
-        $serial_number      = Input::get('e_tag');
         $sex                = new Sex(Input::get('sex'));
         $tagNumber          = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
         $move_on            = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $local_index                  = DB::table('sheep')->where('owner', $owner)->max('local_id');
-        $sheep_exists = Sheep::check($flock_number, $serial_number, $owner);
+        $local_index        = DB::table('sheep')->where('owner', $owner)->max('local_id');
+        $count              = 0;
+        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(),$tagNumber->getSerialNumber(), $owner);
         if (NULL === $sheep_exists) {
             $local_index++;
             $sheep_service = new SheepOnService();
@@ -340,10 +333,13 @@ class SheepController extends Controller
 
             if ($home_bred !== FALSE) {
                 $home_bred_number = new TagNumber('UK0' . $home_bred . Input::get('e_tag'));
+                $count = 1;
                 $tag = new SheepOnService();
-                $tag->homeBredOn($home_bred_number,$move_on,1,$owner);
+                $tag->homeBredOn($home_bred_number,$move_on,$count,$owner);
             }
         }
+        if ($count != 1){Session::flash('message', 'Sheep already exists ' . $count . ' sheep added.');}
+        else{Session::flash('message', 'Success ' . $count . ' sheep '. $tagNumber->getShortTagNumber(). ' added.');}
 
         return Redirect::back()->withInput(Input::except('e_tag'));
     }
