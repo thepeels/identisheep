@@ -56,9 +56,9 @@
                         </td>
                         <td>
                             <a href="enterdeath/{{$id}}/{{$e_flock}}/{{$e_tag}}/{{$sex}}"
-                               class="btn btn-default btn-xs"
+                               class="btn btn-default btn-xs btn-inverse"
                                style="margin-bottom:-1px;"
-                               title="Edit this Sheep">Enter Sheep Death
+                               title="Edit this Sheep">Enter Death of this Sheep
                             </a>
                         </td>
                     @endif

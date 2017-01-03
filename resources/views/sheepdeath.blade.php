@@ -43,7 +43,7 @@ else {$m =1;} ?>
         {!!Form::label('text','How died?') !!}
         {!!Form::input('text','how_died',NULL,['class'=>'new_class input-xs','placeholder'=>'Optional','size' => '10'])!!}<br>
         <br>
-        {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
+        {!!Form::submit($title,['class'=>'btn btn-default btn-xs btn-inverse'])!!}
 
         {!!Form::close()!!}<br>
     </div>

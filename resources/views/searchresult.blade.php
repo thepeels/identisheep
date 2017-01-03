@@ -24,6 +24,7 @@
             <th>Original Tags</th>
             <th>Old Tags</th>
             <th>Older Tags</th>
+            <th>Secondary Tag</th>
             <th>Move on</th>
             <th>Move Off</th>
             <th>Sex</th>
@@ -51,6 +52,9 @@
                     {{sprintf('%05d',$ewe->older_serial_number)}}
                 </td>
                 <td>
+                    {{$ewe->supplementary_tag_flock_number.' '.sprintf('%05d',$ewe->supplementary_serial_number)}}
+                </td>
+                <td>
                     {{$date_on}}
                 </td>
                     <td class="move-off">
@@ -62,12 +66,12 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                    @if($date_off = (date('Y',strtotime($ewe->move_off))=="1970"))
+                    @if((date('Y',strtotime($ewe->move_off))=="1970"))
                         <td class="no-print">
-                        <a href="edit/{{$ewe->id}}"
+                        <a href="select/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"
-                           title="Edit this Sheep">Edit Sheep
+                           title="Select this Sheep for editing">Select this Sheep
                         </a>
                         </td>
                     @endif
@@ -88,7 +92,7 @@
            title="Edit this Sheep">Edit Sheep
         </a>
         <a href="deathsearch/{{$ewe->flock_number}}/{{$ewe->serial_number}}/{{$ewe->sex}}"
-           class="btn btn-default btn-xs"
+           class="btn btn-default btn-xs btn-inverse"
            style="margin-bottom:-1px;"
            title="Edit this Sheep">Enter Death of this Sheep
         </a>
