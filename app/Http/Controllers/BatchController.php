@@ -75,7 +75,7 @@ class BatchController extends Controller {
                 if($tag->getSerialNumber() != 0) {
                     $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
                     if (NULL !== $sheep_exists) $added++;
-                    /**ToDo: check whether this test for dead sheep use to increment added correctly*/
+
                     $ewe = Sheep::firstOrNew([
                         'flock_number' => $tag->getFlockNumber(),
                         'serial_number' => $tag->getSerialNumber()]);
@@ -196,7 +196,7 @@ class BatchController extends Controller {
         $end_tag        = Input::get('end_tag');
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
         $colour_of_tag  = Input::get('colour_of_tag');
-        $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
+        $local_id              = DB::table('sheep')->where('owner',$owner)->max('local_id');
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -206,12 +206,12 @@ class BatchController extends Controller {
                 $sheep_exists = Sheep::check($flock_number,$i,$owner);
                 if($i != 0) {
                     if (NULL === $sheep_exists) {
-                        $l++;
+                        $local_id++;
                         $home_bred_count++;
 
                         $ewe = new Sheep();
 
-                        $ewe->setLocalId($l);
+                        $ewe->setLocalId($local_id);
                         $ewe->setOwner($owner);
                         $ewe->setFlockNumber($flock_number);
                         $ewe->setOriginalFlockNumber($flock_number);
@@ -239,7 +239,7 @@ class BatchController extends Controller {
                 $batch_of_tags->save();
             }
         }
-        $l=NULL;
+        $local_id=NULL;
         return Redirect::back()->withInput(
             [
                 'day'           => Input::get('day'),

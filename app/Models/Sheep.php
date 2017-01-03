@@ -507,6 +507,7 @@ class Sheep extends Model
     {
         $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->paginate(20);
         $count = $query->where('owner',$id)->where('sex',$sex)->count();
+        //dd($ewes);
         return [$ewes,$count];
     }
     public function scopeStockPrint($query,$id,$sex)

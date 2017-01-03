@@ -39,13 +39,15 @@ class AppServiceProvider extends ServiceProvider {
             /* ******** logic from list pages ********** */
                     $string = array_slice($elements,0,-1);
                     $print = implode("/",$string).'/print';
-                    $filtered_pages = array('ewes','tups','replaced');
+                    $filtered_pages = array('ewes','tups','replaced','deadlist','offlist');
+                    $second_filter = array('deadlist','offlist');
             /* ********* */
 
             $view->with([
                 'home_flock'    => $home_flock,
                 'help_page'     => $help_page,
                 'filtered_pages'=> $filtered_pages,
+                'second_filter' => $second_filter,
                 'print'         => $print,
                 'elements'      => $elements
             ]);

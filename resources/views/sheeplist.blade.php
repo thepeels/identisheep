@@ -16,7 +16,12 @@
         {{$title}}
 
         @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
-            - (number of records = {{$count}})
+            - <span class="pages">(number of records = {{$ewes->total()}})</span>
+        @endif
+    @if(in_array($elements[sizeof($elements)-2],$second_filter))
+                <span class="date-range">dates between {{date('d M Y',strtotime(Session::get('date_from')))}}
+                    and {{date('d M Y',strtotime(Session::get('date_to')))}}
+                </span>
         @endif
     </h4>
         @if(Request::path() !== ('sheep'))
@@ -40,7 +45,7 @@
             <th class="no-print">Old Tags</th>
             <th class="no-print">Older Tags</th>
             <th>Move on</th>
-            @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
+            @if(in_array($elements[sizeof($elements)-2],$second_filter))
             <th>Move Off</th>
             <th>How moved off</th>
             <th>Sex</th>
@@ -72,7 +77,7 @@
                 <td>
                     {{date('d-M-Y',strtotime($date_on))}}
                 </td>
-                @if(!in_array($elements[sizeof($elements)-2],$filtered_pages))
+                @if(in_array($elements[sizeof($elements)-2],$second_filter))
                     <td class="move-off">
                     {{date('d-M-Y',strtotime($date_off))}}
                     </td>

@@ -85,6 +85,7 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::offList($this->user());
         }
+        //dd($ewes->total());
 
         return view('sheeplist')->with([
             'ewes' => $ewes,

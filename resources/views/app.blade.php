@@ -47,9 +47,9 @@
 						</ul>
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
-					<li><a href="/sheep/search">Search Tags</a></li>
+					<li><a href="/sheep/search">Search</a></li>
 					<li>
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep Entry<span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/addewe/false">Add a Ewe</a></li>
 							<li><a href="/sheep/addewe/{{$home_flock}}">Add a Home Bred Ewe</a></li>
@@ -78,7 +78,7 @@
 						</ul>
 					</li>
 					<li>
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Exit<span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep Off<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/sheepoff/female">Ewe Off</a></li>
 							<li><a href="/sheep/sheepoff/male">Tup Off</a></li>
@@ -105,6 +105,7 @@
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/sheep/search">Search</a></li>
 								<li><a href="/sheep/datesetter" target="_blank">Select Date Range</a></li>
+								<li><a href="/sheep/contact" target="_blank">Contact Us</a></li>
 							</ul>
 						</li>
 					@endif
