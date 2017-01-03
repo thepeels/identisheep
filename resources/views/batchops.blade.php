@@ -27,6 +27,7 @@
 
             {!! Form::label('text','Destination Holding') !!}
             {!! Form::input('text','destination',NULL,['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
+            {!!$errors->first('destination','<small style="color:#f00">:message</small>')!!}<br>
             {!! Form::label('name','Select .csv file') !!}
             {!! Form::file('file_raw') !!}
         </div>

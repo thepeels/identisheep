@@ -425,11 +425,11 @@ class Sheep extends Model
         return $ewe;
     }
 
-    public static function getByTag($flock, $tag)
+    public static function getByTag($flockNumber, $serialNumber)
     {
         try {
-            $ewe = Sheep::where('flock_number', $flock)
-                ->where('serial_number', $tag)
+            $ewe = Sheep::where('flock_number', $flockNumber)
+                ->where('serial_number', $serialNumber)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             return (NULL);
@@ -437,12 +437,11 @@ class Sheep extends Model
 
         return $ewe;
     }
-    public static function check($flock,$tag,$id)
+    public static function check($flockNumber, $serialNumber, $owner)
     {
-        $ewe = Sheep::withTrashed()
-            ->where('owner',$id)
-            ->where('flock_number',$flock)
-            ->where('serial_number',$tag)
+        $ewe = Sheep::where('owner',$owner)//withTrashed()-> removed here
+            ->where('flock_number',$flockNumber)
+            ->where('serial_number',$serialNumber)
             ->first();
         return (NULL !== $ewe?:NULL);
     }

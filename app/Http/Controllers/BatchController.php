@@ -46,7 +46,7 @@ class BatchController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $destination    = Input::get('destination');
-        $user           = Auth::user()->id;
+        $owner           = Auth::user()->id;
         $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
         $process_file   = file(Input::file('file_raw'));
             $ewelist    = array_map('str_getcsv', ($process_file));
@@ -69,22 +69,25 @@ class BatchController extends Controller {
         }
         if(Input::get('load')) {
 
-            $added = -1;
+            $added = -0;
             foreach ($ewelist[2] as $ewe) {
                 $tag = new TagNumber($ewe);
-                $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $user);
-                /**ToDo: check whether this test for dead sheep use to increment added correctly*/
-                $ewe = Sheep::firstOrNew([
-                    'flock_number' => $tag->getFlockNumber(),
-                    'serial_number' => $tag->getSerialNumber()]);
-                    $ewe->setOwner($user);
+                if($tag->getSerialNumber() != 0) {
+                    $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
+                    if (NULL !== $sheep_exists) $added++;
+                    /**ToDo: check whether this test for dead sheep use to increment added correctly*/
+                    $ewe = Sheep::firstOrNew([
+                        'flock_number' => $tag->getFlockNumber(),
+                        'serial_number' => $tag->getSerialNumber()]);
+                    $ewe->setOwner($owner);
                     $ewe->setFlockNumber($tag->getFlockNumber());
+                    $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
                     $ewe->setSerialNumber($tag->getSerialNumber());
                     $ewe->setMoveOff($move_off);
                     $ewe->setDestination($destination);
                     $ewe->setAlive(FALSE);
                     $ewe->save();
-                $added++;
+                }
             }
         }
         Session::flash('message', $added .' Tags processed, Sheep moved to Off List.');
@@ -104,14 +107,12 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $file_raw       = Input::file('file_raw');
-        //$destination    = Input::get('destination');
-        $userId           = Auth::user()->id;
+        $owner          = Auth::user()->id;
         $d              = Input::get('day');
         $m              = Input::get('month');
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->where('owner',$userId)->max('local_id');
+        $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $process_file   = file(Input::file('file_raw'));
         $ewelist = array_map('str_getcsv', ($process_file));
 
@@ -132,23 +133,23 @@ class BatchController extends Controller {
 
             $added = 0;
             foreach ($ewelist[2] as $ewe) {
-                $e_flock = substr($ewe, -11, 6);
-                $e_tag = substr($ewe, -5);
-                $sheep_exists = Sheep::check($e_flock, $e_tag, $userId);
-                if($e_tag != 0) {
+                $tag = new TagNumber($ewe);
+                $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
+                if($tag->getSerialNumber() != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
                         $added++;
                         $ewe = Sheep::firstOrNew([
-                            'flock_number' => $e_flock,
-                            'serial_number' => $e_tag
+                            'flock_number' => $tag->getFlockNumber(),
+                            'serial_number' => $tag->getSerialNumber()
                         ]);
-                        $ewe->setOwner($userId);
+                        $ewe->setOwner($owner);
                         $ewe->setLocalId($l);
-                        $ewe->setFlockNumber($e_flock);
-                        $ewe->setOriginalFlockNumber($e_flock);
-                        $ewe->setSerialNumber($e_tag);
-                        $ewe->setOriginalSerialNumber($e_tag);
+                        $ewe->setFlockNumber($tag->getFlockNumber());
+                        $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
+                        $ewe->setOriginalFlockNumber($tag->getFlockNumber());
+                        $ewe->setSerialNumber($tag->getSerialNumber());
+                        $ewe->setOriginalSerialNumber($tag->getSerialNumber());
                         $ewe->setMoveOn($move_on);
 
                         $ewe->save();
@@ -188,24 +189,21 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $id             = Input::get('id');
+        $owner          = Input::get('id');
         $home_bred      = Input::get('home_bred');
         $flock_number   = Input::get('flock_number');
         $start_tag      = Input::get('start_tag');
         $end_tag        = Input::get('end_tag');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
+        $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
         $colour_of_tag  = Input::get('colour_of_tag');
-        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
-        $l              = DB::table('sheep')->where('owner',$id)->max('local_id');
+        $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
 
             $home_bred_count = 0;
             while ($i <= $end_tag){
-                $sheep_exists = Sheep::check($flock_number,$i,$id);
+                $sheep_exists = Sheep::check($flock_number,$i,$owner);
                 if($i != 0) {
                     if (NULL === $sheep_exists) {
                         $l++;
@@ -214,7 +212,7 @@ class BatchController extends Controller {
                         $ewe = new Sheep();
 
                         $ewe->setLocalId($l);
-                        $ewe->setOwner($id);
+                        $ewe->setOwner($owner);
                         $ewe->setFlockNumber($flock_number);
                         $ewe->setOriginalFlockNumber($flock_number);
                         $ewe->setSupplementaryTagFlockNumber($flock_number);
@@ -235,7 +233,7 @@ class BatchController extends Controller {
                 $batch_of_tags = new Homebred();
                     $batch_of_tags->setFlockNumber($home_bred);
                     $batch_of_tags->setDateApplied($move_on);
-                    $batch_of_tags->setUserId($id);
+                    $batch_of_tags->setUserId($owner);
                     $batch_of_tags->setCount($home_bred_count);
                 //dd($home_bred_count);
                 $batch_of_tags->save();
@@ -244,9 +242,9 @@ class BatchController extends Controller {
         $l=NULL;
         return Redirect::back()->withInput(
             [
-                'day'           =>$d,
-                'month'         =>$m,
-                'year'          =>$y,
+                'day'           => Input::get('day'),
+                'month'         => Input::get('month'),
+                'year'          => Input::get('year'),
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);
@@ -351,12 +349,9 @@ class BatchController extends Controller {
         }
         $id             = Input::get('id');
         $flock_number   = Input::get('flock_number');
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
         $destination    = Input::get('destination');
         $count          = Input::get('count');
-        $date_applied   = new \DateTime($y.'-'.$m.'-'.$d.' '.'00:00:00');
+        $date_applied   = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
 
                 $tags = New Single;
                 $tags->setUserId($id);
@@ -368,9 +363,9 @@ class BatchController extends Controller {
 
         return Redirect::back()->withInput(
             [
-                'day'           =>$d,
-                'month'         =>$m,
-                'year'          =>$y,
+                'day'           => Input::get('day'),
+                'month'         => Input::get('month'),
+                'year'          => Input::get('year'),
                 'flock_number'  =>$flock_number,
                 'destination'   =>$destination
             ]);

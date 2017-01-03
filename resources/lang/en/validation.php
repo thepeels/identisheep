@@ -114,7 +114,8 @@ return [
         'address'       =>  'Farm Address and Post Code',
         'holding'       =>  'Holding Number (CPH)',
         'email'         =>  'E-mail address',
-        'name'          =>  'User name'
+        'name'          =>  'User name',
+        'destination'   =>  'Destination'
 
     ],
 
