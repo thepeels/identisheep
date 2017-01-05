@@ -39,14 +39,14 @@
         {!! Form::label('text','Select one year prior to 1st December THIS year') !!}<br>
         {!! Form::input('checkbox','lastyear') !!}
         {!! Form::label('text','Select one year prior to 1st December LAST year') !!}<br><br>
-        {!!Form::submit($title,['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}<br>
+        {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}<br>
         {!!$errors->first('date_set') !!}<br>
-    {{--{!!Form::submit('Finished',['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}<br>--}}
+        {!!Form::submit('Finished',['onclick'=>'self.close()','class'=>'btn btn-info btn-xs'])!!}<br>
     </div>
-<!--<script>
+<script>
             window.onunload = refreshParent;
             function refreshParent() {
             window.opener.location.reload();
             }
-</script>-->
+</script>
 @stop

@@ -18,20 +18,19 @@
             @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
                 - (number of records = {{$count}})
             @endif
-            @if(Request::path() !== ('sheep'))
-                <div class="no-print" style="margin:0 0 10px;">
-                    @if($elements[sizeof($elements)-1]!='print')
-                        {!! $ewes->render() !!}<br>
-                        <a href="../../{{$print}}"
-                           class="btn btn-default btn-xs"
-                           style="margin-bottom:-1px;"
-                           title="printable version of whole list">Printable Version
-                        </a>
-                    @endif
-                </div>
-            @endif
         </h4>
-        {!! $ewes->render() !!}
+        @if(Request::path() !== ('sheep'))
+            <div class="no-print" style="margin:0 0 10px;">
+                @if($elements[sizeof($elements)-1]!='print')
+                    {!! $ewes->render() !!}<br>
+                    <a href="../../{{$print}}"
+                       class="btn btn-default btn-xs"
+                       style="margin-bottom:-1px;"
+                       title="printable version of whole list">Printable Version
+                    </a>
+                @endif
+            </div>
+        @endif
         <table class="table table-striped table-bordered table-sm table-condensed" >
             <thead>
             <tr>
@@ -43,9 +42,6 @@
             </thead>
             <tbody>
             @foreach ($ewes as $ewe)
-                <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('Y-m',strtotime($ewe->move_on)));
-                $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
-                <tr>
                     <td>
                         {{$ewe->local_id}}
                     </td>
@@ -56,10 +52,10 @@
                         {{$ewe->original_flock_number . '&nbsp;&nbsp;&nbsp;' . sprintf('%05d',$ewe->original_serial_number) .' - - ' . $ewe->tag_colour}}
                     </td>
                     <td>
-                        {{date('Y-m-d',strtotime($ewe->updated_at))}}
+                        {{date('d-M-Y',strtotime($ewe->updated_at))}}
                     </td>
                     <td class="no-print">
-                        <a href="edit/{{$ewe->id}}"
+                        <a href="../edit/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
                            style="margin-bottom:-1px;"
                            title="Edit this Sheep">Edit Sheep

@@ -59,7 +59,7 @@
                         {{$date_on}}
                     </td>
                     <td class="move-off">
-                        None
+                        Not Yet Moved
                     </td>
                     <td>
                         {{$ewe->sex}}

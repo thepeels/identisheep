@@ -36,7 +36,7 @@
                 @endif
             </div>
         @endif
-        {{Session::get('date_from')}}
+        {{date('d M Y',strtotime('today'))}}
         <table class="table table-striped table-bordered table-sm table-condensed print" >
         <thead>
         <tr>
@@ -57,8 +57,8 @@
         </thead>
         <tbody>
         @foreach ($ewes as $ewe)
-            <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('Y-m-d',strtotime($ewe->move_on)));
-              $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
+            <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('d-M-Y',strtotime($ewe->move_on)));
+              $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('d-M-Y',strtotime($ewe->move_off)));?>
             <tr>
                 <td class="no-print">
                     {{$ewe->local_id}}

@@ -491,7 +491,7 @@ class Sheep extends Model
     public function scopeReplaced($query,$id)
     {
         $ewes = $query->where('owner','=',$id)->where('alive',TRUE)->whereRaw('`serial_number`!=`original_serial_number`')
-            ->orderBy('updated_at')->paginate(20);
+            ->orderBy('updated_at')->paginate(5);
         $count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         return [$ewes,$count];
     }

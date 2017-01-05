@@ -598,7 +598,7 @@ class SheepController extends Controller
         $ewes = $list->moveOn($key,$comparison,$value,Session::get('date_from'),Session::get('date_to'));
         return View::make('sheeplist')->with([
             'ewes' => $ewes,
-            'title'=> 'tups',
+            'title'=> 'Ewes list by Dates - ',
             'count'=>'count'
         ]);
     }

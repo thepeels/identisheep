@@ -38,9 +38,8 @@
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="/sheep/eweslistbydate/screen">Ewes by date</a></li>
 							<li><a href="/sheep/ewes/screen">Ewes</a></li>
-							<li><a href="/sheep/tups">Tups</a></li>
+							<li><a href="/sheep/tups/screen">Tups</a></li>
 							<li><a href="/sheep/noneid/screen">Non-EID</a></li>
 							<li><a href="/sheep/replaced/screen">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
@@ -64,6 +63,14 @@
 							<li><a href="/batch/batch/false">Batch On</a></li>
 							<li><a href="/batch/batch/{{$home_flock}}">Home Bred Batch On</a></li>
 							<li><a href="/batch/batchopson">.csv Batch On</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Custom Dates<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/sheep/datesetter" target="_blank">Select Date Range</a></li>
+							<li><a href="/sheep/eweslistbydate/screen">Ewes by Date Range</a></li>
+
 						</ul>
 					</li>
 				</ul>
