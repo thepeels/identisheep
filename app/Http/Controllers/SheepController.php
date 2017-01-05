@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Domain\Sheep\ListByDates;
 
 class SheepController extends Controller
 {
@@ -547,11 +548,11 @@ class SheepController extends Controller
             $month_to = Input::get('month_to');
             $day_to = Input::get('day_to');
 
-            Session::put('date_from', Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'));
-            Session::put('date_to', Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'));
+            Session::put('date_from', date('Y-m-d H:i:s',strtotime(Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'))));
+            Session::put('date_to', date('Y-m-d H:i:s',strtotime(Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'))));
         }
-        Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
-            and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');
+        /*Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
+            and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');*/
         Session::flash('custom_date','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'');
 
@@ -586,5 +587,19 @@ class SheepController extends Controller
     {
         $flock_number = 0 != User::where('id', $id)->getFlock() ? User::where('id', $id)->getFlock() : 'false';
         return $flock_number;
+    }
+
+    public function getEweslistbydate()
+    {
+        $key = 'sex';
+        $value = '%Male';
+        $comparison = 'like';
+        $list = new ListByDates();
+        $ewes = $list->moveOn($key,$comparison,$value,Session::get('date_from'),Session::get('date_to'));
+        return View::make('sheeplist')->with([
+            'ewes' => $ewes,
+            'title'=> 'tups',
+            'count'=>'count'
+        ]);
     }
 }

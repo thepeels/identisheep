@@ -38,8 +38,9 @@
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
+							<li><a href="/sheep/eweslistbydate/screen">Ewes by date</a></li>
 							<li><a href="/sheep/ewes/screen">Ewes</a></li>
-							<li><a href="/sheep/tups/screen">Tups</a></li>
+							<li><a href="/sheep/tups">Tups</a></li>
 							<li><a href="/sheep/noneid/screen">Non-EID</a></li>
 							<li><a href="/sheep/replaced/screen">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
@@ -114,9 +115,7 @@
 		</div>
 	</nav>
 	<div class="alert-div">
-	@if(Session::has('message'))
-		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
-	@elseif(Session::has('custom_date'))
+	@if(Session::has('custom_date'))
 		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('custom_date') }}</p>
 	@endif
 	</div>

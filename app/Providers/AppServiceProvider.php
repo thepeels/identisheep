@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider {
                     $string = array_slice($elements,0,-1);
                     $print = implode("/",$string).'/print';
                     $filtered_pages = array('ewes','tups','replaced','deadlist','offlist');
-                    $second_filter = array('deadlist','offlist');
+                    $second_filter = array('deadlist','offlist','eweslistbydate');
             /* ********* */
 
             $view->with([
