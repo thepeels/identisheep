@@ -8,12 +8,8 @@
 
 namespace App\Domain\Sheep;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sheep;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
-use Illuminate\Pagination\Paginator;
 
 
 class ListByDates
@@ -38,12 +34,65 @@ class ListByDates
      * @var string $move
      */
     private $move;
-    /**
-     * @var mixed
-     */
-    public $list;
 
-    /*/**
+    /**
+     * @param \DateTime $date_start
+     */
+    public function setDateStart($date_start)
+    {
+        $this->date_start = $date_start;
+    }
+    /**
+     * @return \DateTime
+     */
+    public function getDateStart(){
+        return $this->date_start;
+    }
+    /**
+     * @param \DateTime $date_end
+     */
+    public function setDateEnd($date_end)
+    {
+        $this->date_end = $date_end;
+    }
+    /**
+     * @return \DateTime
+     */
+    public function getDateEnd(){
+        return $this->date_end;
+    }
+
+    /**
+     * @param string $sex
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+    }
+    /**
+     * @return string
+     */
+    public function getSex(){
+        return $this->sex;
+    }
+    /**
+     * @return string
+     */
+    public function getMove(){
+        return $this->move;
+    }
+
+    /**
+     * @param string $move
+     */
+    public function setMove($move)
+    {
+        $this->move = $move;
+    }
+
+
+
+    /**
      * ListByDates constructor.
      * @param \DateTime $date_start
      * @param \DateTime $date_end
@@ -52,57 +101,12 @@ class ListByDates
      * @param $move
      *
      */
-    /*public function __construct(\DateTime $date_start, \DateTime $date_end, $keep_date, $sex, $move)
+    public function __construct(\DateTime $date_start, \DateTime $date_end, $keep_date, $sex, $move)
     {
-        $move = 'move_'.$move;
-        $both_sexes = $sex;
-        if ($sex == 'both') {$sex = '%male';$both_sexes = 'All Females and Male';}
-        $query = Sheep::where('owner',$this->owner())
-            ->whereDate($move,'>=',$date_start)
-            ->whereDate($move,'<=',$date_end)
-            ->where('sex','like',$sex);
-
-        if ($keep_date == TRUE) {$this->list = $query->paginate(20);}
-        else $this->list = $query->get();
-        ($this->list);
-    }*/
-
-    /**
-     * @return mixed
-     */
-    public function getList(){
-        return $this->list;
-    }
-
-
-    /**
-     * @param \DateTime $date_start
-     * @param \DateTime $date_end
-     * @param $keep_date
-     * @param $sex
-     * @param $move
-     * @return array
-     */
-    public function generateList(\DateTime $date_start, \DateTime $date_end, $keep_date, $sex, $move)
-    {
-        $move_date = 'move_'.$move;
-        $both_sexes = $sex;
-        if ($sex == 'both') {$sex = '%male';$both_sexes = 'All Females and Male';}
-        $query = Sheep::where('owner',$this->owner())
-            ->whereDate($move_date,'>=',$date_start)
-            ->whereDate($move_date,'<=',$date_end)
-            ->where('sex','like',$sex);
-
-        if ($keep_date == TRUE) {$list = $query->paginate(2000);}
-        else $list = $query->paginate(2000);
-        return View::make('custom_list')->with([
-            'title'         => ucfirst($both_sexes).'s moved '.strtoupper($move).' - ',
-            'list'          => $list,
-            'date_start'    => $date_start,
-            'date_end'      => $date_end,
-            'keep_date'     => $keep_date
-
-        ]);
+        $this->move = $this->setMove($move);
+        $this->sex = $this->setSex($sex);
+        $this->date_end = $this->setDateEnd($date_end);
+        $this->date_start = $this->setDateStart($date_start);
 
     }
 
@@ -112,25 +116,28 @@ class ListByDates
      * @param $value
      * @param $start_date
      * @param $end_date
+     * @param $move
      * @return mixed
      */
-    public function moveOn($key,$comparison,$value,$start_date,$end_date)
+    public function moveOn($key,$comparison,$value,$start_date,$end_date,$move)
     {//dd(Session::get('date_from'));
+        $move_type = 'move_'.$move;
         $ewes = Sheep::where('owner',$this->owner())
-            ->whereDate('move_on','>=',$start_date)
-            ->whereDate('move_on','<=',$end_date)
+            ->whereDate($move_type,'>=',$start_date)
+            ->whereDate($move_type,'<=',$end_date)
             ->where($key,$comparison,$value)
             ->paginate(20);
-        //dd($end_date);
+
         return $ewes;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     private function owner()
     {
         $owner = Auth::user()->id;
+
         return $owner;
     }
 

@@ -15,7 +15,8 @@
 <div style="width:60%;margin-left:20%;">
     <h4>{{$title}} between {{date_format($date_start,'d-M-Y')}} and {{date_format($date_end,'d-M-Y')}}</h4>
     {{ date('d M Y',strtotime('today'))}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Number of records = {!! $list->total() !!}&nbsp;&nbsp;&nbsp;&nbsp;{!! $list->render() !!}
+    Records {!! $list->firstItem() !!} to {!! $list->lastItem() !!} of {!! $list->total() !!}
+    &nbsp;&nbsp;&nbsp;&nbsp;{!! $list->render() !!}
 
     <table class="table table-striped table-bordered table-sm table-condensed print" >
         <thead>

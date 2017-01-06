@@ -27,7 +27,7 @@
         {!! Form::checkbox('keep_date',TRUE,FALSE) !!}&nbsp;&nbsp;&nbsp;(click)<br><br>
         Which Sheep to List?'<br>
         <div style="margin-left: 40px;">
-            {!! Form::radio('sex','female',FALSE,array('id'=>'sex-0')) !!}
+            {!! Form::radio('sex','female',TRUE,array('id'=>'sex-0')) !!}
             {!! Form::label('sex-0','Female&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
             {!! Form::radio('sex','male',FALSE,array('id'=>'sex-1')) !!}
             {!! Form::label('sex-1','Male&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
@@ -38,7 +38,7 @@
         <div style="margin-left: 40px;">
             {!! Form::radio('move','on',FALSE,array('id'=>'move-0')) !!}
             {!! Form::label('move-0','ON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
-            {!! Form::radio('move','off',FALSE,array('id'=>'move-1')) !!}
+            {!! Form::radio('move','off',TRUE,array('id'=>'move-1')) !!}
             {!! Form::label('move-1','OFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
         </div><br>
         {!!Form::submit('Generate List',['class'=>'btn btn-info btn-xs'])!!}
