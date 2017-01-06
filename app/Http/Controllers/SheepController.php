@@ -530,7 +530,7 @@ class SheepController extends Controller
     /**
      * @return mixed
      */
-    public function postDatesetter()
+    public function postDateSetter()
     {
         if (Input::get('thisyear') == "on") {
             Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december this year')));
@@ -556,13 +556,13 @@ class SheepController extends Controller
         Session::flash('custom_date','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'');
 
-        return Redirect::to('sheep/datesetter');
+        return Redirect::to('sheep/date-setter');
     }
 
     /**
      * @return mixed
      */
-    public function getDatesetter()
+    public function getDateSetter()
     {
         return View::make('date_setter')->with([
 
@@ -583,13 +583,20 @@ class SheepController extends Controller
         return $ewe;
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public function getFlock($id)
     {
         $flock_number = 0 != User::where('id', $id)->getFlock() ? User::where('id', $id)->getFlock() : 'false';
         return $flock_number;
     }
 
-    public function getEweslistbydate()
+    /**
+     * @return mixed
+     */
+    public function getEwesListByDate()
     {
         $key = 'sex';
         $value = '%Male';
@@ -602,4 +609,12 @@ class SheepController extends Controller
             'count'=>'count'
         ]);
     }
+
+    public function getCustomiseList()
+    {
+        return View::make('customise_list')->with([
+            'title' => 'Customise a List'
+        ]);
+    }
+
 }

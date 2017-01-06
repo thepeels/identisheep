@@ -33,7 +33,8 @@ Route::controller('batch','BatchController');
 Route::controller('test','TestController');
 
 Route::get('singles','Singles@index');
-//Route::get('list','SheepController@index');
+
+Route::controller('list','ListController');
 
 Route::get('back',function(){return redirect()->back();});
 

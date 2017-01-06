@@ -17,7 +17,7 @@
         <h4>Either accept the default 'Last 10 years' date range</h4>
         <h4>or change this range to your needs</h4>
 
-        {!!Form::open(array('url' => '/sheep/datesetter','class'=>'form-inline'))!!}
+        {!!Form::open(array('url' => '/sheep/date-setter','class'=>'form-inline'))!!}
 
         {!!Form::label('text','Start Date') !!}
         {!!Form::input('int','day',date('d'),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
