@@ -10,6 +10,7 @@ namespace App\Domain\Sheep;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sheep;
+use phpDocumentor\Reflection\Types\Boolean;
 
 
 class ListByDates
@@ -23,7 +24,7 @@ class ListByDates
      */
     private $date_end;
     /**
-     * @var Boolen $keep_date
+     * @var Boolean $keep_date
      */
     private $keep_date;
     /**
@@ -34,6 +35,26 @@ class ListByDates
      * @var string $move
      */
     private $move;
+    /**
+     * @var Boolean
+     */
+    private $alive;
+    /**
+     * @var Boolean
+     */
+    private $include_dead;
+    /**
+     * @var string
+     */
+    private $key;
+    /**
+     * @var string
+     */
+    private $comparison;
+    /**
+     * @var
+     */
+    private $value;
 
     /**
      * @param \DateTime $date_start
@@ -90,6 +111,90 @@ class ListByDates
         $this->move = $move;
     }
 
+    /**
+     * @param int $alive
+     */
+    public function setAlive($alive)
+    {
+        $this->alive = $alive;
+    }
+    /**
+     * @return int
+     */
+    public function getAlive(){
+        return $this->alive;
+    }
+
+    /**
+     * @param Boolean $include_dead
+     */
+    public function setIncludeDead($include_dead)
+    {
+        $this->include_dead = $include_dead;
+    }
+    /**
+     * @return Boolean
+     */
+    public function getIncludeDead(){
+        return $this->include_dead;
+    }
+
+    /**
+     * @param int $keep_date
+     */
+    public function setKeepDate($keep_date)
+    {
+        $this->keep_date = $keep_date;
+    }
+    /**
+     * @return int
+     */
+    public function getKeepDate(){
+        return $this->keep_date;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+/**
+ * @return string
+ */
+public function getKey(){
+    return $this->key;
+}
+
+    /**
+     * @param string $comparison
+     */
+    public function setComparison($comparison)
+    {
+        $this->comparison = $comparison;
+    }
+    /**
+     * @return string
+     */
+    public function getComparison(){
+        return $this->comparison;
+    }
+
+/**
+ * @return string
+ */
+public function getValue(){
+    return $this->value;
+}
+
+    /**
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 
 
     /**
@@ -99,33 +204,56 @@ class ListByDates
      * @param $keep_date
      * @param $sex
      * @param $move
-     *
+     * @param $include_dead
+     * @param $key
+     * @param $comparison
+     * @param $value
      */
-    public function __construct(\DateTime $date_start, \DateTime $date_end, $keep_date, $sex, $move)
+    public function __construct(\DateTime $date_start, \DateTime $date_end,
+                                $keep_date, $sex, $move,$include_dead,$key,$comparison,$value)
     {
-        $this->move = $this->setMove($move);
-        $this->sex = $this->setSex($sex);
-        $this->date_end = $this->setDateEnd($date_end);
-        $this->date_start = $this->setDateStart($date_start);
+        global $KEEP;
+        global $END;
+        global $START;
+       //dd($KEEP);
+
+        $this->setMove($move);
+        $this->setSex($sex);
+        $this->setKeepDate($keep_date*$this->getKeepDate());
+        if($keep_date == 0)
+        {
+            $END = $date_end;
+            $START = $date_start;
+            $KEEP = 0;
+        }
+        else
+        {
+            $KEEP ++;
+            $END = NULL != $END?$END:$date_end;
+            $START = NULL != $START?$START:$date_start;
+        }
+        $this->setDateStart($START);
+        $this->setDateEnd($END);
+        $this->setIncludeDead($include_dead);
+        $this->setKey($key);
+        $this->setComparison($comparison);
+        $this->setValue($value);
 
     }
 
     /**
-     * @param $key
-     * @param $comparison
-     * @param $value
-     * @param $start_date
-     * @param $end_date
-     * @param $move
      * @return mixed
      */
-    public function moveOn($key,$comparison,$value,$start_date,$end_date,$move)
-    {//dd(Session::get('date_from'));
-        $move_type = 'move_'.$move;
+    public function makeList()
+    {
+        $this->setAlive(1);
+        if($this->getIncludeDead() == TRUE){$this->setAlive(-1);}
+        $move_type = 'move_'.$this->getMove();
         $ewes = Sheep::where('owner',$this->owner())
-            ->whereDate($move_type,'>=',$start_date)
-            ->whereDate($move_type,'<=',$end_date)
-            ->where($key,$comparison,$value)
+            ->whereDate($move_type,'>=',$this->getDateStart())
+            ->whereDate($move_type,'<=',$this->getDateEnd())
+            ->where($this->getKey(),$this->getComparison(),$this->getValue())
+            ->where('alive','>=',$this->getAlive())
             ->paginate(20);
 
         return $ewes;

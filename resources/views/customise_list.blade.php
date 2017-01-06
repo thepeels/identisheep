@@ -40,6 +40,13 @@
             {!! Form::label('move-0','ON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
             {!! Form::radio('move','off',TRUE,array('id'=>'move-1')) !!}
             {!! Form::label('move-1','OFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
+        </div>
+        <br> Include moved Off and Dead Sheep?
+        <div style="margin-left: 40px;">
+            {!! Form::radio('include_dead',TRUE,TRUE,array('id'=>'include_dead-0')) !!}
+            {!! Form::label('include_dead-0','Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
+            {!! Form::radio('include_dead',FALSE,FALSE,array('id'=>'include_dead-1')) !!}
+            {!! Form::label('include_dead-1','No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
         </div><br>
         {!!Form::submit('Generate List',['class'=>'btn btn-info btn-xs'])!!}
 
