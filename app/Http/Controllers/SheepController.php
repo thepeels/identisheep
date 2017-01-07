@@ -49,6 +49,10 @@ class SheepController extends Controller
     {
         return Auth::user()->id;
     }
+    private static function owner()
+    {
+        return Auth::user()->id;
+    }
 
     public function getEwes($print = 'screen')
     {
@@ -148,24 +152,34 @@ class SheepController extends Controller
      */
     public function postChangetags()
     {
-        $rules = Sheep::$rules['death'];
-        $validation = Validator::make(Input::all(), $rules);
+        $rules          = Sheep::$rules['death'];
+        $validation     = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $id = Input::get('id');
-        $old_e_flock = Input::get('old_e_flock');
-        $ewe = Sheep::where('id', $id)->first();
-        if ($ewe->serial_number != Input::get('e_tag')) {
-            $ewe->older_serial_number = $ewe->old_serial_number;
-            $ewe->old_serial_number = $ewe->serial_number;
-            $ewe->serial_number = Input::get('e_tag');
-        }
-        $ewe->flock_number = Input::get('e_flock');
-        $ewe->save();
+        $tagNumber          = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $new_number_exists = Sheep::check($tagNumber->getFlockNumber(),$tagNumber->getSerialNumber(),$this->owner());
+        if (Null!=$new_number_exists)
+            {Session::flash('alert-class', 'alert-danger');
+                Session::flash('message','The New Tag Number is already in use on another sheep,
+                                                        You cannot have duplicates');
+                    return Redirect::back()->withErrors('This is a duplicate!')->withInput();
+            }
 
+        $id             = Input::get('id');
+        $old_e_flock    = Input::get('old_e_flock');
+        $ewe            = Sheep::where('id', $id)->first();
+
+        if ($ewe->serial_number         != Input::get('e_tag')) {
+            $ewe->older_serial_number   = $ewe->old_serial_number;
+            $ewe->old_serial_number     = $ewe->serial_number;
+            $ewe->serial_number         = Input::get('e_tag');
+        }
+        $ewe->flock_number  = Input::get('e_flock');
+        $ewe->save();
+        Session::flash('message','Tags sucessfully changed to '.$tagNumber->getShortTagNumber());
         return View::make('sheepfinder')->with([
-            'title' => 'Find another sheep',
+            'title' => 'Find another sheep to edit?',
             'e_flock' => $old_e_flock]);
     }
 
@@ -553,7 +567,7 @@ class SheepController extends Controller
         }
         /*Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');*/
-        Session::flash('custom_date','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
+        Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'');
 
         return Redirect::to('sheep/date-setter');

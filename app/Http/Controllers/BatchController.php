@@ -202,12 +202,14 @@ class BatchController extends Controller {
             $i = $start_tag;
 
             $home_bred_count = 0;
+            $added = 0;
             while ($i <= $end_tag){
                 $sheep_exists = Sheep::check($flock_number,$i,$owner);
                 if($i != 0) {
                     if (NULL === $sheep_exists) {
-                        $local_id++;
-                        $home_bred_count++;
+                        $local_id ++;
+                        $home_bred_count ++;
+                        $added ++;
 
                         $ewe = new Sheep();
 
@@ -240,6 +242,7 @@ class BatchController extends Controller {
             }
         }
         $local_id=NULL;
+        Session::flash('message', $added .' Tags processed, Sheep Added.');
         return Redirect::back()->withInput(
             [
                 'day'           => Input::get('day'),
