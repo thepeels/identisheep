@@ -19,7 +19,14 @@
 		<div class="container" style="text-align: center;margin-top:200px;opacity:0.5;">
 			<div class="content" style="font-size: 80px;margin-bottom: 40px;">
 				<div class="title" style="font-size:96px;margin-bottom: 40px;">Welcome to <span class="red">Identi</span><span class="blue">Sheep</span> </div>
-				<div class="quote" style="font-size: 24px;">{{ Inspiring::quote() }}</div>
+				<div class="quote" style="font-size: 30px;">
+					<a href="get-started"
+					   class="btn btn-info btn-inverse btn-xl"
+					   style=""
+					title="Go to 'help getting started' page">Get Started
+					</a>
+				</div>
+				<div class="quote" style="font-size: 24px;margin-top:40px;">{{ Inspiring::quote() }}</div>
 			</div>
 		</div>
 	@stop

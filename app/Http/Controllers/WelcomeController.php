@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\View;
+
 class WelcomeController extends Controller {
 
 	/*
@@ -32,5 +34,10 @@ class WelcomeController extends Controller {
 	{
 		return view('welcome');
 	}
-
+    public function getStarted()
+    {
+        return View::make('get_started')->with([
+            'title'         => 'Getting Started'
+        ]);
+    }
 }

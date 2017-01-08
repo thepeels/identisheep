@@ -18,40 +18,40 @@ class AppServiceProvider extends ServiceProvider {
 	{
         view()->composer('*', function($view)
         {
-            if (Auth::check()){
-                $home_flock = Auth::user()->getFlock();
-            }
-            else{
-                $home_flock = 'false';
-            }
 
-            /* *********** logic from app.blade *********** */
-                    $url = Request::path();
-                    $elements = explode('/', $url);
-                    if(Request::path() === ('home')){
-                        $help_page = $elements[0];
-                    }
-                    else{
-                        $help_page = $elements[1];
-                    }
-            /* ************ */
 
-            /* ******** logic from list pages ********** */
-                    $string = array_slice($elements,0,-1);
-                    $print = implode("/",$string).'/print';
-                    $filtered_pages = array('ewes','tups','replaced','deadlist','offlist');
-                    $second_filter = array('deadlist','offlist','eweslistbydate');
-            /* ********* */
+            if (Auth::check()) {
+                    $home_flock = Auth::user()->getFlock();
+                } else {
+                    $home_flock = 'false';
+                }
+                /* *********** logic from app.blade *********** */
+                $url = Request::path();
+                $elements = explode('/', $url);
+                if (Request::path() === ('home') || Request::path() === ('get-started')) {
+                    $help_page = $elements[0];
+                } else {
+                    $help_page = $elements[1];
+                }
+                /* ************ */
 
-            $view->with([
-                'home_flock'    => $home_flock,
-                'help_page'     => $help_page,
-                'filtered_pages'=> $filtered_pages,
-                'second_filter' => $second_filter,
-                'print'         => $print,
-                'elements'      => $elements
-            ]);
-        });
+                /* ******** logic from list pages ********** */
+                $string = array_slice($elements, 0, -1);
+                $print = implode("/", $string) . '/print';
+                $filtered_pages = array('ewes', 'tups', 'replaced', 'deadlist', 'offlist');
+                $second_filter = array('deadlist', 'offlist', 'eweslistbydate');
+                /* ********* */
+
+                $view->with([
+                    'home_flock' => $home_flock,
+                    'help_page' => $help_page,
+                    'filtered_pages' => $filtered_pages,
+                    'second_filter' => $second_filter,
+                    'print' => $print,
+                    'elements' => $elements
+                ]);
+
+            });
 
 	}
 	/**

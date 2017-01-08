@@ -139,7 +139,7 @@ class SheepController extends Controller
         $year = Input::get('year');
         $date = Carbon::create($year, 11, 30, 23, 59, 59, 'UTC');
         $date = $date->toDateTimeString();
-        Sheep::delete($this->user(), $date);
+        Sheep::removeOld($this->user(), $date);
 
         return Redirect::to('sheep/ewes/screen');
     }
