@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Sheep\ListByDates;
 use Illuminate\Http\Request;
+use App\Models\ListDates;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -43,23 +44,25 @@ class ListController extends Controller
         $input_end   = new \DateTime($request->get('end_year') . $request->get('end_month') . $request->get('end_day'));
         $keep_date  = $request->get('keep_date');
         /*if(NULL != $keep_date){
-            Session::keep('custom_date_start');
-            Session::keep('custom_date_end');
-            $date_start = Session::has('custom_date_start')?Session::get('custom_date_start'):$input_start;
-            $date_end = Session::has('custom_date_end')?Session::get('custom_date_end'):$input_end;
-            Session::put('custom_date_start',$input_start);
-            Session::put('custom_date_end'  ,$input_end);
-        } else {
-            Session::pull('custom_date_start');
-            Session::pull('custom_date_end');*/
+            $date_pair = ListDates::where(['owner' => $this->owner()])->first();
+            $date_start = $date_pair->getDateStart();
+            $date_end = $date_pair->getDateEnd();
+        } else {*/
             $date_start = $input_start;
             $date_end = $input_end;
-        //}
-        if(NULL == $keep_date){$keep_date = 0;}
+       /* }*/
+
         $sex        = $request->get('sex');
         $move       = $request->get('move');
         $both_sexes = $sex;
         $include_dead      = $request->get('include_dead');
+        $date_pair = ListDates::firstOrNew(['owner' => $this->owner()]);
+        $date_pair->setOwner($this->owner());
+        $date_pair->setDateStart($input_start);
+
+        $date_pair->setDateEnd($input_end);
+        $date_pair->save();
+
         //dd($alive);
         if ($sex == 'both') {$sex = '%male';$both_sexes = 'All Females and Male';}
         $tags       = new ListByDates($date_start,$date_end,$keep_date,$sex,$move,$include_dead,'sex','like',$sex);
