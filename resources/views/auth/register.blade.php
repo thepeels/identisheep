@@ -52,7 +52,7 @@
 						<div class="form-group">
 							<label class="col-md-4 control-label">Farm Address</label>
 							<div class="col-md-6">
-								<input type="text" class="form-control" name="address" value="{{ old('flock') }}">
+								<input type="text" class="form-control" name="address" value="{{ old('address') }}">
 							</div>
 						</div>
 
@@ -82,6 +82,12 @@
 								<button type="submit" class="btn btn-primary">
 									Register
 								</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="opacity:0.6">Already registered?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="login"
+								   class="btn btn-default ">
+								   Log in
+								</a>
+								</span>
 							</div>
 						</div>
 					</form>
