@@ -44,4 +44,9 @@ class Registrar implements RegistrarContract {
 		]);
 	}
 
+    private function createListDate()
+    {
+
+	}
+
 }

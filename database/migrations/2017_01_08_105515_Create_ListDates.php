@@ -17,8 +17,9 @@ class CreateListDates extends Migration
         {
             $table->increments('id');
             $table->integer('owner');
-            $table->dateTime('date_start');
-            $table->dateTime('date_end');
+            $table->dateTime('date_start')->nullable();
+            $table->dateTime('date_end')->nullable();
+            $table->boolean('keep_date')->nullable();
             $table->timestamps();
             $table->index('owner');
         });

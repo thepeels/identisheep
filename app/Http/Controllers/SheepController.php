@@ -503,6 +503,11 @@ class SheepController extends Controller
     public function postSearch()
     {
         $tag = Input::get('tag');
+        $rules = Sheep::$rules['search'];
+        $validation = Validator::make(Input::all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
 
         $ewes = Sheep::searchByTag($this->user(),$tag);
         if ($ewes->isEmpty()) {

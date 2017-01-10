@@ -16,15 +16,15 @@
         <h4>{{$title}}</h4>
         {!! Form::open(array('url' => '/list/customised','method' =>'get','class'=>'form-inline'))!!}
         {!! Form::label('text','Enter a Date Range&nbsp;  ->  &nbsp;Start Date') !!}
-        {!! Form::input('int','day',date('d'),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
-        {!! Form::input('int','month',date('m'),['class'=>'new_class','placeholder'=>'MM','size' => '1']) !!}
-        {!! Form::input('int','year',date('Y'),['class'=>'new_class input-xs','placeholder'=>'YYYY','size' => '3']) !!}
+        {!! Form::input('int','day',date('d',strtotime($date_start)),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
+        {!! Form::input('int','month',date('m',strtotime($date_start)),['class'=>'new_class','placeholder'=>'MM','size' => '1']) !!}
+        {!! Form::input('int','year',date('Y',strtotime($date_start)),['class'=>'new_class input-xs','placeholder'=>'YYYY','size' => '3']) !!}
         {!! Form::label('text','End Date') !!}
-        {!! Form::input('int','end_day',date('d'),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
-        {!! Form::input('int','end_month',date('m'),['class'=>'new_class','placeholder'=>'MM','size' => '1']) !!}
-        {!! Form::input('int','end_year',date('Y'),['class'=>'new_class input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br><br>
-        {!! Form::label('text','Use this date for all custom lists until changed?') !!}&nbsp;&nbsp;
-        {!! Form::checkbox('keep_date',TRUE,FALSE) !!}&nbsp;&nbsp;&nbsp;(click)<br><br>
+        {!! Form::input('int','end_day',date('d',strtotime($date_end)),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
+        {!! Form::input('int','end_month',date('m',strtotime($date_end)),['class'=>'new_class','placeholder'=>'MM','size' => '1']) !!}
+        {!! Form::input('int','end_year',date('Y',strtotime($date_end)),['class'=>'new_class input-xs','placeholder'=>'YYYY','size' => '3']) !!}<br><br>
+        {!! Form::label('text','Use these dates for all custom lists until I change them?') !!}&nbsp;&nbsp;
+        {!! Form::checkbox('keep_date',old($keep_date),$keep_date) !!}&nbsp;&nbsp;&nbsp;(click)<br><br>
         Which Sheep to List?'<br>
         <div style="margin-left: 40px;">
             {!! Form::radio('sex','female',TRUE,array('id'=>'sex-0')) !!}

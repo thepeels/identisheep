@@ -115,7 +115,8 @@ return [
         'holding'       =>  'Holding Number (CPH)',
         'email'         =>  'E-mail address',
         'name'          =>  'User name',
-        'destination'   =>  'Destination'
+        'destination'   =>  'Destination',
+        'tag'           =>  'Serial Number',
 
     ],
 

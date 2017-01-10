@@ -119,4 +119,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('Sheep');
     }
 
+    public function listdates()
+    {
+        return $this->hasOne('ListDates');
+    }
+
 }

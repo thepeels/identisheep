@@ -485,6 +485,9 @@ class Sheep extends Model
         'death'=>[
             'e_flock'   => 'digits:6|required',
             'e_tag'     => 'numeric|required|between:1,99999',
+        ],
+        'search'=>[
+            'tag'       => 'numeric|required|between:1,99999'
         ]
 
     ];

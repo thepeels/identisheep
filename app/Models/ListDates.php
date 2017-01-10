@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Listdates extends Model
+class ListDates extends Model
 {
     /**
      * @var 
@@ -18,7 +18,26 @@ class Listdates extends Model
         'date_start',
         'date_end'
     ];
+    /**
+     * @var 
+     */
+    protected $date_start;
+    /**
+     * @var 
+     */
+    protected $date_end;
+    /**
+     * @var 
+     */
+    protected $owner;
+    /**
+     * @var
+     */
+    protected $keep_date;
 
+
+    
+    
     /**
      * @param int $owner
      */
@@ -52,14 +71,42 @@ class Listdates extends Model
      * @return \DateTime
      */
     public function getDateStart(){
-        return $this->attributes['date_start'];
+        $date = isset($this->attributes['date_start'])?$this->attributes['date_start']:NULL;
+        //return $this->attributes['date_start'];
+        return $date;
     }
     /**
      * @return \DateTime
      */
     public function getDateEnd(){
-        return $this->attributes['date_end'];
+        $date = isset($this->attributes['date_end'])?$this->attributes['date_end']:NULL;
+        //return $this->attributes['date_end'];
+        return $date;
     }
 
+    /**
+     * @param boolean $keep_date
+     */
+    public function setKeepDate($keep_date)
+    {
+        $this->attributes['keep_date'] = $keep_date;
+    }
+/**
+ * @return boolean
+ */
+public function getKeepDate(){
+    $flag = isset($this->attributes['keep_date'])?$this->attributes['keep_date']:NULL;
+    //return $this->attributes['keep_date'];
+    return $flag;
+}
+
+
+    public function getCreate($owner)
+    {
+        $this->setDateStart(NULL);
+        $this->setDateEnd(NULL);
+        $this->setOwner($owner);
+        $this->save();
+    }
 
 }
