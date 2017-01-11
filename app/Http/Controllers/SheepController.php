@@ -31,10 +31,12 @@ class SheepController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        if (Auth::guest()){return Redirect::to('../login');}
+        if (Auth::guest()) {
+            return Redirect::to('../login');
+        }
         $this->home_flock = Auth::user()->getFlock();
     }
-/**todo: secondary tag needs to be complete in editing options or probably excluded */
+    /**todo: secondary tag needs to be complete in editing options or probably excluded */
     /**
      * Display a listing of the resource.
      *
@@ -49,6 +51,7 @@ class SheepController extends Controller
     {
         return Auth::user()->id;
     }
+
     private static function owner()
     {
         return Auth::user()->id;
@@ -152,32 +155,32 @@ class SheepController extends Controller
      */
     public function postChangetags()
     {
-        $rules          = Sheep::$rules['death'];
-        $validation     = Validator::make(Input::all(), $rules);
+        $rules = Sheep::$rules['death'];
+        $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $tagNumber          = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
-        $new_number_exists = Sheep::check($tagNumber->getFlockNumber(),$tagNumber->getSerialNumber(),$this->owner());
-        if (Null!=$new_number_exists)
-            {Session::flash('alert-class', 'alert-danger');
-                Session::flash('message','The New Tag Number is already in use on another sheep,
+        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $new_number_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $this->owner());
+        if (Null != $new_number_exists) {
+            Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', 'The New Tag Number is already in use on another sheep,
                                                         You cannot have duplicates');
-                    return Redirect::back()->withErrors('This is a duplicate!')->withInput();
-            }
-
-        $id             = Input::get('id');
-        $old_e_flock    = Input::get('old_e_flock');
-        $ewe            = Sheep::where('id', $id)->first();
-
-        if ($ewe->serial_number         != Input::get('e_tag')) {
-            $ewe->older_serial_number   = $ewe->old_serial_number;
-            $ewe->old_serial_number     = $ewe->serial_number;
-            $ewe->serial_number         = Input::get('e_tag');
+            return Redirect::back()->withErrors('This is a duplicate!')->withInput();
         }
-        $ewe->flock_number  = Input::get('e_flock');
+
+        $id = Input::get('id');
+        $old_e_flock = Input::get('old_e_flock');
+        $ewe = Sheep::where('id', $id)->first();
+
+        if ($ewe->serial_number != Input::get('e_tag')) {
+            $ewe->older_serial_number = $ewe->old_serial_number;
+            $ewe->old_serial_number = $ewe->serial_number;
+            $ewe->serial_number = Input::get('e_tag');
+        }
+        $ewe->flock_number = Input::get('e_flock');
         $ewe->save();
-        Session::flash('message','Tags sucessfully changed to '.$tagNumber->getShortTagNumber());
+        Session::flash('message', 'Tags sucessfully changed to ' . $tagNumber->getShortTagNumber());
         return View::make('sheepfinder')->with([
             'title' => 'Find another sheep to edit?',
             'e_flock' => $old_e_flock]);
@@ -333,29 +336,33 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $owner              = $this->user();
-        $home_bred          = Input::get('home_bred');
-        $colour_of_tag      = Input::get('colour_of_tag');
-        $sex                = new Sex(Input::get('sex'));
-        $tagNumber          = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
-        $move_on            = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $local_index        = DB::table('sheep')->where('owner', $owner)->max('local_id');
-        $count              = 0;
-        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(),$tagNumber->getSerialNumber(), $owner);
+        $owner = $this->user();
+        $home_bred = Input::get('home_bred');
+        $colour_of_tag = Input::get('colour_of_tag');
+        $sex = new Sex(Input::get('sex'));
+        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $move_on = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $local_index = DB::table('sheep')->where('owner', $owner)->max('local_id');
+        $count = 0;
+        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         if (NULL === $sheep_exists) {
             $local_index++;
             $sheep_service = new SheepOnService();
-            $sheep_service->movementOn($tagNumber,$move_on,$colour_of_tag,$sex,$owner,$local_index);           $ewe = new Sheep();
+            $sheep_service->movementOn($tagNumber, $move_on, $colour_of_tag, $sex, $owner, $local_index);
+            $ewe = new Sheep();
 
             if ($home_bred !== FALSE) {
                 $home_bred_number = new TagNumber('UK0' . $home_bred . Input::get('e_tag'));
                 $count = 1;
                 $tag = new SheepOnService();
-                $tag->homeBredOn($home_bred_number,$move_on,$count,$owner);
+                $tag->homeBredOn($home_bred_number, $move_on, $count, $owner);
             }
         }
-        if ($count != 1){Session::flash('message', 'Sheep already exists ' . $count . ' sheep added.');}
-        else{Session::flash('message', 'Success ' . $count . ' sheep '. $tagNumber->getShortTagNumber(). ' added.');}
+        if ($count != 1) {
+            Session::flash('message', 'Sheep already exists ' . $count . ' sheep added.');
+        } else {
+            Session::flash('message', 'Success ' . $count . ' sheep ' . $tagNumber->getShortTagNumber() . ' added.');
+        }
 
         return Redirect::back()->withInput(Input::except('e_tag'));
     }
@@ -385,19 +392,19 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
         $dateOfMovement = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $destination    = Input::get('destination');
-        $sex            = new Sex(Input::get('sex'));
-        $owner          = $this->user();
+        $destination = Input::get('destination');
+        $sex = new Sex(Input::get('sex'));
+        $owner = $this->user();
 
         $sheepService = new SheepOffService();
         $sheepService->recordMovement($tagNumber, $dateOfMovement, $destination, $sex, $owner);
 
         Session::flash('message', 'Sheep - Tag No. ' . $tagNumber->getCountryCode() . ' ' .
-            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d',$tagNumber->getSerialNumber()) . ' moved off.');
+            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d', $tagNumber->getSerialNumber()) . ' moved off.');
 
-        return Redirect::to('sheep/sheepoff/'.$sex);
+        return Redirect::to('sheep/sheepoff/' . $sex);
     }
 
     /**
@@ -441,17 +448,17 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
-        $dateOfDeath    = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $reason         = ' - ' . Input::get('how_died');
-        $sex            = new Sex(Input::get('sex'));
-        $owner          = $this->user();
+        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . Input::get('e_tag'));
+        $dateOfDeath = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $reason = ' - ' . Input::get('how_died');
+        $sex = new Sex(Input::get('sex'));
+        $owner = $this->user();
 
-        $sheepService   = new SheepOffService();
+        $sheepService = new SheepOffService();
         $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
 
         Session::flash('message', 'Death of ' . $tagNumber->getCountryCode() . ' ' .
-            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d',$tagNumber->getSerialNumber()) . ' recorded');
+            $tagNumber->getFlockNumber() . ' ' . sprintf('%05d', $tagNumber->getSerialNumber()) . ' recorded');
 
         return Redirect::to('sheep/death');
     }
@@ -473,6 +480,7 @@ class SheepController extends Controller
             'sex' => $sex
         ]);
     }
+
     /**
      * @return mixed
      */
@@ -509,7 +517,7 @@ class SheepController extends Controller
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
 
-        $ewes = Sheep::searchByTag($this->user(),$tag);
+        $ewes = Sheep::searchByTag($this->user(), $tag);
         if ($ewes->isEmpty()) {
             Session::put('find_error', 'Sheep not found, check number and re-try.');
             return Redirect::to('sheep/search')->withInput();
@@ -523,7 +531,7 @@ class SheepController extends Controller
 
     public function getSelect($id)
     {
-        $ewe = (Sheep::where('id',$id)->first());
+        $ewe = (Sheep::where('id', $id)->first());
         //dd($ewes->move_on);
         return View::make('selectedsheep')->with([
             'ewe' => $ewe,
@@ -554,10 +562,9 @@ class SheepController extends Controller
         if (Input::get('thisyear') == "on") {
             Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december this year')));
             Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 december last year')));
-        }
-        elseif (Input::get('lastyear') == "on") {
+        } elseif (Input::get('lastyear') == "on") {
             Session::put('date_to', date('Y-m-d H:i:s', strtotime('1 december last year')));
-            Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 year ago',strtotime('1 december last year'))));
+            Session::put('date_from', date('Y-m-d H:i:s', strtotime('1 year ago', strtotime('1 december last year'))));
         } else {
 
             $year_from = Input::get('year');
@@ -567,13 +574,13 @@ class SheepController extends Controller
             $month_to = Input::get('month_to');
             $day_to = Input::get('day_to');
 
-            Session::put('date_from', date('Y-m-d H:i:s',strtotime(Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'))));
-            Session::put('date_to', date('Y-m-d H:i:s',strtotime(Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'))));
+            Session::put('date_from', date('Y-m-d H:i:s', strtotime(Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'))));
+            Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'))));
         }
         /*Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');*/
-        Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
-            and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'');
+        Session::flash('message', 'The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
+            and ' . date('d-m-Y', strtotime(Session::get('date_to'))) . '');
 
         return Redirect::to('sheep/date-setter');
     }
@@ -621,11 +628,11 @@ class SheepController extends Controller
         $value = '%Male';
         $comparison = 'like';
         $list = new ListByDates();
-        $ewes = $list->moveOn($key,$comparison,$value,Session::get('date_from'),Session::get('date_to'));
+        $ewes = $list->moveOn($key, $comparison, $value, Session::get('date_from'), Session::get('date_to'));
         return View::make('sheeplist')->with([
             'ewes' => $ewes,
-            'title'=> 'Ewes list by Dates - ',
-            'count'=>'count'
+            'title' => 'Ewes list by Dates - ',
+            'count' => 'count'
         ]);
     }
 

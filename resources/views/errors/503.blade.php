@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
-
+		<link href="/css/override.css" rel="stylesheet">
 		<style>
 			body {
 				margin: 0;
@@ -10,7 +10,7 @@
 				height: 100%;
 				color: #B0BEC5;
 				display: table;
-				font-weight: 100;
+				font-weight: 700;
 				font-family: 'Lato';
 			}
 
@@ -26,15 +26,17 @@
 			}
 
 			.title {
-				font-size: 72px;
+				font-size: 36px;
 				margin-bottom: 40px;
 			}
 		</style>
 	</head>
-	<body>
+	<body style="font-weight: 700;">
 		<div class="container">
 			<div class="content">
-				<div class="title">Be right back.</div>
+				<div class="title"><span class="red"style="font-weight: 700;">Identi</span><span class="blue"style="font-weight: 700;">sheep</span>
+					is shut down temporarily for maintenance.<br>
+				We'll be back up and running shortly.</div>
 			</div>
 		</div>
 	</body>
