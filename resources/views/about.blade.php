@@ -11,7 +11,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-8 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">Information about <span class="red">Identi</span><span class="blue">Sheep.com</span></div>
                     
@@ -20,7 +20,7 @@
                         up to DEFRA Cross Compliance standards.</p>
                         <p>Name and Address details are only collected to use as headings on Printed Lists.</p>
                         <p>Use of the site is free for six months, after that you will be asked to enter credit or debit card details<br>
-                        You will then be charged £10 annually until you cancel your subscription.</p>
+                        You will then be charged £10 plus V.A.T. annually until you cancel your subscription.</p>
                         <p>Card details are never handled by the site, all payments are securely handled by <a href="https://stripe.com/gb" target="_blank">Stripe.com</a></p>
                         <p>When you subscribe you will receive a VAT invoice by email.</p>
                         <p>IdentiSheep.com is created and owned by Messrs J & J Corley, The Peels, Morpeth, NE65 7DL U.K.</p>
