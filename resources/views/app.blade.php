@@ -101,7 +101,11 @@
 							<li><a href="/sheep/deadlist/screen">Dead List</a></li>
 						</ul>
 					</li>
+					@if(Request::path() == '/')
+					<li><a href="about" >About Identisheep</a></li>
+					@else
 					<li><a href="/help/{{$help_page}}" target="_blank">Help</a></li>
+					@endif
 					@if (Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>
@@ -114,6 +118,7 @@
 								<li><a href="/sheep/search">Search</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
 								<li><a href="/sheep/contact" target="_blank">Contact Us</a></li>
+								<li><a href="homeabout">About IdentiSheep</a></li>
 							</ul>
 						</li>
 					@endif

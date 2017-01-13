@@ -493,10 +493,14 @@ class Sheep extends Model
     ];
     public function scopeReplaced($query,$id)
     {
-        $ewes = $query->where('owner','=',$id)->where('alive',TRUE)->whereRaw('`serial_number`!=`original_serial_number`')
-            ->orderBy('updated_at')->paginate(5);
-        $count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
-        return [$ewes,$count];
+        $dates = $this->dateRange();
+
+        $ewes = $query->where('owner','=',$id)->where('updated_at' ,'>=',$dates[0])->where('updated_at' ,'<=',$dates[1])
+            ->whereRaw('`serial_number`!=`original_serial_number`')
+            ->orderBy('updated_at')->paginate(20);
+        //$count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
+        //return [$ewes,$count];
+        return $ewes;
     }
     public function scopeSearchByTag($query,$id,$tag)
     {
@@ -508,31 +512,34 @@ class Sheep extends Model
 
     public function scopeStock($query,$id,$sex)
     {
-        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->paginate(20);
-        $count = $query->where('owner',$id)->where('sex',$sex)->count();
-        //dd($ewes);
-        return [$ewes,$count];
+        $dates = $this->dateRange();
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)
+            ->where('move_on','>=',$dates[0])->where('move_on','<=',$dates[1])
+            ->orderBy('move_on')->paginate(20);
+
+        return $ewes;
     }
     public function scopeStockPrint($query,$id,$sex)
     {
-        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)->orderBy('move_on')->get();
-        $count = $query->where('owner',$id)->where('sex',$sex)->count();
-        return [$ewes,$count];
+        $dates = $this->dateRange();
+        $ewes = $query->where('owner',$id)->where('alive',TRUE)->where('sex',$sex)
+            ->where('move_on','>=',$dates[0])->where('move_on','<=',$dates[1])
+            ->orderBy('move_on')->get();
+
+        return $ewes;
     }
     public function scopeOffList($query,$id)
     {
         $dates = $this->dateRange();
         return $query->where('owner',$id)->where('alive',FALSE)
-            ->where('move_off','>=',$dates[0])
-            ->where('move_off','<=',$dates[1])
+            ->where('move_off','>=',$dates[0])->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->paginate(20);
     }
     public function scopeOffListPrint($query,$id)
     {
         $dates = $this->dateRange();
         return $query->where('owner',$id)->where('alive',FALSE)
-            ->where('move_off','>=',$dates[0])
-            ->where('move_off','<=',$dates[1])
+            ->where('move_off','>=',$dates[0])->where('move_off','<=',$dates[1])
             ->where('destination','not like','died'.'%')->orderBy('move_off','DESC')->get();
     }
     public function scopeDead($query,$id)

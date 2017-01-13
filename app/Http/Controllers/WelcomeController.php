@@ -40,4 +40,9 @@ class WelcomeController extends Controller {
             'title'         => 'Getting Started'
         ]);
     }
+    public function about()
+    {
+        return view('about');
+    }
+
 }

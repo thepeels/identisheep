@@ -28,7 +28,10 @@ class AppServiceProvider extends ServiceProvider {
                 /* *********** logic from app.blade *********** */
                 $url = Request::path();
                 $elements = explode('/', $url);
-                if (Request::path() === ('home') || Request::path() === ('get-started')) {
+                if (Request::path() === ('home')
+                    || Request::path() === ('get-started')
+                    || Request::path() === ('homeabout')
+                    || Request::path() === ('about')) {
                     $help_page = $elements[0];
                 } else {
                     $help_page = $elements[1];

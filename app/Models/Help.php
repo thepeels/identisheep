@@ -44,10 +44,14 @@ class Help extends Model {
             records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.</p>'],
         'death'     =>  ['Recording a death','<p>This action removes a sheep from the \'Sheep\' lists, 
             but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number</p>'],
-        'datesetter'     =>  ['Setting custom dates','<p>This page allows you to choose a range of dates to show in \'Sheep\' lists,<br> 
-            Choose a custom range, either of the previous two years to 1st December ( the official Annual Inventory date).</p>
+        'date-setter'     =>  ['Setting custom dates','<p>Setting a date range will filter the results shown in the ready made lists -   
+            those under the \'Sheep Lists\' and \'Off Lists\' menu items. <br> This can be useful to narrow the field when looking for a
+            tag or when preparing a list for printing.<br> 
+            Choose a custom range, or either of the previous two years to 1st December (the official Annual Inventory date).</p>
             <p>Reset to the default 10 years range by coming back again later.<br> If sheep do not appear in a list when you expected 
-            them to you it may be that you have a custom date set</p>']
+            them to you it may be that you have a custom date set</p>'],
+        'replaced'  => ['Replacement tags','<p>These are identified here as belonging to sheep that have a different original tag number form the current one. <br>
+            Change the date range to filter results to perhaps only the last 12 months.</p>']
     ];
 
 
