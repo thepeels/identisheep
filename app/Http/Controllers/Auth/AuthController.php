@@ -74,7 +74,7 @@ class AuthController extends Controller {
      */
     public function create(array $data)
     {
-        $now = date_format( Carbon::now()->addDays(1),'Y-m-d H:i:s');
+        $now = Carbon::now()->addDays(1);
         //dd($now);
         Session::flash('message','You are now signed up for a 6 month free trial membership.');
         return User::create([
@@ -87,7 +87,7 @@ class AuthController extends Controller {
             'business' => $data['business'],
             'trial_ends_at' => $now
         ]);
-        /**toDo:start a subscription?*/
+        /**ToDo: send welcome e-mail*/
     }
     public function getLogout(){
         Auth::logout();

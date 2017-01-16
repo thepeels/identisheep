@@ -18,7 +18,8 @@
         
         {!! Form::open(array('url'=>'/subs/store','style'=>'margin-left:15%;')) !!}
             <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button btn-inverse"
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-label="Pay £<?=$price*$vat_rate?>.00 by Card"
                     data-key="pk_test_mGHz2VWILqcxwcFfkrfCTtE7"
                     data-amount="1000"
                     data-name="IdentiSheep"
