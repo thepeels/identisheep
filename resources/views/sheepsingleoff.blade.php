@@ -7,7 +7,7 @@
         <h4>{!! $title !!} - Single Tagged Sheep Off Holding</h4>
         {!!Form::open(array('url' => '/batch/singleoff','class'=>'form-inline'))!!}
 
-        {!!Form::input('hidden','id',$id) !!}
+        {!!Form::input('hidden','owner',$owner) !!}
 
         {!!Form::label('text','Entry Date') !!}
         {!!Form::input('int','day',date('d'),['class'=>'new_class','placeholder'=>'DD','size' => '1']) !!}
@@ -18,7 +18,7 @@
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','UK 0 ')!!}
-        {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
+        {!!Form::input('text','flock_number',$home_flock,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
         {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','Number of tags applied')!!}<br>

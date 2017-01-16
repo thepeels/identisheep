@@ -34,6 +34,7 @@ class SheepController extends Controller
         if (Auth::guest()) {
             return Redirect::to('../login');
         }
+        $this->middleware('subscribed');
         $this->home_flock = Auth::user()->getFlock();
     }
     /**todo: secondary tag needs to be complete in editing options or probably excluded */

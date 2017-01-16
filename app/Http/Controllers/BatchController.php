@@ -26,6 +26,7 @@ class BatchController extends Controller {
      */
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('subscribed');
     }
     public static function user(){
         return Auth::user()->id;
@@ -169,7 +170,7 @@ class BatchController extends Controller {
      */
     public function getBatch($home_bred)
     {
-        return View::make('sheepbatch')->with([
+        return View::make('batch')->with([
             'id'=>$this->user(),
             'title' => 'Enter Batch of Tags - Movement of Sheep onto Holding',
             'alt_title' => 'Enter Batch of Tags - Home Bred Sheep Entering Flock',
@@ -261,7 +262,7 @@ class BatchController extends Controller {
      */
     public function getBatchoff($home_bred)
     {
-        return View::make('sheepbatchoff')->with([
+        return View::make('batchoff')->with([
             'id'=>$this->user(),
             'title' => 'Enter Batch of tags',
             'alt_title' => 'Enter Batch of Home bred tags',
@@ -332,7 +333,7 @@ class BatchController extends Controller {
     public function getSingleoff()
     {
         return View::make('sheepsingleoff')->with([
-            'id'=>$this->user(),
+            'owner' => $this->user(),
             'title' => 'Enter Movement to Slaughter'
         ]);
     }
@@ -350,14 +351,14 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $id             = Input::get('id');
+        $owner          = Input::get('owner');
         $flock_number   = Input::get('flock_number');
         $destination    = Input::get('destination');
         $count          = Input::get('count');
         $date_applied   = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
 
                 $tags = New Single;
-                $tags->setUserId($id);
+                $tags->setUserId($owner);
                 $tags->setFlockNumber($flock_number);
                 $tags->setCount($count);
                 $tags->setDestination($destination);

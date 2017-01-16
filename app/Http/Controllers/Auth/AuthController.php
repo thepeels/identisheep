@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 class AuthController extends Controller {
@@ -37,8 +38,8 @@ class AuthController extends Controller {
 	{
 		$this->auth = $auth;
 		$this->registrar = $registrar;
-
 		$this->middleware('guest', ['except' => 'getLogout']);
+        //$this->middleware('subscribed');
 	}
 
 
@@ -73,6 +74,7 @@ class AuthController extends Controller {
      */
     public function create(array $data)
     {
+        $now = Carbon::now()->addMinutes(5);
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -81,6 +83,7 @@ class AuthController extends Controller {
             'password' => bcrypt($data['password']),
             'address' => $data['address'],
             'business' => $data['business'],
+            'trial_ends_at' => $now
         ]);
     }
     public function getLogout(){

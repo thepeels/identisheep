@@ -31,8 +31,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'flock',
         'address',
         'business',
-        'holding'
+        'holding',
+        'super_user',
+        'trial_ends_at'
     ];
+    /**
+     * @var 
+     */
+    protected $email;
+    
     /**
      * @var int
      */
@@ -55,6 +62,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+    /**
+     * @var array
+     */
+    protected $dates = ['trial_ends_at', 'subscription_ends_at'];
+    
+    /**
+     * @var 
+     */
+    protected $superuser;
+    /**
+     * @var
+     */
+    protected $trial_ends_at;
+
+    
     /**
      * @return int 
      */
@@ -110,6 +132,41 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         $this->attributes['holding'] = $holding;
     }
+    /**
+     * @return int 
+     */
+    public function getSuperuser(){
+        return $this->attributes['superuser'];
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->attributes['email'] = $email;
+    }
+    /**
+     * @return string 
+     */
+    public function getEmail(){
+        return $this->attributes['email'];
+    }
+
+    /**
+     * @param \DateTime $trial_ends_at
+     */
+    public function setTrialEndsAt($trial_ends_at)
+    {
+        $this->attributes['trial_ends_at'] = $trial_ends_at;
+    }
+    /**
+     * @return \DateTime
+     */
+    public function getTrialEndsAt(){
+        return $this->attributes['trial_ends_at'];
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -125,4 +182,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('ListDates');
     }
 
+    public function taxPercentage()
+    {
+        return 20;
+    }
 }

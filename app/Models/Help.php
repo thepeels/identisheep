@@ -51,7 +51,10 @@ class Help extends Model {
             <p>Reset to the default 10 years range by coming back again later.<br> If sheep do not appear in a list when you expected 
             them to you it may be that you have a custom date set</p>'],
         'replaced'  => ['Replacement tags','<p>These are identified here as belonging to sheep that have a different original tag number form the current one. <br>
-            Change the date range to filter results to perhaps only the last 12 months.</p>']
+            Change the date range to filter results to perhaps only the last 12 months.</p>'],
+        'singleoff' => ['Single Batch Tags','<p>Here record the application of singleton EID batch tags to slaughter.<br> 
+            Use the correct date and the list will then correspond with your movement records.</p><p>These should normally be
+            your home flock number, change this if not.</p>']
     ];
 
 
