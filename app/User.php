@@ -1,16 +1,18 @@
 <?php namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as Dumbo;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Psy\Util\String;
 use Laravel\Cashier\Billable;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Dumbo implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword, Billable;
+	use Billable;
+    use Authenticatable;
+    use CanResetPassword;
 
 	/**
 	 * The database table used by the model.
@@ -34,6 +36,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'holding',
         'super_user',
         'trial_ends_at'
+
     ];
     /**
      * @var 
@@ -71,10 +74,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var 
      */
     protected $superuser;
+
     /**
-     * @var
+     * @var 
      */
-    protected $trial_ends_at;
+    protected $cardUpFront = false;
+    
 
     
     /**
@@ -171,17 +176,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-
     public function sheep()
     {
         return $this->hasMany('Sheep');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function listdates()
     {
         return $this->hasOne('ListDates');
     }
 
+    /**
+     * @return int
+     */
     public function taxPercentage()
     {
         return 20;

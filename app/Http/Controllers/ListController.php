@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Input;
 class ListController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+        /*if (Auth::guest()) {
+            return Redirect::to('../login');
+        }*/
+        $this->middleware('subscribed');
+    }
     /**
      * @return mixed
      */

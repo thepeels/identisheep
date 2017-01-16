@@ -10,29 +10,29 @@ use Illuminate\Support\Facades\View;
 use Carbon\Carbon;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Subscription;
 
 class SubscriptionsController extends Controller
 {
     public function getDetails()
     {
-        $email = Auth::user()->getEmail();
-    $now =Carbon::now()->addMinutes(5);
+        $email = $this->owner()->getEmail();
+
         return View::make('subs/card_details')->with([
-            'title' => 'Card Details',
-            'receipt_email'  => $email,
-            'now' =>$now
+            'title'         => 'Subscribe',
+            'receipt_email' => $email
         ]);
     }
 
     public function postStore(Request $request)
     {
-        $user = Auth::user();
+        $owner = $this->owner();
         $token = $request->stripeToken;
-        $user->newSubscription('Annual','Annual')->create($token);
-        $invoices = ($user->invoices());
+        $owner->newSubscription('Annual','Annual')->create($token);
+        $invoices = ($owner->invoices());
         foreach ($invoices as $invoice)
         {
-            dd('amount: £'.$invoice->subtotal.' tax: £'.$invoice->tax.' total: £'.$invoice->total);
+            dd('amount: £'.$invoice->subtotal/100  .' tax: £'.$invoice->tax/100 .' total: £'.$invoice->total/100);
         }
 
 
@@ -46,4 +46,8 @@ class SubscriptionsController extends Controller
         return [$start,$end];
     }
 
+    private function owner()
+    {
+        return Auth::user();
+    }
 }

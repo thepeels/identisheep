@@ -7,9 +7,11 @@
  */
 
 namespace App\Http\Middleware;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
+use Laravel\Cashier\Cashier;
 
 class Subscribed
 
@@ -25,7 +27,7 @@ class Subscribed
     {
         $owner = Auth::user();
         if(!$owner->subscribed('Annual')) {
-            if (!$owner->onTrial()) {
+            if (!$owner->onGenericTrial()) {
                 return Redirect::to('subs/details');
             }
         }
