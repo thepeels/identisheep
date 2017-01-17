@@ -51,7 +51,8 @@ class AppServiceProvider extends ServiceProvider {
                     'filtered_pages' => $filtered_pages,
                     'second_filter' => $second_filter,
                     'print' => $print,
-                    'elements' => $elements
+                    'elements' => $elements,
+                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>'
                 ]);
 
             });

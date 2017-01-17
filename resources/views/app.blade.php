@@ -29,7 +29,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span class="red">Identi</span><span class="blue">Sheep</span></a>
+				<a class="navbar-brand" href="#">{!! $styled_logo !!}</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -115,7 +115,8 @@
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="/auth/logout">Logout</a></li>
 								<li><a href="/sheep/delete">Delete old Records</a></li>
-								<li><a href="/sheep/search">Search</a></li>
+								<li><a href="/subs/cancel">Un-subscribe</a></li>
+								<li><a href="/subs/resume">Re-subscribe</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
 								<li><a href="/sheep/contact" target="_blank">Contact Us</a></li>
 								<li><a href="homeabout">About IdentiSheep</a></li>

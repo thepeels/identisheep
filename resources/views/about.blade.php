@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Information about <span class="red">Identi</span><span class="blue">Sheep.com</span></div>
+                    <div class="panel-heading">Information about {!! $styled_logo !!}</div>
                     
                     <div class="panel-body">
                         <p>You will be using the site to keep track of individual ear tags and so be able to produce tagging and EID evidence <br>
@@ -29,7 +29,7 @@
                         <p>Contact details <a id="email"href="click:the.address.will.be.decrypted.by.javascript" title="click to Email"
                         onclick='openMailer(this);'><img src="/scripts/image.png" style="height:16px"/></a></p>
                         <p>This site uses cookies to present your data in a usable format.</p>
-                        <p><span class="red">Identi</span><span class="blue">Sheep.com</span> © <?php echo(date('Y'));?></p>
+                        <p>{!! $styled_logo !!} © <?php echo(date('Y'));?></p>
                     </div>
                 </div>
             </div>
