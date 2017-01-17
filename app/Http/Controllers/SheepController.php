@@ -34,6 +34,7 @@ class SheepController extends Controller
         if (Auth::guest()) {
             return Redirect::to('../login');
         }
+        $this->middleware('subscribed');
         $this->home_flock = Auth::user()->getFlock();
     }
     /**todo: secondary tag needs to be complete in editing options or probably excluded */
@@ -65,9 +66,8 @@ class SheepController extends Controller
             $ewes = Sheep::stock($this->user(), 'female');
         }
         return view('sheeplist')->with([
-            'ewes' => $ewes[0],
+            'ewes' => $ewes,
             'title' => 'All Female Sheep',
-            'count' => $ewes[1],
 
         ]);
     }
@@ -80,9 +80,8 @@ class SheepController extends Controller
             $ewes = Sheep::stock($this->user(), 'male');
         }
         return view('sheeplist')->with([
-            'ewes' => $ewes[0],
+            'ewes' => $ewes,
             'title' => 'All Tups ',
-            'count' => $ewes[1],
         ]);
     }
 
@@ -499,8 +498,8 @@ class SheepController extends Controller
         $ewes = Sheep::replaced($this->user());
 
         return View::make('replacement_tags')->with([
-            'ewes' => $ewes[0],
-            'count' => $ewes[1],
+            'ewes' => $ewes,
+            //'count' => $ewes[1],
             'title' => 'Tag Replacements List'
         ]);
     }
@@ -592,7 +591,7 @@ class SheepController extends Controller
     {
         return View::make('date_setter')->with([
 
-            'title' => 'Change the Date Range for Movement \'OFF\' Lists',
+            'title' => 'Change the Date Range for many of the standard lists',
         ]);
     }
 

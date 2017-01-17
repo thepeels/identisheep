@@ -16,7 +16,7 @@
             {{$title}}
 
             @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
-                - (number of records = {{$count}})
+                - (number of records = {{$ewes->total()}})
             @endif
         </h4>
         @if(Request::path() !== ('sheep'))

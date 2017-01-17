@@ -28,7 +28,10 @@ class AppServiceProvider extends ServiceProvider {
                 /* *********** logic from app.blade *********** */
                 $url = Request::path();
                 $elements = explode('/', $url);
-                if (Request::path() === ('home') || Request::path() === ('get-started')) {
+                if (Request::path() === ('home')
+                    || Request::path() === ('get-started')
+                    || Request::path() === ('homeabout')
+                    || Request::path() === ('about')) {
                     $help_page = $elements[0];
                 } else {
                     $help_page = $elements[1];
@@ -48,7 +51,8 @@ class AppServiceProvider extends ServiceProvider {
                     'filtered_pages' => $filtered_pages,
                     'second_filter' => $second_filter,
                     'print' => $print,
-                    'elements' => $elements
+                    'elements' => $elements,
+                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>'
                 ]);
 
             });

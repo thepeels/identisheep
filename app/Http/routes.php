@@ -17,6 +17,10 @@ Route::get('get-started','WelcomeController@getStarted');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('about', 'WelcomeController@about');
+
+Route::get('homeabout', 'HomeController@about');
+
 Route::get('help/{page}', 'HelpController@index');
 
 Route::controllers([
@@ -34,10 +38,11 @@ Route::controller('batch','BatchController');
 
 Route::controller('test','TestController');
 
-Route::get('singles','Singles@index');
 
 Route::controller('list','ListController');
 
 Route::get('back',function(){return redirect()->back();});
+
+Route::controller('subs','SubscriptionsController');
 
 

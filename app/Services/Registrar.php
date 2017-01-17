@@ -3,6 +3,7 @@
 use App\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
+use Carbon\Carbon;
 
 class Registrar implements RegistrarContract {
 
@@ -33,14 +34,16 @@ class Registrar implements RegistrarContract {
 	 */
 	public function create(array $data)
 	{
-		return User::create([
-			'name' => $data['name'],
+		$free = Carbon::now()->addMinutes(5);
+        return User::create([
+			'name' => 'name',
 			'email' => $data['email'],
             'flock' => $data['flock'],
             'holding'=> $data['holding'],
 			'password' => bcrypt($data['password']),
             'address' => $data['address'],
             'business' => $data['business'],
+            'trial_ends_at' => $free
 		]);
 	}
 

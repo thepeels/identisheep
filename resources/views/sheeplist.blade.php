@@ -16,7 +16,10 @@
         {{$title}}
 
         @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
-            - <span class="pages">(number of records = {{$ewes->total()}})</span>
+            - <span class="pages">(number of records =
+                @if($elements[sizeof($elements)-1]=='print'){{$ewes->count()}})
+                @else{{$ewes->count()}} of {{$ewes->total()}})
+                @endif</span>
         @endif
    @if(in_array($elements[sizeof($elements)-2],$second_filter))
                 <span class="date-range">dates between {{date('d M Y',strtotime(Session::get('date_from')))}}
