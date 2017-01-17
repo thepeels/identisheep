@@ -3,19 +3,16 @@
 <head>
     <meta charset="utf-8">
     
-    <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
-
     <title>Invoice</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         
-        }
+        
         body {
             background: #fff;
             background-image: none;
-            font-family : "Helvetica";
+            font-family : "Helvetica",sans-serif;
             font-size: 80%;
         }
         address{
