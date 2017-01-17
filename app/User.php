@@ -79,7 +79,19 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      * @var 
      */
     protected $cardUpFront = false;
-    
+    /**
+     * The current currency.
+     *
+     * @var string
+     */
+    protected static $currency = 'gbp';
+
+    /**
+     * The current currency symbol.
+     *
+     * @var string
+     */
+    protected static $currencySymbol = '£';
 
     
     /**

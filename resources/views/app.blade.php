@@ -117,6 +117,7 @@
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/subs/cancel">Un-subscribe</a></li>
 								<li><a href="/subs/resume">Re-subscribe</a></li>
+								<li><a href="/subs/invoice">Invoice</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
 								<li><a href="/sheep/contact" target="_blank">Contact Us</a></li>
 								<li><a href="homeabout">About IdentiSheep</a></li>

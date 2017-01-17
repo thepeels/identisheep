@@ -38,12 +38,14 @@ class SubscriptionsController extends Controller
         if(!$owner->subscribed('Test')) {
             $owner->newSubscription('Test', 'Test')->create($token);
         }
-        $invoices = ($owner->invoices());
-        foreach ($invoices as $invoice)
+        $invoice = ($owner->invoices()->id);
+        dd($invoice);
+        $this->getInvoice($invoice)->id;
+
+        /*foreach ($invoices as $invoice)
         {
-            //$this->sendInvoice($invoice);
             dd('amount: £'.$invoice->subtotal/100  .' tax: £'.$invoice->tax/100 .' total: £'.$invoice->total/100);
-        }
+        }*/
         /**ToDo: Send Invoice and flash a message*/
         //$this->sendInvoice($owner->invoices());
     }
@@ -116,5 +118,18 @@ class SubscriptionsController extends Controller
     {
         return Auth::user();
     }
-    
+
+    public function getInvoice(Request $request)
+    {
+        $owner = $this->owner();
+        $invoice = $owner->invoices();
+        $invoiceId = $invoice[0]->id;
+        return $owner->downloadInvoice($invoiceId ,[
+        //return View::make('cashier/receipt')->with([
+            'vendor'    => 'IdentiSheep',
+            'product'   => 'Annual Membership',
+            'vat'       => 'Vat Number - UK 499 7886 39'
+    ]);
+
+    }
 }
