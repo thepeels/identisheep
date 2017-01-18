@@ -91,16 +91,15 @@ if (! function_exists('asset')) {
     }
 }
 
-/**
- * Get the available auth instance.
- *
- * @return \Illuminate\Contracts\Auth\Factory
- */
 if (! function_exists('auth')) {
+    /**
+     * Get the available auth instance.
+     *
+     * @return \Illuminate\Contracts\Auth\Factory
+     */
     function auth()
     {
-        //return app(AuthFactory::class);
-        return app('AuthFactory::class in Illuminate\Foundation\helpers.php');
+        return app(AuthFactory::class);
     }
 }
 
