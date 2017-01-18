@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Psy\Util\String;
 use Laravel\Cashier\Billable;
+use Laravel\Cashier\Cashier;
 
 class User extends Dumbo implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -42,7 +43,6 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      * @var 
      */
     protected $email;
-    
     /**
      * @var int
      */
@@ -79,21 +79,7 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      * @var 
      */
     protected $cardUpFront = false;
-    /**
-     * The current currency.
-     *
-     * @var string
-     */
-    protected static $currency = 'gbp';
 
-    /**
-     * The current currency symbol.
-     *
-     * @var string
-     */
-    protected static $currencySymbol = '£';
-
-    
     /**
      * @return int 
      */

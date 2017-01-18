@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Request;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -56,7 +57,7 @@ class AppServiceProvider extends ServiceProvider {
                 ]);
 
             });
-
+        Cashier::useCurrency('gbp', '£');
 	}
 	/**
 	 * Register any application services.
