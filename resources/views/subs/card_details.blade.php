@@ -20,10 +20,10 @@
             <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-label="Pay £<?=$price*$vat_rate?>.00 by Card"
-                    data-key="pk_test_mGHz2VWILqcxwcFfkrfCTtE7"
+                    data-key="<?=env('STRIPE_KEY')?>"
                     data-amount="1000"
                     data-name="IdentiSheep"
-                    data-description="Test"
+                    data-description="Annual"
                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                     data-locale="auto"
                     data-receipt_email="<?=$receipt_email;?>"
