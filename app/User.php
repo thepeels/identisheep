@@ -85,11 +85,6 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      * @var string
      */
     protected static $currency = 'gbp';
-    /**
-     * @var
-     */
-    protected static $preferredCurrency = 'gbp';
-
 
     /**
      * The current currency symbol.
@@ -212,35 +207,5 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
     public function taxPercentage()
     {
         return 20;
-    }
-    /**
-     * Get the currency currently in use.
-     *
-     * @return string
-     */
-    public static function usesCurrency()
-    {
-        return 'gbp';
-    }
-
-    /**
-     * Set the currency symbol to be used when formatting currency.
-     *
-     * @param  string  $symbol
-     * @return void
-     */
-    public static function useCurrencySymbol($symbol)
-    {
-        static::$currencySymbol = $symbol;
-    }
-
-    /**
-     * Get the currency symbol currently in use.
-     *
-     * @return string
-     */
-    public static function usesCurrencySymbol()
-    {
-        return '£';
     }
 }
