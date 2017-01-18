@@ -23,7 +23,7 @@
                     data-key="pk_test_mGHz2VWILqcxwcFfkrfCTtE7"
                     data-amount="1000"
                     data-name="IdentiSheep"
-                    data-description="Test"
+                    data-description="Annual"
                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                     data-locale="auto"
                     data-receipt_email="<?=$receipt_email;?>"
