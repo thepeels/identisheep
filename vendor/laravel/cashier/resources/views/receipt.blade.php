@@ -112,7 +112,8 @@
                 <!-- Invoice Info -->
                 <p>
                     <strong>Product:</strong> {{ $product }}<br><br>
-                    <strong>Invoice No:</strong> {{ $id or $invoice->id }}<br>
+                    <strong>Invoice No:</strong> {{ $number }}/{{date('Y')}}<br>
+                    <strong>Invoice Ref:</strong><span style="color:#666666"> {{ $id or $invoice->id }}</span><br>
                 </p>
 
                 <br><br>

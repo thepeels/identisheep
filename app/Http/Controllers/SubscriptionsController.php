@@ -35,8 +35,8 @@ class SubscriptionsController extends Controller
     {
         $owner = $this->owner();
         $token = $request->stripeToken;
-        if(!$owner->subscribed('Test')) {
-            $owner->newSubscription('Test', 'Test')->create($token);
+        if(!$owner->subscribed('Annual')) {
+            $owner->newSubscription('Annual', 'Annual')->create($token);
         }
         $invoice = ($owner->invoices()->id);
         dd($invoice);
@@ -53,8 +53,8 @@ class SubscriptionsController extends Controller
     public function getCancel()
     {
         $owner = $this->owner();
-        $subscribed = $owner->subscribed('Test');
-        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Test')->created_at)->addDays(1)->toFormattedDateString('d M Y');
+        $subscribed = $owner->subscribed('Annual');
+        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addDays(1)->toFormattedDateString('d M Y');
         if(!$subscribed){
             /**ToDo: flash a message no subscription and/or you have already cancelled. perhaps this route is not possible
             * unless browser open through expiry time
@@ -71,28 +71,28 @@ class SubscriptionsController extends Controller
     public function getCancelhere()
     {
         $owner = $this->owner();
-        $owner->subscription('Test')->cancel();
+        $owner->subscription('Annual')->cancel();
 
         Session::flash('message','We have cancelled your subscription,
-                but you remain a member until '.date_format($owner->subscription('Test')->ends_at,'d M Y'));
+                but you remain a member until '.date_format($owner->subscription('Annual')->ends_at,'d M Y'));
 
         return Redirect::to('home');
     }
     public function getResume()
     {
         $owner = $this->owner();
-        $subscribed = $owner->subscribed('Test');
-        if(!$owner->subscription('Test')->onGracePeriod()){
+        $subscribed = $owner->subscribed('Annual');
+        if(!$owner->subscription('Annual')->onGracePeriod()){
             Session::flash('alert-class','alert-danger');
             Session::flash('message','You are not currently un-subscribed, so no action was taken.');
             return Redirect::to('home');
             /**ToDo: flash a message you are subscribed. */
         }
-        if($owner->subscription('Test')->onGracePeriod())
+        if($owner->subscription('Annual')->onGracePeriod())
         return View::make('subs/resume')->with([
             'title'     => 'Resume subscription',
             'subscribed_to'=> 'Annual Subscription',
-            'subscribed_until'=> date_format($owner->subscription('Test')->ends_at,'d M Y')
+            'subscribed_until'=> date_format($owner->subscription('Annual')->ends_at,'d M Y')
         ]);
     }
     public function getResumehere()
@@ -100,8 +100,8 @@ class SubscriptionsController extends Controller
         $owner = $this->owner();
 
         Session::flash('message','We are re-activating your subscription,
-                and you will remain a member, with your next payment will be taken automatically on '.date_format($owner->subscription('Test')->ends_at,'d M Y'));
-        $owner->subscription('Test')->resume();
+                and you will remain a member, with your next payment will be taken automatically on '.date_format($owner->subscription('Annual')->ends_at,'d M Y'));
+        $owner->subscription('Annual')->resume();
 
         return Redirect::to('home');
     }
@@ -122,13 +122,14 @@ class SubscriptionsController extends Controller
     public function getInvoice(Request $request)
     {
         $owner = $this->owner();
-        $invoice = $owner->invoices();
+        $invoice = $owner->invoicesIncludingPending();
         $invoiceId = $invoice[0]->id;
         return $owner->downloadInvoice($invoiceId ,[
         //return View::make('cashier/receipt')->with([
             'vendor'    => 'IdentiSheep',
             'product'   => 'Annual Membership',
-            'vat'       => 'Vat Number - UK 499 7886 39'
+            'vat'       => 'Vat Number - UK 499 7886 39',
+            'number'    => $owner->subscription('Annual')->id
     ]);
 
     }
