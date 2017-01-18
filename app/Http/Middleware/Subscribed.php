@@ -27,7 +27,7 @@ class Subscribed
     {
         $owner = Auth::user();
         /**ToDo: change here and controller post store method to Annual */
-        if(!$owner->subscribed('Annual')) {
+        if(!$owner->subscribed('Annual')&&!$owner->subscribed('Test')) {
             if (!$owner->onGenericTrial()) {
                 return Redirect::to('subs/details');
             }
