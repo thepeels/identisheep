@@ -641,5 +641,10 @@ class SheepController extends Controller
             'title' => 'Customise a List'
         ]);
     }
-
+    public function getContact()
+    {
+        return view('contact')->with([
+            'title'     => 'Contact Us'
+        ]);
+    }
 }

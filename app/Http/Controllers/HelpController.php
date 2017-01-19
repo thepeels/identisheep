@@ -48,10 +48,10 @@ class HelpController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
-		//
-	}
+    public function store()
+    {
+        //
+    }
 
 	/**
 	 * Display the specified resource.
