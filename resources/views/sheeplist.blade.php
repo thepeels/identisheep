@@ -60,7 +60,7 @@
             </thead>
             <tbody>
             @foreach ($ewes as $ewe)
-                <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('d-M-Y',strtotime($ewe->move_on)));
+                <?$date_on = (date('Y',strtotime($ewe->move_on))=="-0001"?"":date('d-M-Y',strtotime($ewe->move_on)));
                 $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('d-M-Y',strtotime($ewe->move_off)));?>
                 <tr>
                     <td class="no-print">
