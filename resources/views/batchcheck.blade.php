@@ -33,7 +33,7 @@
             </tbody>
         </table>
         Total {{count($tag_list)}} tags
-        <button onclick="goBack()" class="btn btn-info  btn-inverse">Go back to load the batch or correct details.</button>
+        
         
     </div>
 <script>
