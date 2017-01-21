@@ -22,24 +22,23 @@ class SheepOffService
      * @param $reasonForDeath
      * @param Sex $sex
      * @param $owner
+     * @param $colour_of_tag
      */
-    public function recordDeath(TagNumber $tagNumber, \DateTime $dateOfDeath, $reasonForDeath, Sex $sex, $owner)
+    public function recordDeath(TagNumber $tagNumber, \DateTime $dateOfDeath, $reasonForDeath, Sex $sex, $owner,$colour_of_tag = "")
     {
+        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         $ewe = Sheep::firstOrNew([
             'flock_number'    =>  $tagNumber->getFlockNumber(),
             'serial_number'   =>  $tagNumber->getSerialNumber(),
             'owner'           =>  $owner,
-            //'alive'           =>  TRUE,
         ]);
-        $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
-        $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
-        $ewe->setSerialNumber($tagNumber->getSerialNumber());
         $ewe->setAlive(FALSE);
         $ewe->setMoveOff($dateOfDeath->format('Y-m-d'));
         $ewe->setDestination('died' . $reasonForDeath);
-        $ewe->setSex($sex);
+        if(!$sheep_exists){
+            $this->newSheepOffAction($tagNumber, $sex, $colour_of_tag, $ewe);
+        }
         $ewe->save();
-
     }
 
     /**
@@ -52,20 +51,37 @@ class SheepOffService
      */
     public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex, $owner, $colour_of_tag = "")
     {
+        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         $ewe = Sheep::firstOrNew([
             'flock_number'    =>  $tagNumber->getFlockNumber(),
             'serial_number'   =>  $tagNumber->getSerialNumber(),
             'owner'           =>  $owner,
         ]);
-        $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
-        $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
-        $ewe->setSerialNumber($tagNumber->getSerialNumber());
         $ewe->setAlive(FALSE);
         $ewe->setMoveOff($dateOfMovement->format('Y-m-d'));
         $ewe->setDestination($destination);
-        $ewe->setSex($sex);
-        $ewe->setTagColour($colour_of_tag);
+        if(!$sheep_exists) {
+            $this->newSheepOffAction($tagNumber, $sex, $colour_of_tag, $ewe);
+        }
         $ewe->save();
+    }
+
+    /**
+     * @param \App\Domain\Sheep\TagNumber $tagNumber
+     * @param \App\Domain\Sheep\Sex $sex
+     * @param $colour_of_tag
+     * @param $ewe
+     */
+    public function newSheepOffAction(TagNumber $tagNumber, Sex $sex, $colour_of_tag, $ewe)
+    {
+        $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
+        $ewe->setOriginalSerialNumber($tagNumber->getSerialNumber());
+        $ewe->setFlockNumber($tagNumber->getFlockNumber());
+        $ewe->setSerialNumber($tagNumber->getSerialNumber());
+        $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
+        $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
+        $ewe->setTagColour($colour_of_tag);
+        $ewe->setSex($sex);
     }
 
 }

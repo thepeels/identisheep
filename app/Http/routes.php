@@ -17,8 +17,6 @@ Route::get('get-started','WelcomeController@getStarted');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('contact', 'HomeController@contact');
-
 Route::get('about', 'WelcomeController@about');
 
 Route::get('homeabout', 'HomeController@about');

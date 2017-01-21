@@ -443,7 +443,7 @@ class Sheep extends Model
             ->where('flock_number',$flockNumber)
             ->where('serial_number',$serialNumber)
             ->first();
-        return (NULL !== $ewe?:NULL);
+        return (NULL !== $ewe?TRUE:FALSE);
     }
 
     /**
