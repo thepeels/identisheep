@@ -472,7 +472,7 @@ class SheepController extends Controller
     public function getEnterdeath($id, $e_flock, $e_tag, $sex)
     {
         return View::make('sheepdeath')->with([
-            'title' => 'Record a Death',
+            'title' => 'Record the Death of this Sheep',
             'id' => $id,
             'e_flock' => $e_flock,
             'e_tag' => $e_tag,

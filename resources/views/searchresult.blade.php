@@ -33,8 +33,8 @@
         </thead>
         <tbody>
         @foreach ($ewes as $ewe)
-            <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('Y-m',strtotime($ewe->move_on)));
-              $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('Y-m-d',strtotime($ewe->move_off)));?>
+            <?$date_on = (date('Y',strtotime($ewe->move_on))==env('BASE_DATE')?"":date('Y-m',strtotime($ewe->move_on)));
+            $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('Y-m-d',strtotime($ewe->move_off)));?>
             <tr>
                 <td class="no-print">
                     {{$ewe->local_id}}
@@ -66,7 +66,7 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                    @if((date('Y',strtotime($ewe->move_off))=="1970"))
+                    @if((date('Y',strtotime($ewe->move_off))==env('BASE_DATE')))
                         <td class="no-print">
                         <a href="select/{{$ewe->id}}"
                            class="btn btn-default btn-xs"
@@ -85,7 +85,7 @@
            style="margin-bottom:-1px;"
            title="Search fo another Sheep">Search Again
         </a>
-        @if($date_off = (date('Y',strtotime($ewe->move_off))=="1970"))
+        @if($date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')))
         <a href="edit/{{$ewe->id}}"
            class="btn btn-info btn-xs"
            style="margin-bottom:-1px;"

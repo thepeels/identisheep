@@ -53,7 +53,8 @@ class AppServiceProvider extends ServiceProvider {
                     'second_filter' => $second_filter,
                     'print' => $print,
                     'elements' => $elements,
-                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>'
+                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>',
+                    'base_date' => env('BASE_DATE')
                 ]);
 
             });
