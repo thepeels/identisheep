@@ -117,9 +117,9 @@
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/subs/cancel">Un-subscribe</a></li>
 								<li><a href="/subs/resume">Re-subscribe</a></li>
-								<li><a href="/subs/invoice">Invoice</a></li>
+								<li><a href="/subs/invoice">Invoice Downloads</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
-								<li><a href="/sheep/contact" target="_blank">Contact Us</a></li>
+								<li><a href="/sheep/contact">Contact Us</a></li>
 								<li><a href="../homeabout">About IdentiSheep</a></li>
 							</ul>
 						</li>
@@ -130,7 +130,7 @@
 	</nav>
 	<div class="alert-div">
 	@if(Session::has('message'))
-		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{!! nl2br(e(Session::get('message'))) !!}</p>
 	@endif
 	</div>
 	@yield('content')

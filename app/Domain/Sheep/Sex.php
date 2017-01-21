@@ -28,7 +28,7 @@ class Sex
         if (!in_array($sex, ['male', 'female','Male','Female'])) {
             throw new DomainException('Sex must be either male or female');
         }
-        $this->sex = $sex;
+        $this->sex = ucfirst($sex);
     }
 
     /**

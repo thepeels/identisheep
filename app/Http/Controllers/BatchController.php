@@ -53,47 +53,51 @@ class BatchController extends Controller {
             $ewelist    = array_map('str_getcsv', ($process_file));
 
         if(Input::get('check')) {
-            $i = 0;
+            $tag_list = $this->batchcheck($ewelist);
 
-            echo($ewelist[0][0]."<br>");
-            echo($ewelist[1][0]."<br><br>");
-
-            foreach ($ewelist[2] as $ewe) {
-                $tag = new TagNumber($ewe);
-                if($tag->getSerialNumber() != 0) {
-                    $i++;
-                    echo("{$i} {$tag->getShortTagNumber()}<br>");
-                }
-            }
-            echo("<br>".$i.' Tags.');
-            exit();
+            return view('batchcheck')->with([
+                'title'         => 'Csv Contents',
+                'heading'       => $ewelist[0][0],
+                'sub_heading'   => $ewelist[1][0],
+                'tag_list'      => $tag_list
+            ]);
         }
+
         if(Input::get('load')) {
 
-            $added = -0;
+            $added = 0;
+            $processed = 0;
             foreach ($ewelist[2] as $ewe) {
                 $tag = new TagNumber($ewe);
                 if($tag->getSerialNumber() != 0) {
                     $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
-                    if (NULL !== $sheep_exists) $added++;
-
+                    //dd(!$sheep_exists);
+                    if ($sheep_exists)$processed ++;
                     $ewe = Sheep::firstOrNew([
                         'flock_number' => $tag->getFlockNumber(),
                         'serial_number' => $tag->getSerialNumber()]);
+                    //dd($ewe->exists());
                     $ewe->setOwner($owner);
                     $ewe->setFlockNumber($tag->getFlockNumber());
                     $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
+                    $ewe->setSupplementarySerialNumber($tag->getSerialNumber());
                     $ewe->setSerialNumber($tag->getSerialNumber());
                     $ewe->setMoveOff($move_off);
                     $ewe->setDestination($destination);
                     $ewe->setAlive(FALSE);
+                    if (!$sheep_exists){
+                        $added++;
+                        $ewe->setOriginalSerialNumber($tag->getSerialNumber());
+                        $ewe->setOriginalFlockNumber($tag->getFlockNumber());
+                    }
                     $ewe->save();
                 }
             }
         }
-        Session::flash('message', $added .' Tags processed, Sheep moved to Off List.');
+        Session::flash('message', $processed .' Tags processed, Sheep now in Off List.' . PHP_EOL . $added . ' Sheep Added.');
         return Redirect::to('batch/batchops');
     }
+
     public function getBatchopson()
     {
         return View::make('batchopson')->with([
@@ -137,7 +141,7 @@ class BatchController extends Controller {
                 $tag = new TagNumber($ewe);
                 $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
                 if($tag->getSerialNumber() != 0) {
-                    if (NULL === $sheep_exists) {
+                    if (!$sheep_exists) {
                         $l++;
                         $added++;
                         $ewe = Sheep::firstOrNew([
@@ -148,6 +152,7 @@ class BatchController extends Controller {
                         $ewe->setLocalId($l);
                         $ewe->setFlockNumber($tag->getFlockNumber());
                         $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
+                        $ewe->setSupplementarySerialNumber($tag->getSerialNumber());
                         $ewe->setOriginalFlockNumber($tag->getFlockNumber());
                         $ewe->setSerialNumber($tag->getSerialNumber());
                         $ewe->setOriginalSerialNumber($tag->getSerialNumber());
@@ -197,7 +202,7 @@ class BatchController extends Controller {
         $end_tag        = Input::get('end_tag');
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
         $colour_of_tag  = Input::get('colour_of_tag');
-        $local_id              = DB::table('sheep')->where('owner',$owner)->max('local_id');
+        $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -207,7 +212,7 @@ class BatchController extends Controller {
             while ($i <= $end_tag){
                 $sheep_exists = Sheep::check($flock_number,$i,$owner);
                 if($i != 0) {
-                    if (NULL === $sheep_exists) {
+                    if (!$sheep_exists) {
                         $local_id ++;
                         $home_bred_count ++;
                         $added ++;
@@ -396,5 +401,24 @@ class BatchController extends Controller {
             'title'=>'Home Bred Sheep, EID Tags Applied (total = '.$count.')',
             'tags'  => $tags
         ]);
+    }
+
+    /**
+     * @param $ewelist
+     */
+    private function batchcheck($ewelist)
+    {
+        $i = 0;
+        $tag_list = [];
+        foreach ($ewelist[2] as $ewe) {
+            $tag = new TagNumber($ewe);
+            if ($tag->getSerialNumber() != 0) {
+                $i++;
+                $tag_list[$i][0] = $i;
+                $tag_list[$i][1] = $tag->getShortTagNumber();
+            }
+        }
+
+        return $tag_list;
     }
 }

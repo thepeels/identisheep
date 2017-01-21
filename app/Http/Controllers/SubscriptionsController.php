@@ -122,6 +122,22 @@ class SubscriptionsController extends Controller
     public function getInvoice(Request $request)
     {
         $owner = $this->owner();
+        $invoices = $owner->invoicesIncludingPending();
+        //$invoiceId = $invoice[0]->id;
+        //return $owner->downloadInvoice($invoiceId ,[
+        return View::make('receipt_selector')->with([
+            'title'     => 'Select Invoice from List',
+            'vendor'    => 'IdentiSheep',
+            'product'   => 'Annual Membership',
+            'vat'       => 'Vat Number - UK 499 7886 39',
+            'number'    => $owner->subscription('Annual')->id,
+            'invoices'  => $invoices,
+    ]);
+
+    }
+    public function getSingleInvoice(Request $request)
+    {
+        $owner = $this->owner();
         $invoice = $owner->invoicesIncludingPending();
         $invoiceId = $invoice[0]->id;
         return $owner->downloadInvoice($invoiceId ,[
@@ -132,5 +148,17 @@ class SubscriptionsController extends Controller
             'number'    => $owner->subscription('Annual')->id
     ]);
 
+    }
+
+    public function getDownloadInvoice($invoiceId)
+    {
+        $owner = $this->owner();
+        return $owner->downloadInvoice($invoiceId ,[
+            //return View::make('cashier/receipt')->with([
+            'vendor'    => 'IdentiSheep',
+            'product'   => 'Annual Membership',
+            'vat'       => 'Vat Number - UK 499 7886 39',
+            'number'    => $owner->subscription('Annual')->id
+        ]);
     }
 }

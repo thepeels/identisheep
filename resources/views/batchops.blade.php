@@ -26,10 +26,10 @@
             {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
             {!! Form::label('text','Destination Holding') !!}
-            {!! Form::input('text','destination',NULL,['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
+            {!! Form::input('text','destination',old('destination'),['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
             {!!$errors->first('destination','<small style="color:#f00">:message</small>')!!}<br>
             {!! Form::label('name','Select .csv file') !!}
-            {!! Form::file('file_raw') !!}
+            {!! Form::file('file_raw',old('file_raw')) !!}
         </div>
         <div class="form-group">
             {!! Form::submit('Check',['name'=>'check','class' => 'btn btn-primary']) !!}
