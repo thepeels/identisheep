@@ -16,15 +16,13 @@
             {{$title}}
             
             @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
-                <span class="pages">
-                    @if($elements[sizeof($elements)-1]=='print') - (number of records = {{$ewes->count()}})
-                    @else - (records {{$ewes->firstItem()}} to {{$ewes->lastItem()}} of {{$ewes->total()}})
-                    @endif
-                </span>
+                - <span class="pages">(number of records =
+                    @if($elements[sizeof($elements)-1]=='print'){{$ewes->count()}})
+                    @else{{$ewes->count()}} of {{$ewes->total()}})
+                    @endif</span>
             @endif
             @if(in_array($elements[sizeof($elements)-2],$second_filter))
-                <span class="date-range">
-                    dates between {{date('d M Y',strtotime(Session::get('date_from')))}}
+                <span class="date-range">dates between {{date('d M Y',strtotime(Session::get('date_from')))}}
                     and {{date('d M Y',strtotime(Session::get('date_to')))}}
                 </span>
             @endif
@@ -62,8 +60,8 @@
             </thead>
             <tbody>
             @foreach ($ewes as $ewe)
-                <?$date_on = (date('Y',strtotime($ewe->move_on))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_on)));
-                $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_off)));?>
+                <?$date_on = (date('Y',strtotime($ewe->move_on))=="1970"?"":date('d-M-Y',strtotime($ewe->move_on)));
+                $date_off = (date('Y',strtotime($ewe->move_off))=="1970"?"":date('d-M-Y',strtotime($ewe->move_off)));?>
                 <tr>
                     <td class="no-print">
                         {{$ewe->local_id}}
@@ -81,11 +79,11 @@
                         {{sprintf('%05d',$ewe->older_serial_number)}}
                     </td>
                     <td>
-                        {{$date_on}}
+                        {{date('d-M-Y',strtotime($date_on))}}
                     </td>
                     @if(in_array($elements[sizeof($elements)-2],$second_filter))
                         <td class="move-off">
-                            {{$date_off}}
+                            {{date('d-M-Y',strtotime($date_off))}}
                         </td>
                         <td>
                             {{$ewe->destination}}
