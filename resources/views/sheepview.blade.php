@@ -26,7 +26,7 @@
             </tr>
             </thead>
             <tbody>
-                <?$date_on = (date('Y',strtotime($move_on))=="1970"?"":date('Y-m',strtotime($move_on)));?>
+                <?$date_on = (date('Y',strtotime($move_on))==env('BASE_DATE')?"":date('Y-m',strtotime($move_on)));?>
                 <tr>
                     <td>
                         UK0 {{$e_flock}} {{sprintf('%05d',$e_tag)}}

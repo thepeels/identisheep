@@ -28,7 +28,7 @@
         </thead>
         <tbody>
         @foreach ($batches as $batch)
-            <?$date = (date('Y',strtotime($batch->date_applied))=="1970"?"":date('d - m - Y',strtotime($batch->date_applied)))?>
+            <?$date = (date('Y',strtotime($batch->date_applied))==env('BASE_DATE')?"":date('d - m - Y',strtotime($batch->date_applied)))?>
             <tr>
                 <td>
                     {{$date}}
