@@ -38,23 +38,18 @@ class SubscriptionsController extends Controller
         if(!$owner->subscribed('Annual')) {
             $owner->newSubscription('Annual', 'Annual')->create($token);
         }
-        $invoice = ($owner->invoices()->id);
-        dd($invoice);
-        $this->getInvoice($invoice)->id;
+        /**ToDo: delete users and subscriptions in stripe too, and try to see whether ends_at is set in user() */
+        Session::flash('message','You are now subscribed, you will be able to download '.PHP_EOL .
+                        'your Invoice under your User Name -> Invoice Downloads.');
 
-        /*foreach ($invoices as $invoice)
-        {
-            dd('amount: £'.$invoice->subtotal/100  .' tax: £'.$invoice->tax/100 .' total: £'.$invoice->total/100);
-        }*/
-        /**ToDo: Send Invoice and flash a message*/
-        //$this->sendInvoice($owner->invoices());
+        return view('home');
     }
 
     public function getCancel()
     {
         $owner = $this->owner();
         $subscribed = $owner->subscribed('Annual');
-        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addDays(1)->toFormattedDateString('d M Y');
+        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addDays(3)->toFormattedDateString('d M Y');
         if(!$subscribed){
             /**ToDo: flash a message no subscription and/or you have already cancelled. perhaps this route is not possible
             * unless browser open through expiry time
