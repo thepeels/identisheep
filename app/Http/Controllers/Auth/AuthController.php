@@ -74,7 +74,7 @@ class AuthController extends Controller {
      */
     public function create(array $data)
     {
-        $now = Carbon::now()->addDays(1);
+        $then = Carbon::now()->addDays(3);
         //dd($now);
         Session::flash('message','You are now signed up for a 6 month free trial membership.');
         return User::create([
@@ -85,7 +85,7 @@ class AuthController extends Controller {
             'password' => bcrypt($data['password']),
             'address' => $data['address'],
             'business' => $data['business'],
-            'trial_ends_at' => $now
+            'trial_ends_at' => $then
         ]);
         /**ToDo: send welcome e-mail*/
     }
