@@ -30,7 +30,7 @@ else {$m =1;} ?>
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::input('hidden','id',$id)!!}
-        {!!Form::input('hidden','sex',$sex)!!}
+        
         {!!Form::label('text','UK 0')!!}
         {!!Form::input('text','e_flock',$e_flock,['class'=>'new_class','placeholder'=>' Flock Number','size' => '12'])!!}
         {!!Form::input('text','e_tag',$e_tag,['class'=>'new_class','placeholder'=>'Tag Number','size' => '10'])!!}<br>

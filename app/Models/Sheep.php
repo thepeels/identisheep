@@ -488,6 +488,10 @@ class Sheep extends Model
         ],
         'search'=>[
             'tag'       => 'numeric|required|between:1,99999'
+        ],
+        'replacement'=>[
+            'original_flock'=>'sometimes|required_with:original_tag|digits:6',
+            'original_tag' => 'sometimes|required_with:original_flock|sometimes:numeric|between:1,99999'
         ]
 
     ];

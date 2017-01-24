@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Domain\Sheep\ListByDates;
+use Illuminate\Http\Request;
 
 class SheepController extends Controller
 {
@@ -48,11 +49,17 @@ class SheepController extends Controller
         return Redirect::to('sheep/ewes/screen');
     }
 
+    /**
+     * @return mixed
+     */
     private static function user()
     {
         return Auth::user()->id;
     }
 
+    /**
+     * @return mixed
+     */
     private static function owner()
     {
         return Auth::user()->id;
@@ -504,6 +511,81 @@ class SheepController extends Controller
         ]);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getReplaceATag()
+    {
+        return View::make('replace_a_tag')->with([
+            'title'     => 'Replace a tag on a New or an already recorded Sheep'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function postReplaceATag(Request $request)
+    {
+        $rules1= Sheep::$rules['dates_and_tags'];
+        $rules2= Sheep::$rules['replacement'];
+        $validation = Validator::make($request->all(),$rules1 + $rules2);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $tagNumber = new TagNumber('UK0' . $request->e_flock . $request->e_tag);
+        $date_of_replacement = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
+        if($request->original_flock) {
+            $originalTagNumber = new TagNumber('UK0' . $request->original_flock . $request->original_tag);
+            $sheep_exists = Sheep::check($originalTagNumber->getFlockNumber(), $originalTagNumber->getSerialNumber(), $this->owner());
+            $ewe = Sheep::firstOrNew(['flock_number'=>$originalTagNumber->getFlockNumber(),
+                'serial_number'=>$originalTagNumber->getSerialNumber(),
+                'owner'=>$this->owner()]);
+
+            if($sheep_exists){
+                $ewe->setOlderSerialNumber($ewe->getOldSerialNumber());
+                $ewe->setOldSerialNumber($ewe->getSerialNumber());
+            }
+            else {
+                $ewe->setOriginalFlockNumber($originalTagNumber->getFlockNumber());
+                $ewe->setOriginalSerialNumber($originalTagNumber->getSerialNumber());
+                $ewe->setSupplementaryTagFlockNumber($originalTagNumber->getFlockNumber());
+                $ewe->setSupplementarySerialNumber($originalTagNumber->getSerialNumber());
+                $ewe->setMoveOn($date_of_replacement);
+                $ewe->setAlive(TRUE);
+            }
+                $ewe->setFlockNumber($tagNumber->getFlockNumber());
+                $ewe->setSerialNumber($tagNumber->getSerialNumber());
+            /**ToDo: put sex in to form with female default */
+                $ewe->setSex($ewe->getSex());
+                $ewe->setOwner($this->owner());
+                $ewe->save();
+
+
+
+        }
+        else { /* original flock not filled....*/
+
+            $ewe = Sheep::firstOrNew(['flock_number'=>$tagNumber->getFlockNumber(),
+                'serial_number'=>$tagNumber->getSerialNumber(),
+                'owner'=>$this->owner()]);
+            $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
+            $ewe->setOriginalSerialNumber('*****');
+            $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
+            $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
+            $ewe->setMoveOn($date_of_replacement);
+            $ewe->setAlive(TRUE);
+            $ewe->setSex('Female');
+            $ewe->save();
+        }
+        Session::flash('message','Replacement UK0 '
+                . $tagNumber->getFlockNumber() . ' '
+                .$tagNumber->getSerialNumber() . ' entered.' );
+
+        return View::make('replace_a_tag')->with([
+            'title'     => 'Replace  another tag on a New or an already recorded Sheep'
+        ]);
+    }
     /**
      * @return mixed
      */
