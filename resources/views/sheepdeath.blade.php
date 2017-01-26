@@ -11,11 +11,11 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
-<?$f = 0;$m = 0;
-
-
-if (strcasecmp($sex ,'female') == 0) {$f = 1;}
-else {$m =1;} ?>
+<?
+    $f = 0;$m = 0;
+    if (strcasecmp($sex ,'female') == 0) {$f = 1;}
+    else {$m =1;}
+?>
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{!! $title !!}</h4>

@@ -11,12 +11,17 @@
 @section('title')
 <title>{!! $title !!}</title>
 @stop
+<?
+$f = 0;$m = 0;
+if (strcasecmp($sex ,'female') == 0) {$f = 1;}
+else {$m =1;}
+?>
 @section('content')
 <div style="width:60%;margin-left:20%;">
     <h4>{{$title}}</h4>
         <?$flock = isset($e_flock)?$e_flock:NULL ;?>
         <?$old_flock = isset($old_e_flock)?$old_e_flock:NULL ;?>
-        {!! Form::open(array('url' => '/sheep/replace-a-tag','class'=>'form-inline')) !!}
+        {!! Form::open(array('url' => '/sheep/replace-tag','class'=>'form-inline')) !!}
     <br>
         {!! Form::label('text', 'Date of Replacement') !!}
         {!! Form::input('int','day',date('d'),['class'=>'new_class input-xs','placeholder'=>'DD','size' => '1']) !!}
@@ -25,7 +30,12 @@
         {!! $errors->first('day','<small style="color:#f00">:message</small>') !!}
         {!! $errors->first('month','<small style="color:#f00">:message</small>') !!}
         {!! $errors->first('year','<small style="color:#f00">:message</small>') !!}<br>
-        
+    
+        {!! Form::radio('sex','Female',$f,array('id'=>'sex-0')) !!}
+        {!! Form::label('sex-0','Female &nbsp;&nbsp;&nbsp;') !!}<br>
+        {!! Form::radio('sex','Male',$m,array('id'=>'sex-1')) !!}
+        {!! Form::label('sex-1','Male &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br><br>
+    
         {!! Form::label('text','Numbers on Replacement Tags') !!}<br>
         {!! Form::label('text','UK 0') !!}
         {!! Form::input('text','e_flock',$flock,['class'=>'new_class input-xs','placeholder'=>' Flock Number']) !!}
@@ -44,8 +54,6 @@
             echo (Session::pull('find_error'));
         }?><br>
         {!! Form::submit('Enter Tag Details',['class'=>'btn btn-info btn-xs']) !!}<br><br>
-        {!! Form::submit('Find Sheep to Edit tags',['name'=>'find','class'=>'btn btn-info btn-xs']) !!}<br><br>
-        {!! Form::submit('View all details and/or Record Death',['name'=>'view','class'=>'btn btn-danger btn-xs']) !!}<br>
         
         {!! Form::close()!!}<br>
 </div>

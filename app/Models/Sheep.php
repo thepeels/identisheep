@@ -203,7 +203,7 @@ class Sheep extends Model
      */
     public function getOriginalFlockNumber()
     {
-        return $this->attributes['original_flock_number'];
+        return $this->attributes['original_flock_number']?:NULL;
     }
     /**
      * @return int
@@ -413,18 +413,32 @@ class Sheep extends Model
         return $this->belongsTo('User');
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function details($id)
     {
         $details = $this->where('id', $id);
         return $details;
     }
 
+    /**
+     * @param $query
+     * @param $id
+     * @return mixed
+     */
     public function scopeGetById($query,$id)
     {
         $ewe = $query->where('id',$id)->first();
         return $ewe;
     }
 
+    /**
+     * @param $flockNumber
+     * @param $serialNumber
+     * @return null
+     */
     public static function getByTag($flockNumber, $serialNumber)
     {
         try {
@@ -437,11 +451,52 @@ class Sheep extends Model
 
         return $ewe;
     }
+
+    /**
+     * @param $flockNumber
+     * @param $serialNumber
+     * @param $owner
+     * @return bool
+     */
     public static function check($flockNumber, $serialNumber, $owner)
     {
         $ewe = Sheep::where('owner',$owner)//withTrashed()-> removed here
             ->where('flock_number',$flockNumber)
             ->where('serial_number',$serialNumber)
+            ->first();
+        return (NULL !== $ewe?TRUE:FALSE);
+    }
+
+    /**
+     * @param $original_flockNumber
+     * @param $original_serialNumber
+     * @param $flockNumber
+     * @param $serialNumber
+     * @param $owner
+     * @return bool
+     */
+    public static function doubleCheck($original_flockNumber, $original_serialNumber,$flockNumber, $serialNumber, $owner)
+    {
+        $ewe = Sheep::where('owner',$owner)//withTrashed()-> removed here
+            ->where('flock_number',$flockNumber)
+            ->where('serial_number',$serialNumber)
+            ->where('original_flock_number',$original_flockNumber)
+            ->where('original_serial_number',$original_serialNumber)
+            ->first();
+        return (NULL !== $ewe?TRUE:FALSE);
+    }
+
+    /**
+     * @param $original_flockNumber
+     * @param $original_serialNumber
+     * @param $owner
+     * @return bool
+     */
+    public static function originalCheck($original_flockNumber, $original_serialNumber, $owner)
+    {
+        $ewe = Sheep::where('owner',$owner)//withTrashed()-> removed here
+            ->where('original_flock_number',$original_flockNumber)
+            ->where('original_serial_number',$original_serialNumber)
             ->first();
         return (NULL !== $ewe?TRUE:FALSE);
     }
@@ -495,6 +550,8 @@ class Sheep extends Model
         ]
 
     ];
+
+
     public function scopeReplaced($query,$id)
     {
         $dates = $this->dateRange();
@@ -506,13 +563,16 @@ class Sheep extends Model
         //return [$ewes,$count];
         return $ewes;
     }
+
+
     public function scopeSearchByTag($query,$id,$tag)
     {
         $query = (DB::select(DB::raw("select * FROM `sheep` WHERE `owner`= $id 
-                and (`serial_number`= $tag or `old_serial_number`= $tag or`older_serial_number` = $tag)")));
+                and (`serial_number`= $tag or `original_serial_number`= $tag or `old_serial_number`= $tag or`older_serial_number` = $tag)")));
         $ewes = collect($query);
         return $ewes;
     }
+
 
     public function scopeStock($query,$id,$sex)
     {
