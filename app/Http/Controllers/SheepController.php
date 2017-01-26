@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Sheep\Sex;
 use App\Domain\Sheep\TagNumber;
+use App\Domain\Sheep\TagReplacementService;
 use App\Models\Homebred;
 use App\Models\Sheep;
 use App\Domain\Sheep\SheepOffService;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Domain\Sheep\ListByDates;
+use Illuminate\Http\Request;
 
 class SheepController extends Controller
 {
@@ -48,11 +50,17 @@ class SheepController extends Controller
         return Redirect::to('sheep/ewes/screen');
     }
 
+    /**
+     * @return mixed
+     */
     private static function user()
     {
         return Auth::user()->id;
     }
 
+    /**
+     * @return mixed
+     */
     private static function owner()
     {
         return Auth::user()->id;
@@ -344,13 +352,15 @@ class SheepController extends Controller
         $local_index = DB::table('sheep')->where('owner', $owner)->max('local_id');
         $count = 0;
         $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
-        if (NULL === $sheep_exists) {
+        //dd($sheep_exists);
+        if (!$sheep_exists) {
             $local_index++;
+            $count = 1;
             $sheep_service = new SheepOnService();
             $sheep_service->movementOn($tagNumber, $move_on, $colour_of_tag, $sex, $owner, $local_index);
             $ewe = new Sheep();
 
-            if ($home_bred !== FALSE) {
+            if ($home_bred != FALSE) {
                 $home_bred_number = new TagNumber('UK0' . $home_bred . Input::get('e_tag'));
                 $count = 1;
                 $tag = new SheepOnService();
@@ -507,6 +517,36 @@ class SheepController extends Controller
     /**
      * @return mixed
      */
+    public function getReplaceATag()
+    {
+        return View::make('replace_a_tag')->with([
+            'title'     =>  'Replace a tag on a New or an already recorded Sheep',
+            'sex'       =>  'Female'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function postReplaceTag(Request $request)
+    {
+        $rules1= Sheep::$rules['dates_and_tags'];
+        $rules2= Sheep::$rules['replacement'];
+        $validation = Validator::make($request->all(),$rules1 + $rules2);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
+        $replacement = New TagReplacementService($request->e_flock,$request->e_tag,$request->original_flock,
+            $request->original_tag,$request->year,$request->month,$request->day,$request->sex);
+        return View::make('replace_a_tag')->with([
+            'title' => 'Replace  another tag on a New or an already recorded Sheep',
+            'sex' => $request->sex
+        ]);
+    }
+    /**
+     * @return mixed
+     */
     public function postSearch()
     {
         $tag = Input::get('tag');
@@ -645,6 +685,66 @@ class SheepController extends Controller
     {
         return view('contact')->with([
             'title'     => 'Contact Us'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function replacement(Request $request)
+    {
+        $tagNumber = new TagNumber('UK0' . $request->e_flock . $request->e_tag);
+        $originalTagNumber = new TagNumber('UK0' . $request->original_flock . $request->original_tag);
+        $date_of_replacement = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
+        $changed_previously = Sheep::doubleCheck($originalTagNumber->getFlockNumber(), $originalTagNumber->getSerialNumber(),
+            $tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $this->owner());
+        if (!$changed_previously) {
+            if ($request->original_flock) {
+                $sheep_exists = Sheep::check($originalTagNumber->getFlockNumber(), $originalTagNumber->getSerialNumber(), $this->owner());
+                $ewe = Sheep::firstOrNew(['flock_number' => $originalTagNumber->getFlockNumber(),
+                    'serial_number' => $originalTagNumber->getSerialNumber(),
+                    'owner' => $this->owner()]);
+
+                if ($sheep_exists) {
+                    $ewe->setOlderSerialNumber($ewe->getOldSerialNumber());
+                    $ewe->setOldSerialNumber($ewe->getSerialNumber());
+                } else {
+                    $ewe->setOriginalFlockNumber($originalTagNumber->getFlockNumber());
+                    $ewe->setOriginalSerialNumber($originalTagNumber->getSerialNumber());
+                    $ewe->setSupplementaryTagFlockNumber($originalTagNumber->getFlockNumber());
+                    $ewe->setSupplementarySerialNumber($originalTagNumber->getSerialNumber());
+                    $ewe->setMoveOn($date_of_replacement);
+                    $ewe->setAlive(TRUE);
+                }
+                $ewe->setFlockNumber($tagNumber->getFlockNumber());
+                $ewe->setSerialNumber($tagNumber->getSerialNumber());
+                $ewe->setSex($request->sex);
+                $ewe->setOwner($this->owner());
+                $ewe->save();
+
+
+            } else { /* original flock not filled....*/
+
+                $ewe = Sheep::firstOrNew(['flock_number' => $tagNumber->getFlockNumber(),
+                    'serial_number' => $tagNumber->getSerialNumber(),
+                    'owner' => $this->owner()]);
+                $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
+                $ewe->setOriginalSerialNumber('*****');
+                $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
+                $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
+                $ewe->setMoveOn($date_of_replacement);
+                $ewe->setAlive(TRUE);
+                $ewe->setSex($request->sex);
+                $ewe->save();
+            }
+            Session::flash('message', 'Replacement UK0 '
+                . $tagNumber->getFlockNumber() . ' '
+                . $tagNumber->getSerialNumber() . ' entered.');
+        }
+        return View::make('replace_a_tag')->with([
+            'title' => 'Replace  another tag on a New or an already recorded Sheep',
+            'sex' => $request->sex
         ]);
     }
 }
