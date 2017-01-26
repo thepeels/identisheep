@@ -11,11 +11,11 @@
 @section('title')
     <title>{!! $title !!}</title>
 @stop
-<?$f = 0;$m = 0;
-
-
-if (strcasecmp($sex ,'female') == 0) {$f = 1;}
-else {$m =1;} ?>
+<?
+    $f = 0;$m = 0;
+    if (strcasecmp($sex ,'female') == 0) {$f = 1;}
+    else {$m =1;}
+?>
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{!! $title !!}</h4>
@@ -30,7 +30,7 @@ else {$m =1;} ?>
         {!!$errors->first('year','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::input('hidden','id',$id)!!}
-        {!!Form::input('hidden','sex',$sex)!!}
+        
         {!!Form::label('text','UK 0')!!}
         {!!Form::input('text','e_flock',$e_flock,['class'=>'new_class','placeholder'=>' Flock Number','size' => '12'])!!}
         {!!Form::input('text','e_tag',$e_tag,['class'=>'new_class','placeholder'=>'Tag Number','size' => '10'])!!}<br>

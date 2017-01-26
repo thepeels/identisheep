@@ -48,6 +48,7 @@
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
 					<li><a href="/sheep/search">Search</a></li>
+					<li><a href="/sheep/replace-a-tag">Tag Replace</a></li>
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -117,7 +118,7 @@
 								<li><a href="/sheep/delete">Delete old Records</a></li>
 								<li><a href="/subs/cancel">Un-subscribe</a></li>
 								<li><a href="/subs/resume">Re-subscribe</a></li>
-								<li><a href="/subs/invoice">Invoice Downloads</a></li>
+								<li><a href="/subs/invoice">Invoice History</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
 								<li><a href="/sheep/contact">Contact Us</a></li>
 								<li><a href="../homeabout">About IdentiSheep</a></li>
