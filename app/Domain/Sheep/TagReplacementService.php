@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 class TagReplacementService
 {
     /**
-     * TagReplacementService constructor.
+     * Tag replacement handler
      * @param string $e_flock
      * @param string $e_tag
      * @param string $original_flock
@@ -24,7 +24,7 @@ class TagReplacementService
      * @param string $day
      * @param string $sex
      */
-    public function __construct($e_flock,$e_tag,$original_flock,$original_tag,$year,$month,$day,$sex)
+    public function handler($e_flock,$e_tag,$original_flock,$original_tag,$year,$month,$day,$sex)
     {
         $tagNumber = new TagNumber('UK0' . $e_flock . $e_tag);
         $originalTagNumber = new TagNumber('UK0' . $original_flock . $original_tag);

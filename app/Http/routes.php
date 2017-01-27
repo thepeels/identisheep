@@ -33,6 +33,7 @@ Route::get('login','Auth\AuthController@index');
 
 Route::controller('sheep','SheepController');
 
+Route::controller('contact','ContactController');
 
 Route::controller('batch','BatchController');
 

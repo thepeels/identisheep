@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider {
                 if (Request::path() === ('home')
                     || Request::path() === ('get-started')
                     || Request::path() === ('homeabout')
+                    || Request::path() === ('contact')
                     || Request::path() === ('about')) {
                     $help_page = $elements[0];
                 } else {

@@ -120,7 +120,7 @@
 								<li><a href="/subs/resume">Re-subscribe</a></li>
 								<li><a href="/subs/invoice">Invoice History</a></li>
 								<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
-								<li><a href="/sheep/contact">Contact Us</a></li>
+								<li><a href="/contact">Contact Us</a></li>
 								<li><a href="../homeabout">About IdentiSheep</a></li>
 							</ul>
 						</li>
