@@ -1,5 +1,7 @@
 <?php namespace App\Providers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +62,8 @@ class AppServiceProvider extends ServiceProvider {
 
             });
         Cashier::useCurrency('gbp', '£');
+        Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::now())));
+        Session::put('date_from', date('Y-m-d H:i:s', strtotime(Carbon::now()->subYears(10))));
 	}
 	/**
 	 * Register any application services.

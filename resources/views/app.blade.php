@@ -48,7 +48,7 @@
 					</li>
 					<li><a href="/sheep/seek">Find a Sheep</a></li>
 					<li><a href="/sheep/search">Search</a></li>
-					<li><a href="/sheep/replace-a-tag">Tag Replace</a></li>
+					<li><a href="/sheep/replace-a-tag">Replace Tags</a></li>
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Single Sheep On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -70,7 +70,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Custom Dates<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
-							<li><a href="/sheep/ewes-list-by-date/screen">Ewes by Date Range</a></li>
+							<!--<li><a href="/sheep/ewes-list-by-date/screen">Ewes by Date Range</a></li>-->
 							<li><a href="/list/customisation">Customise Lists</a></li>
 						</ul>
 					</li>

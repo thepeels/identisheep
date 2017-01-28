@@ -663,13 +663,15 @@ class SheepController extends Controller
     /**
      * @return mixed
      */
+    /** ToDo:: maybe make this work probably not necessary, removed from menu...
+     * actually operates through the customise list route */
     public function getEwesListByDate()
     {
         $key = 'sex';
         $value = '%Male';
         $comparison = 'like';
-        $list = new ListByDates();
-        $ewes = $list->moveOn($key, $comparison, $value, Session::get('date_from'), Session::get('date_to'));
+        $list = new ListByDates($key, $comparison, $value, Session::get('date_from'), Session::get('date_to'));
+        $ewes = $list->moveOn();
         return View::make('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'Ewes list by Dates - ',

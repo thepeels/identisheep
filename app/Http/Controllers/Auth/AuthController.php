@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Auth;
 
+use App\Domain\Sheep\EmailService;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
@@ -77,6 +78,9 @@ class AuthController extends Controller {
         $then = Carbon::now()->addDays(3);
         //dd($now);
         Session::flash('message','You are now signed up for a 6 month free trial membership.');
+        $welcome = new EmailService($data['email']);
+        $welcome->sendWelcome();
+        dd('here we are then');
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -88,6 +92,7 @@ class AuthController extends Controller {
             'trial_ends_at' => $then
         ]);
         /**ToDo: send welcome e-mail*/
+
     }
     public function getLogout(){
         Auth::logout();
