@@ -80,7 +80,6 @@ class AuthController extends Controller {
         Session::flash('message','You are now signed up for a 6 month free trial membership.');
         $welcome = new EmailService($data['email']);
         $welcome->sendWelcome();
-        dd('here we are then');
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
