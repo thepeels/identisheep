@@ -537,8 +537,10 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $replacement = New TagReplacementService($request->e_flock,$request->e_tag,$request->original_flock,
+        $replacement = New TagReplacementService;
+        $replacement->handler($request->e_flock,$request->e_tag,$request->original_flock,
             $request->original_tag,$request->year,$request->month,$request->day,$request->sex);
+
         return View::make('replace_a_tag')->with([
             'title' => 'Replace  another tag on a New or an already recorded Sheep',
             'sex' => $request->sex
@@ -661,13 +663,15 @@ class SheepController extends Controller
     /**
      * @return mixed
      */
+    /** ToDo:: maybe make this work probably not necessary, removed from menu...
+     * actually operates through the customise list route */
     public function getEwesListByDate()
     {
         $key = 'sex';
         $value = '%Male';
         $comparison = 'like';
-        $list = new ListByDates();
-        $ewes = $list->moveOn($key, $comparison, $value, Session::get('date_from'), Session::get('date_to'));
+        $list = new ListByDates($key, $comparison, $value, Session::get('date_from'), Session::get('date_to'));
+        $ewes = $list->moveOn();
         return View::make('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'Ewes list by Dates - ',
@@ -681,70 +685,5 @@ class SheepController extends Controller
             'title' => 'Customise a List'
         ]);
     }
-    public function getContact()
-    {
-        return view('contact')->with([
-            'title'     => 'Contact Us'
-        ]);
-    }
 
-    /**
-     * @param Request $request
-     * @return mixed
-     */
-    public function replacement(Request $request)
-    {
-        $tagNumber = new TagNumber('UK0' . $request->e_flock . $request->e_tag);
-        $originalTagNumber = new TagNumber('UK0' . $request->original_flock . $request->original_tag);
-        $date_of_replacement = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
-        $changed_previously = Sheep::doubleCheck($originalTagNumber->getFlockNumber(), $originalTagNumber->getSerialNumber(),
-            $tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $this->owner());
-        if (!$changed_previously) {
-            if ($request->original_flock) {
-                $sheep_exists = Sheep::check($originalTagNumber->getFlockNumber(), $originalTagNumber->getSerialNumber(), $this->owner());
-                $ewe = Sheep::firstOrNew(['flock_number' => $originalTagNumber->getFlockNumber(),
-                    'serial_number' => $originalTagNumber->getSerialNumber(),
-                    'owner' => $this->owner()]);
-
-                if ($sheep_exists) {
-                    $ewe->setOlderSerialNumber($ewe->getOldSerialNumber());
-                    $ewe->setOldSerialNumber($ewe->getSerialNumber());
-                } else {
-                    $ewe->setOriginalFlockNumber($originalTagNumber->getFlockNumber());
-                    $ewe->setOriginalSerialNumber($originalTagNumber->getSerialNumber());
-                    $ewe->setSupplementaryTagFlockNumber($originalTagNumber->getFlockNumber());
-                    $ewe->setSupplementarySerialNumber($originalTagNumber->getSerialNumber());
-                    $ewe->setMoveOn($date_of_replacement);
-                    $ewe->setAlive(TRUE);
-                }
-                $ewe->setFlockNumber($tagNumber->getFlockNumber());
-                $ewe->setSerialNumber($tagNumber->getSerialNumber());
-                $ewe->setSex($request->sex);
-                $ewe->setOwner($this->owner());
-                $ewe->save();
-
-
-            } else { /* original flock not filled....*/
-
-                $ewe = Sheep::firstOrNew(['flock_number' => $tagNumber->getFlockNumber(),
-                    'serial_number' => $tagNumber->getSerialNumber(),
-                    'owner' => $this->owner()]);
-                $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
-                $ewe->setOriginalSerialNumber('*****');
-                $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
-                $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
-                $ewe->setMoveOn($date_of_replacement);
-                $ewe->setAlive(TRUE);
-                $ewe->setSex($request->sex);
-                $ewe->save();
-            }
-            Session::flash('message', 'Replacement UK0 '
-                . $tagNumber->getFlockNumber() . ' '
-                . $tagNumber->getSerialNumber() . ' entered.');
-        }
-        return View::make('replace_a_tag')->with([
-            'title' => 'Replace  another tag on a New or an already recorded Sheep',
-            'sex' => $request->sex
-        ]);
-    }
 }

@@ -10,12 +10,11 @@ namespace App\Domain\Sheep;
 use App\Models\Sheep;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
 
 class TagReplacementService
 {
     /**
-     * TagReplacementService constructor.
+     * Tag replacement handler
      * @param string $e_flock
      * @param string $e_tag
      * @param string $original_flock
@@ -25,7 +24,7 @@ class TagReplacementService
      * @param string $day
      * @param string $sex
      */
-    public function __construct($e_flock,$e_tag,$original_flock,$original_tag,$year,$month,$day,$sex)
+    public function handler($e_flock,$e_tag,$original_flock,$original_tag,$year,$month,$day,$sex)
     {
         $tagNumber = new TagNumber('UK0' . $e_flock . $e_tag);
         $originalTagNumber = new TagNumber('UK0' . $original_flock . $original_tag);
@@ -34,7 +33,7 @@ class TagReplacementService
             $tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $this->owner());
         $original_check = Sheep::originalCheck($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(),$this->owner());
         if (!$double_check) {
-            if ($original_flock) { // original field is set
+            if ($original_flock) { // original fields are not blank
                 $ewe = Sheep::firstOrNew(['original_flock_number' => $originalTagNumber->getFlockNumber(),
                     'Original_serial_number' => $originalTagNumber->getSerialNumber(),
                     'owner' => $this->owner()]);
@@ -52,8 +51,8 @@ class TagReplacementService
                 } else {
                     Session::flash('message','Tags Input Error - no Action.');
                 }
-            } else { // original field is not set....
-                if(!$original_check) {
+            } else { // original fields are blank....
+                if(!$original_check) { //new tag numbers are not present as originals
                     $ewe = Sheep::firstOrNew(['flock_number' => $tagNumber->getFlockNumber(),
                         'serial_number' => $tagNumber->getSerialNumber(),
                         'owner' => $this->owner()]);
@@ -61,7 +60,7 @@ class TagReplacementService
                     $ewe->setSerialNumber($tagNumber->getSerialNumber());
                     $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
                     $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
-                    if ($ewe->exists) { //modify existing
+                    if ($ewe->exists) { //ie double entry of form -> modify existing
                         $ewe->setOlderSerialNumber($ewe->getOldSerialNumber());
                         $ewe->setOldSerialNumber($ewe->getSerialNumber());
                         $ewe->save();

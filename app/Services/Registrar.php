@@ -1,7 +1,8 @@
 <?php namespace App\Services;
 
+use App\Domain\Sheep\EmailService;
 use App\User;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 use Carbon\Carbon;
 
