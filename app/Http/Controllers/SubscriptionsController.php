@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Sheep\EmailService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -38,10 +39,11 @@ class SubscriptionsController extends Controller
         if(!$owner->subscribed('Annual')) {
             $owner->newSubscription('Annual', 'Annual')->create($token);
         }
-        /**ToDo: delete users and subscriptions in stripe too, and try to see whether ends_at is set in user() */
         Session::flash('message','You are now subscribed, you will be able to download '.PHP_EOL .
                         'your Invoice under your User Name -> Invoice Downloads.');
-
+        /**ToDo: make new email for with invoice download link (subs/single-invoice) */
+        //$email = new EmailService($this->owner()->email);
+        //$email->sendInvoiceByEmail();
         return view('home');
     }
 
@@ -117,6 +119,8 @@ class SubscriptionsController extends Controller
     public function getInvoice(Request $request)
     {
         $owner = $this->owner();
+        $test = new EmailService($owner->email);
+        $test->sendInvoiceByEmail();
         $invoices = $owner->invoicesIncludingPending();
         //$invoiceId = $invoice[0]->id;
         //return $owner->downloadInvoice($invoiceId ,[
