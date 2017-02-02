@@ -39,6 +39,7 @@ Route::controller('batch','BatchController');
 
 Route::controller('test','TestController');
 
+Route::controller('group','GroupController');
 
 Route::controller('list','ListController');
 

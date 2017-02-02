@@ -176,7 +176,12 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      */
     public function sheep()
     {
-        return $this->hasMany('Sheep');
+        return $this->hasMany('app\Models\Sheep');
+    }
+
+    public function group()
+    {
+        return $this->hasMany('app\Models\Group');
     }
 
     /**
@@ -184,7 +189,7 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      */
     public function listdates()
     {
-        return $this->hasOne('ListDates');
+        return $this->hasOne('app\Models\ListDates');
     }
 
     /**

@@ -17,8 +17,9 @@ class GroupSheep extends Migration
             $table->increments('id');
             $table->integer('sheep_id');
             $table->integer('group_id');
+            $table->integer('owner_id');
             $table->timestamps();
-
+            $table->index('owner_id');
         });
     }
 

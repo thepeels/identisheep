@@ -15,11 +15,11 @@ class Groups extends Migration
         Schema::create('groups', function(Blueprint $table)
         {
             $table->increments('id');
+            $table->integer('owner');
             $table->string('name');
             $table->string('description');
             $table->string('info');
             $table->timestamps();
-            $table->index('sheep_id');
         });
     }
 
