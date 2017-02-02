@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Domain\FileHandling\FileHandler;
 use App\Domain\Sheep\SheepOffService;
 use App\Domain\Sheep\TagNumber;
 use App\Http\Requests;
@@ -10,7 +11,9 @@ use Illuminate\Http\Request;
 use App\Models\Sheep;
 use App\Models\Single;
 use App\Models\Homebred;
-use View,Session,DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -49,12 +52,12 @@ class BatchController extends Controller {
         $destination    = Input::get('destination');
         $owner           = Auth::user()->id;
         $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
-        $process_file   = file(Input::file('file_raw'));
-            $ewelist    = array_map('str_getcsv', ($process_file));
 
+        $process_file = new FileHandler(file(Input::file('file_raw')));
+        $ewelist = $process_file->mappedFile();
+        dd(Input::all());
         if(Input::get('check')) {
-            $tag_list = $this->batchcheck($ewelist);
-
+            $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
                 'heading'       => $ewelist[0][0],
@@ -118,21 +121,18 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
-        $process_file   = file(Input::file('file_raw'));
-        $ewelist = array_map('str_getcsv', ($process_file));
+
+        $process_file = new FileHandler(file(Input::file('file_raw')));
+        $ewelist = $process_file->mappedFile();
 
         if(Input::get('check')) {
-            $i = 0;
-
-            foreach ($ewelist[2] as $ewe) {
-                $tag = new TagNumber($ewe);
-                if($tag->getSerialNumber() != 0) {
-                    $i++;
-                    echo("{$i} {$tag->getShortTagNumber()}<br>");
-                }
-            }
-            echo("<br>".$i.' Tags.');
-            exit();
+            $tag_list = $process_file->extractTagNumbers();
+            return view('batchcheck')->with([
+                'title'         => 'Csv Contents',
+                'heading'       => $ewelist[0][0],
+                'sub_heading'   => $ewelist[1][0],
+                'tag_list'      => $tag_list
+            ]);
         }
         if(Input::get('load')) {
 
@@ -405,6 +405,7 @@ class BatchController extends Controller {
 
     /**
      * @param $ewelist
+     * @return array
      */
     private function batchcheck($ewelist)
     {

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\Paginator;
 use Carbon\Carbon;
+use App\Models\Group;
 
 
 class Sheep extends Model
@@ -410,7 +411,7 @@ class Sheep extends Model
      */
     public function user()
     {
-        return $this->belongsTo('User');
+        return $this->belongsTo('app\User');
     }
 
     /**
@@ -432,6 +433,14 @@ class Sheep extends Model
     {
         $ewe = $query->where('id',$id)->first();
         return $ewe;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function groups()
+    {
+        return $this->belongsToMany('App\Models\Group','group_sheep');
     }
 
     /**

@@ -58,6 +58,19 @@
 							<li><a href="/sheep/addtup/{{$home_flock}}">Add a Home Bred Tup</a></li>
 						</ul>
 					</li>
+					@if(!Auth::guest())
+						@if(Auth::user()->superuser)
+						<li>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Groups<span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="/group/create">Create a Group</a></li>
+								<li><a href="/group/add-to-group">Add to a Group</a></li>
+								<li><a href="/group/view-group">View a Group</a></li>
+								<li><a href="/group/combine">Combine 2 Groups</a></li>
+							</ul>
+						</li>
+						@endif
+					@endif
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Batch On<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
