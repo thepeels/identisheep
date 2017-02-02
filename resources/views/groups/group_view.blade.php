@@ -16,7 +16,7 @@
         <h4>{{$group_name}}</h4>
         <h5>{{$title}}</h5>
         <? $counter = 0;?>
-        <table class="table table-striped table-bordered table-sm table-condensed print medium-width" >
+        <table class="table table-striped table-bordered table-sm table-condensed print medium-to-wide" >
             <thead>
             <th>Ref</th>
             <th>Number</th>
@@ -30,6 +30,7 @@
                     <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
                     <td>{!! date('d M Y',strtotime($member->getMoveOn())) !!}</td>
+                    <td><a href = "detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove fom Group</a></td>
                 </tr>
             @endforeach
         </table>
