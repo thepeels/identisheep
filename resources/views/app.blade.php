@@ -64,9 +64,10 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Groups<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="/group/create">Create a Group</a></li>
-								<li><a href="/group/add-to-group">Add to a Group</a></li>
+								<li><a href="/group/add-to-group">Add List to Group</a></li>
+								<li><a href="/group/single-to-group">Add Single to Group</a></li>
 								<li><a href="/group/view-group">View a Group</a></li>
-								<li><a href="/group/combine">Combine 2 Groups</a></li>
+								<li><a href="/group/combine">Compare 2 Groups</a></li>
 							</ul>
 						</li>
 						@endif

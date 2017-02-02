@@ -7,6 +7,7 @@ use App\Domain\Sheep\TagNumber;
 use App\Models\Group;
 use App\Models\Sheep;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -50,6 +51,16 @@ class GroupController extends Controller
     /**
      * @return mixed
      */
+    public function getSingleToGroup()
+    {
+        return View::make('groups/add_single')->with([
+            'title'     =>'Add to Group',
+            'group_names'=>$this->groupNames()
+        ]);
+    }
+    /**
+     * @return mixed
+     */
     public function getAddToGroup()
     {
         return View::make('groups/add')->with([
@@ -63,9 +74,8 @@ class GroupController extends Controller
      */
     public function postAdd(Request $request)
     {
-        $group_list = Group::where('owner',$this->owner())->lists('id');//lists() returns array not collection
-        $group_id = $group_list[$request->group];
-        $group =  Group::where('id',$group_id)->first();
+        $group = $this->loadGroup($request);
+
         $csv_file = $request->csv_file;
         $process_file = new FileHandler(file($csv_file));
         $ewe_list = $process_file->mappedFile();
@@ -101,6 +111,42 @@ class GroupController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function postSingleToGroup(Request $request)
+    {
+        $group = $this->loadGroup($request);
+        $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
+        try {
+            $ewe = Sheep::where([
+                'flock_number' => $tag->getFlockNumber(),
+                'serial_number' => $tag->getSerialNumber()])->firstOrFail();
+        } catch(ModelNotFoundException $e) {
+            Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', 'Sheep Not Found - not added');
+            return Redirect::back()->withInput();
+        }
+        if(!$ewe->groups->contains($group->getId())) {
+            $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
+        }
+        Session::flash('message','Sheep added to ' . $group->getName() .'.');
+
+        return $this->getSingleToGroup();
+
+    }
+
+    public function getDetach($sheep_id,$group_id)
+    {
+        $group = Group::find($group_id);
+        $group->sheep()->detach($sheep_id);
+        return View::make('groups/group_view')->with([
+            'group'     => $group, //collection dismantled in view with foreach
+            'title'     => 'Group Members',
+            'group_name'=> $group->getName()
+        ]);
+    }
     public function getCombine()
     {
         return View::make('groups/group_combine')->with([
@@ -152,9 +198,7 @@ class GroupController extends Controller
 
     public function postViewGroup(Request $request)
     {
-        $group_list = Group::where('owner',$this->owner())->lists('id');//lists() returns array not collection
-        $group_id = $group_list[$request->group];
-        $group =  Group::where('id',$group_id)->first();
+        $group = $this->loadGroup($request);
 
         return View::make('groups/group_view')->with([
             'group'     => $group, //collection dismantled in view with foreach
@@ -174,5 +218,17 @@ class GroupController extends Controller
     {
         $group_names = Group::where('owner', $this->owner())->lists('name');
         return $group_names;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function loadGroup(Request $request)
+    {
+        $group_list = Group::where('owner', $this->owner())->lists('id');//lists() returns array not collection
+        $group_id = $group_list[$request->group];
+        $group = Group::where('id', $group_id)->first();
+        return $group;
     }
 }

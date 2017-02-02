@@ -9,6 +9,7 @@ div.scrolling-area{height: 800px;overflow: auto;}
 .new_class {padding-left:5px;}
 .narrow{width:30%;}
 .medium-width{width:50%;}
+.medium-to-wide{width:62.5%;}
 label{min-width:40px;}
 .bolder{font-size: larger;
 font-weight: 400;}
