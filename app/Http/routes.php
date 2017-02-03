@@ -41,6 +41,8 @@ Route::controller('test','TestController');
 
 Route::controller('group','GroupController');
 
+Route::get('detach/{sheep_id}/{group_id}','GroupController@getDetach');
+
 Route::controller('list','ListController');
 
 Route::get('back',function(){return redirect()->back();});

@@ -31,7 +31,7 @@
                     <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
                     <td>{!! date('d M Y',strtotime($member->getMoveOn())) !!}</td>
-                    <td><a href = "detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove fom Group</a></td>
+                    <td><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove from Group</a></td>
                 </tr>
             @endforeach
         </table>

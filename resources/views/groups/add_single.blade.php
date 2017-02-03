@@ -22,7 +22,6 @@
         {!! Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number']) !!}
         {!! Form::input('text','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Tag Number']) !!}<br>
         {!! $errors->first('e_flock','<small style="color:#f00">:message</small>') !!}{!! $errors->first('e_tag','<small style="color:#f00">:message</small>') !!}<br>
-        {!! Form::input('text','info',NULL,['class'=>'new_class input-xs','placeholder'=>'info','size' => '20']) !!}<br><br>
         {!! Form::submit($title,['class'=>'btn btn-info btn-xs']) !!}
     </div>
 @stop
