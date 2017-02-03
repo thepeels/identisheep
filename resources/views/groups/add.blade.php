@@ -19,7 +19,6 @@
         {!! Form::select('group',$group_names,['class'=>'new_class input-xs','size' => '20']) !!}<br>
         {!! Form::label('text','Select a .csv File',['style'=>'margin-top:15px;']) !!}<br>
         {!! Form::file('csv_file') !!}<br>
-        {!! Form::input('text','info',NULL,['class'=>'new_class input-xs','placeholder'=>'info','size' => '20']) !!}<br><br>
         {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
     </div>
 @stop

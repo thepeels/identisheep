@@ -117,6 +117,7 @@ class GroupController extends Controller
      */
     public function postSingleToGroup(Request $request)
     {
+        $request->flashExcept('e_tag');
         $group = $this->loadGroup($request);
         $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
         try {
@@ -137,6 +138,33 @@ class GroupController extends Controller
 
     }
 
+    public function postAddOnTheFly(Request $request)
+    {
+        $request->flashExcept('e_tag');
+        $group_id = $request->group;
+        $group = Group::where('id', $group_id)->first();
+        //dd($group);
+        $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
+        try {
+            $ewe = Sheep::where([
+                'flock_number' => $tag->getFlockNumber(),
+                'serial_number' => $tag->getSerialNumber()])->firstOrFail();
+        } catch(ModelNotFoundException $e) {
+            Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', 'Sheep Not Found - not added');
+            return Redirect::back()->withInput();
+        }
+        if(!$ewe->groups->contains($group->getId())) {
+            $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
+        }
+        Session::flash('message','Sheep added to ' . $group->getName() .'.');
+
+        return View::make('groups/group_view')->with([
+            'group'     => $group, //collection dismantled in view with foreach
+            'title'     => 'Group Members',
+            'group_name'=> $group->getName()
+        ]);
+    }
     public function getDetach($sheep_id,$group_id)
     {
         $group = Group::find($group_id);
