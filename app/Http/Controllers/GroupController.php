@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 
 class GroupController extends Controller
@@ -119,6 +120,11 @@ class GroupController extends Controller
     {
         $request->flashExcept('e_tag');
         $group = $this->loadGroup($request);
+        $rules1 = Sheep::$rules['death'];
+        $validation = Validator::make($request->all(), $rules1);
+        if ($validation->fails()) {
+            return $this->getSingleToGroup()->withErrors($validation->messages());
+        }
         $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
         try {
             $ewe = Sheep::where([
@@ -132,7 +138,9 @@ class GroupController extends Controller
         if(!$ewe->groups->contains($group->getId())) {
             $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
         }
-        Session::flash('message','Sheep added to ' . $group->getName() .'.');
+        Session::flash('message','Sheep ' .$tag->getFlockNumber()
+                    .' '.sprintf('%05d',$tag->getSerialNumber()). ' added to '
+                    . $group->getName() .'.');
 
         return $this->getSingleToGroup();
 
@@ -143,6 +151,15 @@ class GroupController extends Controller
         $request->flashExcept('e_tag');
         $group_id = $request->group;
         $group = Group::where('id', $group_id)->first();
+        $rules1 = Sheep::$rules['death'];
+        $validation = Validator::make($request->all(), $rules1);
+        if ($validation->fails()) {
+            return View::make('groups/group_view')->with([
+                'group'     => $group, //collection dismantled in view with foreach
+                'title'     => 'Group Members',
+                'group_name'=> $group->getName()
+            ])->withErrors($validation->messages());
+        }
         //dd($group);
         $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
         try {
@@ -157,7 +174,9 @@ class GroupController extends Controller
         if(!$ewe->groups->contains($group->getId())) {
             $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
         }
-        Session::flash('message','Sheep added to ' . $group->getName() .'.');
+        Session::flash('message','Sheep ' .$tag->getFlockNumber()
+            .' '.sprintf('%05d',$tag->getSerialNumber()). ' added to '
+            . $group->getName() .'.');
 
         return View::make('groups/group_view')->with([
             'group'     => $group, //collection dismantled in view with foreach
@@ -169,6 +188,9 @@ class GroupController extends Controller
     {
         $group = Group::find($group_id);
         $group->sheep()->detach($sheep_id);
+        //dd('got to here');
+        //return Redirect::back();
+        //return $this->postViewGroup($group_id);
         return View::make('groups/group_view')->with([
             'group'     => $group, //collection dismantled in view with foreach
             'title'     => 'Group Members',
