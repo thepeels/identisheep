@@ -253,6 +253,7 @@ class GroupController extends Controller
         list($group1, $group2) = $this->setUpTwoGroups($request);
 
         $group = $this->firstOrNewGroup($request);
+        //dd($group->exists);
         $group->save();
 
         $this->attachGroup($group1, $group);
@@ -341,7 +342,7 @@ class GroupController extends Controller
             'info' => $request->info,
             'owner' => $this->owner()
         ]);
-        return $group;
+        dd( $group);
     }
 
     /**
@@ -352,10 +353,13 @@ class GroupController extends Controller
     public function attachGroup($group1, $group)
     {
         foreach ($group1->sheep as $sheep) {
+            dd($group1->id);
             //dd($group->sheep->contains($sheep->getId()));
             if (!$group->sheep->has($sheep->getId())) {
                 $group->sheep()->attach($sheep->getId());
-                $sheep->save();
+                //$group->sheep()->sync(['sheep_id' => $sheep->getId,'group_id' => $group->id,'owner_id' => $this->owner()]);
+                //$group->save();
+                //usleep(100000);
             }
         }
         //return $group;
