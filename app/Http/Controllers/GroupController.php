@@ -6,14 +6,10 @@ use App\Domain\FileHandling\FileHandler;
 use App\Domain\Sheep\TagNumber;
 use App\Models\Group;
 use App\Models\Sheep;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -77,11 +73,7 @@ class GroupController extends Controller
         $ewe_list = $process_file->mappedFile();
         $this->addIntoGroup($ewe_list[2],$group->getId()); //array of tag numbers, group number
 
-        return View::make('groups/group_view')->with([
-            'group'     => $group, //collection dismantled in view with foreach
-            'title'     => 'Group Members',
-            'group_name'=> $group->getName()
-        ]);
+        return $this->loadGroupView($group);
     }
     /**
      * @param array $ewe_list
@@ -177,11 +169,7 @@ class GroupController extends Controller
             .' '.sprintf('%05d',$tag->getSerialNumber()). ' added to '
             . $group->getName() .'.');
 
-        return View::make('groups/group_view')->with([
-            'group'     => $group, //collection dismantled in view with foreach
-            'title'     => 'Group Members',
-            'group_name'=> $group->getName()
-        ]);
+        return $this->loadGroupView($group);
     }
 
     /**
@@ -194,11 +182,7 @@ class GroupController extends Controller
         $group = Group::find($group_id);
         $group->sheep()->detach($sheep_id);
 
-        return View::make('groups/group_view')->with([
-            'group'     => $group, //collection dismantled in view with foreach
-            'title'     => 'Group Members',
-            'group_name'=> $group->getName()
-        ]);
+        return $this->loadGroupView($group);
     }
 
     /**
@@ -257,11 +241,9 @@ class GroupController extends Controller
 
         $this->attachGroup($group1, $group);
         $this->attachGroup($group2, $group);
-        return View::make('groups/group_view')->with([
-            'group'     => $group,
-            'title'     => 'Group Members',
-            'group_name'=> $group->getName()
-        ]);
+        $group->save();
+
+        return $this->loadGroupView($group);
 
     }
     /**
@@ -279,11 +261,7 @@ class GroupController extends Controller
     {
         $group = $this->loadGroup($request);
 
-        return View::make('groups/group_view')->with([
-            'group'     => $group, //collection dismantled in view with foreach
-            'title'     => 'Group Members',
-            'group_name'=> $group->getName()
-        ]);
+        return $this->loadGroupView($group);
     }
 
     /**
@@ -335,7 +313,7 @@ class GroupController extends Controller
      */
     public function firstOrNewGroup(Request $request)
     {
-        $group = Group::firstOrNew([
+        $group = Group::firstOrCreate([
             'name' => $request->name,
             'description' => $request->description,
             'info' => $request->info,
@@ -351,13 +329,27 @@ class GroupController extends Controller
      */
     public function attachGroup($group1, $group)
     {
-        foreach ($group1->sheep as $sheep) {
-            //dd($group->sheep->contains($sheep->getId()));
-            if (!$group->sheep->has($sheep->getId())) {
-                $group->sheep()->attach($sheep->getId());
-                $sheep->save();
+        $id_array = [];
+        foreach ($group1->sheep as $sheep)
+        {
+            if (!$group->sheep->has($sheep->getId()))
+            {
+                array_push($id_array,$sheep->getId());
             }
+            $group->sheep()->sync($id_array,false);
         }
-        //return $group;
+    }
+
+    /**
+     * @param $group
+     * @return mixed
+     */
+    public function loadGroupView($group)
+    {
+        return View::make('groups/group_view')->with([
+            'group' => $group, //collection dismantled in view with foreach
+            'title' => 'Group Members',
+            'group_name' => $group->getName()
+        ]);
     }
 }
