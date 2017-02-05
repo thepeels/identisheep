@@ -37,12 +37,7 @@ class GroupController extends Controller
      */
     public function postCreate(Request $request)
     {
-        $group = Group::firstOrNew([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'info'          => $request->info,
-            'owner'         =>  $this->owner()
-        ]);
+        $group = $this->firstOrNewGroup($request);
         $group->save();
         Session::flash('message','Group \''.$request->name .'\' created');
 
@@ -146,6 +141,10 @@ class GroupController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function postAddOnTheFly(Request $request)
     {
         $request->flashExcept('e_tag');
@@ -184,22 +183,30 @@ class GroupController extends Controller
             'group_name'=> $group->getName()
         ]);
     }
+
+    /**
+     * @param int $sheep_id
+     * @param int $group_id
+     * @return mixed
+     */
     public function getDetach($sheep_id,$group_id)
     {
         $group = Group::find($group_id);
         $group->sheep()->detach($sheep_id);
-        //dd('got to here');
-        //return Redirect::back();
-        //return $this->postViewGroup($group_id);
+
         return View::make('groups/group_view')->with([
             'group'     => $group, //collection dismantled in view with foreach
             'title'     => 'Group Members',
             'group_name'=> $group->getName()
         ]);
     }
-    public function getCombine()
+
+    /**
+     * @return mixed
+     */
+    public function getIntersect()
     {
-        return View::make('groups/group_combine')->with([
+        return View::make('groups/group_intersect')->with([
             'title'         =>'Show Sheep common to 2 Groups',
             'group_names'   =>$this->groupNames()
         ]);
@@ -208,13 +215,9 @@ class GroupController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function postCombine(Request $request)
+    public function postIntersect(Request $request)
     {
-        $group_list = Group::where('owner',$this->owner())->lists('id');//lists() returns array not collection
-        $group_id_1 = $group_list[$request->group1];
-        $group_id_2 = $group_list[$request->group2];
-        $group1 = Group::where('id',$group_id_1)->first();
-        $group2 = Group::where('id',$group_id_2)->first();
+        list($group1, $group2) = $this->setUpTwoGroups($request);
 
         $sheep_group2 = [];
         $sheep_group1 = [];
@@ -229,12 +232,38 @@ class GroupController extends Controller
         return View::make('groups/group_intersect_view')->with([
             'group'     => $collection,
             'title'     => 'Group Members',
-            'group_name'=> 'Combined Groups',
+            'group_name'=> 'Group Comparison',
             'group1'    => $group1->getName(),
             'group2'    => $group2->getName(),
         ]);
     }
+    /**
+     * @return mixed
+     */
+    public function getCombine()
+    {
+        return View::make('groups/group_combine')->with([
+            'title'         =>'Amalgamate 2 Groups to form a New Group',
+            'group_names'   =>$this->groupNames()
+        ]);
+    }
 
+    public function postCombine(Request $request)
+    {
+        list($group1, $group2) = $this->setUpTwoGroups($request);
+
+        $group = $this->firstOrNewGroup($request);
+        $group->save();
+
+        $this->attachGroup($group1, $group);
+        $this->attachGroup($group2, $group);
+        return View::make('groups/group_view')->with([
+            'group'     => $group,
+            'title'     => 'Group Members',
+            'group_name'=> $group->getName()
+        ]);
+
+    }
     /**
      * @return mixed
      */
@@ -256,6 +285,10 @@ class GroupController extends Controller
             'group_name'=> $group->getName()
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     private function owner()
     {
         return Auth::user()->id;
@@ -280,5 +313,51 @@ class GroupController extends Controller
         $group_id = $group_list[$request->group];
         $group = Group::where('id', $group_id)->first();
         return $group;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function setUpTwoGroups(Request $request)
+    {
+        $group_list = Group::where('owner', $this->owner())->lists('id');//lists() returns array not collection
+        $group_id_1 = $group_list[$request->group1];
+        $group_id_2 = $group_list[$request->group2];
+        $group1 = Group::where('id', $group_id_1)->first();
+        $group2 = Group::where('id', $group_id_2)->first();
+        return array($group1, $group2);
+    }
+
+    /**
+     * @param Request $request
+     * @return static
+     */
+    public function firstOrNewGroup(Request $request)
+    {
+        $group = Group::firstOrNew([
+            'name' => $request->name,
+            'description' => $request->description,
+            'info' => $request->info,
+            'owner' => $this->owner()
+        ]);
+        return $group;
+    }
+
+    /**
+     * @param $group1
+     * @param $group
+     * @return mixed
+     */
+    public function attachGroup($group1, $group)
+    {
+        foreach ($group1->sheep as $sheep) {
+            //dd($group->sheep->contains($sheep->getId()));
+            if (!$group->sheep->has($sheep->getId())) {
+                $group->sheep()->attach($sheep->getId());
+                $sheep->save();
+            }
+        }
+        //return $group;
     }
 }
