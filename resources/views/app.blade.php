@@ -67,7 +67,8 @@
 								<li><a href="/group/add-to-group">Add List to Group</a></li>
 								<li><a href="/group/single-to-group">Add Single to Group</a></li>
 								<li><a href="/group/view-group">View a Group</a></li>
-								<li><a href="/group/combine">Compare 2 Groups</a></li>
+								<li><a href="/group/intersect">Compare 2 Groups</a></li>
+								<li><a href="/group/combine">Combine 2 Groups</a></li>
 							</ul>
 						</li>
 						@endif
