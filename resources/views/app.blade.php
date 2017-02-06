@@ -146,7 +146,7 @@
 	</nav>
 	<div class="alert-div">
 	@if(Session::has('message'))
-		<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{!! nl2br(e(Session::get('message'))) !!}</p>
+		<p class="alert no-print {{ Session::get('alert-class', 'alert-info') }}">{!! nl2br(e(Session::get('message'))) !!}</p>
 	@endif
 	</div>
 	@yield('content')

@@ -23,20 +23,24 @@
             <th>Number</th>
             <th>Colour</th>
             <th>Moved On</th>
+            <th>Moved Off</th>
             </thead>
             @foreach($group->sheep as $member)
                 <?$counter++;?>
+                <?$date_on = (date('Y',strtotime($member->getMoveOn()))==env('BASE_DATE')?"":date('d-M-Y',strtotime($member->getMoveOn())));
+                $date_off = (date('Y',strtotime($member->getMoveOff()))==env('BASE_DATE')?"":date('d-M-Y',strtotime($member->getMoveOff())));?>
                 <tr>
                     <td>{!! $member->getLocalId() !!}</td>
                     <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
-                    <td>{!! date('d M Y',strtotime($member->getMoveOn())) !!}</td>
-                    <td><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove from Group</a></td>
+                    <td>{!! $date_on !!}</td>
+                    <td>{!! $date_off !!}</td>
+                    <td><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs no-print">Remove from Group</a></td>
                 </tr>
             @endforeach
         </table>
         Total {!! $counter !!} sheep.
-        {!! Form::open(array('url' => '/group/add-on-the-fly','class'=>'form-inline', 'files' => true)) !!}
+        {!! Form::open(array('url' => '../group/add-on-the-fly','class'=>'form-inline no-print', 'files' => true)) !!}
         {!! Form::hidden('group',$group->id) !!}<br>
         {!! Form::label('text','Additional sheep - Flock and Individual Number')!!}<br>
         {!! Form::label('text','UK 0')!!}

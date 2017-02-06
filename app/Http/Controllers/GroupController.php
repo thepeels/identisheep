@@ -120,7 +120,7 @@ class GroupController extends Controller
         } catch(ModelNotFoundException $e) {
             Session::flash('alert-class', 'alert-danger');
             Session::flash('message', 'Sheep Not Found - not added');
-            return Redirect::back()->withInput();
+            return Redirect::back()->withInput();//redirect()->back(); also
         }
         if(!$ewe->groups->contains($group->getId())) {
             $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
@@ -142,26 +142,23 @@ class GroupController extends Controller
         $request->flashExcept('e_tag');
         $group_id = $request->group;
         $group = Group::where('id', $group_id)->first();
+
         $rules1 = Sheep::$rules['death'];
         $validation = Validator::make($request->all(), $rules1);
         if ($validation->fails()) {
-            return View::make('groups/group_view')->with([
-                'group'     => $group, //collection dismantled in view with foreach
-                'title'     => 'Group Members',
-                'group_name'=> $group->getName()
-            ])->withErrors($validation->messages());
+            return $this->loadGroupView($group)->withErrors($validation->messages());
         }
-        //dd($group);
+
         $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
-        try {
-            $ewe = Sheep::where([
-                'flock_number' => $tag->getFlockNumber(),
-                'serial_number' => $tag->getSerialNumber()])->firstOrFail();
-        } catch(ModelNotFoundException $e) {
-            Session::flash('alert-class', 'alert-danger');
-            Session::flash('message', 'Sheep Not Found - not added');
-            return Redirect::back()->withInput();
-        }
+            try {
+                $ewe = Sheep::where([
+                    'flock_number' => $tag->getFlockNumber(),
+                    'serial_number' => $tag->getSerialNumber()])->firstOrFail();
+            } catch(ModelNotFoundException $e) {
+                Session::flash('alert-class', 'alert-danger');
+                Session::flash('message', 'Sheep Not Found - not added');
+                return $this->loadGroupView($group);
+            }
         if(!$ewe->groups->contains($group->getId())) {
             $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
         }
@@ -325,7 +322,6 @@ class GroupController extends Controller
     /**
      * @param $group1
      * @param $group
-     * @return mixed
      */
     public function attachGroup($group1, $group)
     {
