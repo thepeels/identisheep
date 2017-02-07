@@ -54,11 +54,11 @@ class ListController extends Controller
      */
     public function getCustomised(Request $request)
     {
-
+        $request->flashExcept('make_group');
         $input_start = new \DateTime($request->get('year') . $request->get('month') . $request->get('day'));
-
         $input_end   = new \DateTime($request->get('end_year') . $request->get('end_month') . $request->get('end_day'));
         $keep_date  = $request->get('keep_date');
+
         $rules = Sheep::$rules['dates'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
@@ -90,14 +90,27 @@ class ListController extends Controller
         if ($sex == 'both') {$sex = '%male';$both_sexes = 'All Females and Male';}
         $tags       = new ListByDates($date_start,$date_end,$keep_date,$sex,$move,$include_dead,'sex','like',$sex);
         $list = $tags->makeList();
-        return View::make('custom_list')->with([
-            'title'         => ucfirst($both_sexes).'s moved '.strtoupper($move).' - ',
-            'list'          => $list->appends($request->except('page')),
-            'date_start'    => $date_start,
-            'date_end'      => $date_end,
-            'keep_date'     => $keep_date
+        if(!$request->make_group == TRUE) {
+            return View::make('custom_list')->with([
+                'title' => ucfirst($both_sexes) . 's moved ' . strtoupper($move) . ' - ',
+                'list' => $list->appends($request->except('page')),
+                'date_start' => $date_start,
+                'date_end' => $date_end,
+                'keep_date' => $keep_date
+            ]);
+        }
+        /** ToDo: introduce route rout to generate name description etc this works with fixed group name*/
+        if($request->make_group == TRUE) {
+            $group_list = $tags->makeGroup('Test Group');
 
-        ]);
+            return View::make('custom_list')->with([
+                'title' => ucfirst($both_sexes) . 's moved ' . strtoupper($move) . ' - ',
+                'list' => $list->appends($request->except('page')),
+                'date_start' => $date_start,
+                'date_end' => $date_end,
+                'keep_date' => $keep_date
+            ]);
+        }
 
     }
 

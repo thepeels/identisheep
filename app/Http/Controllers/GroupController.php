@@ -348,4 +348,9 @@ class GroupController extends Controller
             'group_name' => $group->getName()
         ]);
     }
+
+    public function getConvert($list)
+    {
+        dd($list);
+    }
 }

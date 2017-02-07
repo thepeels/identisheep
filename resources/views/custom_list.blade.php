@@ -32,6 +32,7 @@
         <tr>
         </thead>
         <tbody>
+        
         @foreach ($list as $ewe)
             <?$date_on = (date('Y',strtotime($ewe->move_on))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_on)));
             $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_off)));?>
@@ -66,5 +67,14 @@
         @endforeach
         </tbody>
     </table>
+    @if(!Auth::guest())
+        @if(Auth::user()->superuser)
+            <a href="{!! Request::getRequestUri().'&make_group=true' !!}"
+               class="btn btn-default btn-xs no-print"
+               style="margin-bottom:-1px;"
+               title="Edit this Sheep">Convert list to Group
+            </a>
+        @endif
+    @endif
 </div>
 @stop

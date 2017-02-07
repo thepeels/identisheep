@@ -8,6 +8,7 @@
 
 namespace App\Domain\Sheep;
 
+use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sheep;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -259,6 +260,24 @@ public function getValue(){
         return $ewes;
     }
 
+    public function makeGroup($group_name)
+    {
+        $this->setAlive(1);
+        if($this->getIncludeDead() == TRUE){$this->setAlive(-1);}
+        $move_type = 'move_'.$this->getMove();
+        $ewes = Sheep::where('owner',$this->owner())
+            ->whereDate($move_type,'>=',$this->getDateStart())
+            ->whereDate($move_type,'<=',$this->getDateEnd())
+            ->where($this->getKey(),$this->getComparison(),$this->getValue())
+            ->where('alive','>=',$this->getAlive())
+            ->get();
+        $group = Group::firstOrCreate(['name' => $group_name,'owner'=>$this->owner()]);
+        foreach ($ewes as $ewe){
+            $group->sheep()->attach($ewe->getId());
+        }
+        $group->save();
+
+    }
     /**
      * @return int
      */
