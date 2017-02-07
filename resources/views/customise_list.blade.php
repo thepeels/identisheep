@@ -48,8 +48,9 @@
             {!! Form::radio('include_dead',FALSE,FALSE,array('id'=>'include_dead-1')) !!}
             {!! Form::label('include_dead-1','No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') !!}<br>
         </div><br>
-        {!!Form::submit('Generate List',['class'=>'btn btn-info btn-xs'])!!}
+        {!! Form::input('hidden','make_group',FALSE) !!}
+        {!! Form::submit('Generate List',['class'=>'btn btn-info btn-xs']) !!}
 
-        {!!Form::close()!!}<br>
+        {!! Form::close() !!}<br>
     </div>
 @stop

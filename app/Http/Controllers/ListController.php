@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Sheep\ListByDates;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Models\ListDates;
 use Illuminate\Support\Facades\View;
@@ -54,11 +55,11 @@ class ListController extends Controller
      */
     public function getCustomised(Request $request)
     {
-
+        $request->flashExcept('make_group');
         $input_start = new \DateTime($request->get('year') . $request->get('month') . $request->get('day'));
-
         $input_end   = new \DateTime($request->get('end_year') . $request->get('end_month') . $request->get('end_day'));
         $keep_date  = $request->get('keep_date');
+
         $rules = Sheep::$rules['dates'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
@@ -90,15 +91,32 @@ class ListController extends Controller
         if ($sex == 'both') {$sex = '%male';$both_sexes = 'All Females and Male';}
         $tags       = new ListByDates($date_start,$date_end,$keep_date,$sex,$move,$include_dead,'sex','like',$sex);
         $list = $tags->makeList();
-        return View::make('custom_list')->with([
-            'title'         => ucfirst($both_sexes).'s moved '.strtoupper($move).' - ',
-            'list'          => $list->appends($request->except('page')),
-            'date_start'    => $date_start,
-            'date_end'      => $date_end,
-            'keep_date'     => $keep_date
+        if(!$request->make_group == TRUE) {
+            return $this->generateView($request, $both_sexes, $move, $list, $date_start, $date_end, $keep_date);
+        }
+        if($request->make_group == TRUE) {
+            $tags->makeGroup('Temporary Group');
 
-        ]);
+            return View::make('groups/group_name')->with([
+                'title'     => 'Name the new Group',
+            ]);
+        }
 
+    }
+
+    /**
+     * @param Request $request
+     * @var Group $group
+     */
+    public function postReName(Request $request)
+    {
+        $group = Group::where(['owner' => $this->owner(),'name' => 'Temporary Group'])->first();
+        $group->setName($request->group_name);
+        $group->setDescription($request->description);
+        $group->setInfo($request->info);
+        $group->save();
+
+        return Redirect::action('GroupController@getViewGroup');
     }
 
     private function datePair()
@@ -110,5 +128,26 @@ class ListController extends Controller
         $keep_date  = NULL!=($date_pair->getKeepDate())?$date_pair->getKeepDate():FALSE;
 
         return [$date_start,$date_end,$keep_date];
+    }
+
+    /**
+     * @param Request $request
+     * @param $both_sexes
+     * @param $move
+     * @param $list
+     * @param $date_start
+     * @param $date_end
+     * @param $keep_date
+     * @return mixed
+     */
+    public function generateView(Request $request, $both_sexes, $move, $list, $date_start, $date_end, $keep_date)
+    {
+        return View::make('custom_list')->with([
+            'title' => ucfirst($both_sexes) . 's moved ' . strtoupper($move) . ' - ',
+            'list' => $list->appends($request->except('page')),
+            'date_start' => $date_start,
+            'date_end' => $date_end,
+            'keep_date' => $keep_date
+        ]);
     }
 }
