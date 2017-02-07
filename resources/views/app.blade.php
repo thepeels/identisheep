@@ -69,6 +69,7 @@
 								<li><a href="/group/view-group">View a Group</a></li>
 								<li><a href="/group/intersect">Compare 2 Groups</a></li>
 								<li><a href="/group/combine">Combine 2 Groups</a></li>
+								<li><a href="/group/delete">Delete</a></li>
 							</ul>
 						</li>
 						@endif

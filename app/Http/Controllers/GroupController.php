@@ -349,8 +349,22 @@ class GroupController extends Controller
         ]);
     }
 
-    public function getConvert($list)
+    /**
+     * @return mixed
+     */
+    public function getDelete()
     {
-        dd($list);
+        return View::make('groups/group_delete')->with([
+            'title'         =>  'Select Group for Deletion',
+            'group_names'   =>  $this->groupNames()
+        ]);
+    }
+
+    public function postDelete(Request $request)
+    {
+        $group = $this->loadGroup($request);
+        $group->delete();
+
+        return $this->getDelete();
     }
 }
