@@ -69,9 +69,9 @@ class GroupController extends Controller
         $group = $this->loadGroup($request);
 
         $csv_file = $request->csv_file;
-        $process_file = new FileHandler(file($csv_file));
+        $process_file = new FileHandler(file($csv_file),$request->csv_file->getClientOriginalName());
         $ewe_list = $process_file->mappedFile();
-        $this->addIntoGroup($ewe_list[2],$group->getId()); //array of tag numbers, group number
+        $this->addIntoGroup($ewe_list,$group->getId()); //array of tag numbers, group number
 
         return $this->loadGroupView($group);
     }

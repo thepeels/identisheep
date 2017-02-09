@@ -38,13 +38,20 @@ class TagNumber
         $tagNumberString    = str_replace(array("L","I"), "1", $tagNumberString);
         $tagNumberString    = str_replace(array("O"), "0", $tagNumberString);
 
-        if (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) === false) {
-            throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. e.g. UK012345600001');
+        if (preg_match("/^[A-Z]{2}[0-7]{1}[0-9]{11}$/", $tagNumberString) !== false) {
+            $this->countryCode = substr($tagNumberString, 0, 3);
+            $this->flockNumber = (int)substr($tagNumberString, 3, 6);
+            $this->serialNumber = (int)substr($tagNumberString, 9, 5);
+        }
+        if (preg_match("/^[0-9]{3} [0-7]{1}[0-9]{11}$/", $tagNumberString) !== false) {
+            //throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. e.g. UK012345600001');
+
+            $this->countryCode = substr($tagNumberString, 0, 3);
+            $this->flockNumber = (int)substr($tagNumberString, 4, 6);
+            $this->serialNumber = (int)substr($tagNumberString, 10, 5);
         }
 
-        $this->countryCode = substr($tagNumberString, 0, 3);
-        $this->flockNumber = (int) substr($tagNumberString, 3, 6);
-        $this->serialNumber = (int) substr($tagNumberString, 9, 5);
+
     }
 
     /**

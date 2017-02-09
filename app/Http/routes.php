@@ -49,4 +49,6 @@ Route::get('back',function(){return redirect()->back();});
 
 Route::controller('subs','SubscriptionsController');
 
+$excel = App::make('excel');
+
 

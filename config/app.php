@@ -147,7 +147,8 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Laravel\Cashier\CashierServiceProvider'
+        'Laravel\Cashier\CashierServiceProvider',
+        'Maatwebsite\Excel\ExcelServiceProvider',
 
 	],
 
@@ -198,7 +199,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
-
+        'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
 	],
 
 ];
