@@ -41,7 +41,7 @@ class BatchController extends Controller {
             'subtitle' => '- Sheep Off Holding'
         ]);
     }
-    public function  postCsvload()
+    public function  postCsvload(Request $request)
     {
         $rules1 = Sheep::$rules['dates'];
         $rules2 = Sheep::$rules['where_to'];
@@ -53,15 +53,27 @@ class BatchController extends Controller {
         $owner           = Auth::user()->id;
         $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
 
-        $process_file = new FileHandler(file(Input::file('file_raw')));
+        $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
+        if(stripos($type,'text' )!==False){
+        $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
+
         $ewelist = $process_file->mappedFile();
-        dd(Input::all());
+    }
+        if(stripos($type,'corrupt' )!==False){
+            Session::flash('alert-class','alert-danger');
+            Session::flash('message','cannot process Excel file, please choose a .csv file'.PHP_EOL.
+                'Tru-test software setting - "CSV EID only" under "Tools -> data link options"');
+            return Redirect::back()->withInput();
+            $process_file = new ExcelHandler(file(Input::file('file_raw')));
+            $ewelist = $process_file->excelFile();
+
+        };
+        $request->flash();
         if(Input::get('check')) {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
-                'heading'       => $ewelist[0][0],
-                'sub_heading'   => $ewelist[1][0],
+                'heading'       => $process_file->originalName(),
                 'tag_list'      => $tag_list
             ]);
         }
@@ -70,7 +82,7 @@ class BatchController extends Controller {
 
             $added = 0;
             $processed = 0;
-            foreach ($ewelist[2] as $ewe) {
+            foreach ($ewelist as $ewe) {
                 $tag = new TagNumber($ewe);
                 if($tag->getSerialNumber() != 0) {
                     $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
@@ -108,7 +120,7 @@ class BatchController extends Controller {
             'subtitle' => '- Sheep Onto Holding'
         ]);
     }
-    public function  postCsvloadon()
+    public function  postCsvloadon(Request $request)
     {
         $rules = Sheep::$rules['dates'];
         $validation = Validator::make(Input::all(), $rules);
@@ -122,22 +134,34 @@ class BatchController extends Controller {
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
 
-        $process_file = new FileHandler(file(Input::file('file_raw')));
-        $ewelist = $process_file->mappedFile();
+        $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
+        if(stripos($type,'text' )!==False){
+            $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
+            $ewelist = $process_file->mappedFile();
+        }
+        if(stripos($type,'corrupt' )!==False){
+            Session::flash('alert-class','alert-danger');
+            Session::flash('message','cannot process Excel file, please choose a .csv file'.PHP_EOL.
+                'Tru-test software setting - "CSV EID only" under "Tools -> data link options"');
+            return Redirect::back()->withInput();
+            $process_file = new ExcelHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
+            $ewelist = $process_file->excelFile();
+
+        };
+        $request->flash();
         if(Input::get('check')) {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
-                'heading'       => $ewelist[0][0],
-                'sub_heading'   => $ewelist[1][0],
+                'heading'       => $process_file->originalName(),
                 'tag_list'      => $tag_list
             ]);
         }
         if(Input::get('load')) {
 
             $added = 0;
-            foreach ($ewelist[2] as $ewe) {
+            foreach ($ewelist as $ewe) {
                 $tag = new TagNumber($ewe);
                 $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
                 if($tag->getSerialNumber() != 0) {

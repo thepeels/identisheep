@@ -15,7 +15,6 @@
     <div style="width:60%;margin-left:20%;">
         <h4>{{$title}}</h4>
         <h5>{{$heading}}</h5>
-        <h5>{{$sub_heading}}</h5>
         <table class="table table-striped table-bordered table-sm table-condensed print narrow" >
             <thead>
                 <tr>
@@ -32,7 +31,9 @@
             @endforeach
             </tbody>
         </table>
-        Total {{count($tag_list)}} tags
+        Total {{count($tag_list)}} tags<br> <br>
+        
+        If these appear correct, use your browser "Back <- " button, and select the load option on the previous page.
         
         
     </div>
