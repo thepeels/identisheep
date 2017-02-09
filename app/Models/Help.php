@@ -24,19 +24,32 @@ class Help extends Model {
         'batchops'  =>  ['.csv File entry',
             '<p>First prepare your .csv File. This can be from a tag reader, or a file can be generated from 
              a market list of tag reads. <br> To do this latter, scan the document with \'OCR\' and save it as a text 
-             (.txt) file. Then open the file in e.g. notepad. <br> To load correctly the file must have EXACTLY 
-             TWO lines above the tag list, so adjust this accordingly. <br> The third line must contain all 
-             the tag data, and each tag number <br> is separated from the following one with a comma (.csv = 
-             comma separated values) like this:- <br> UK012312300051,UK012312300053,UK012312300088,UK012312300151
-             <br> Spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
+             (.txt) file. Then open the file in e.g. notepad. <br> To load correctly the file must have NO 
+             lines above the tag list, so adjust this accordingly. <br> Each line must contain all 
+             the tag data, and is followed by a line break<br>like this:- <br> 826 012312300051<br>826 012312300053<br> 826 012312300088<br> 826 012312300151
+             <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
              with all zeros to be loaded. </p>
              The default date is today, change this if you want to.<br>Enter the holding number and/or name 
              of the destination for the sheep.<br>Select your previously prepared and saved file, and use the 
              \'check\' button to generate a list <br>which you can use to see whether your file is being read 
              correctly.</p>
-             If you are satisfied with the list, press the backspace key and then the \'load\' button.<br> Now the 
+             If you are satisfied with the list, press the backspace button and then the \'load\' button.<br> Now the 
              list will be loaded into your \'off list\' (Sheep Off Holding) and also removed from the \'all sheep\' 
              list.<br>'],
+        'batchopson'  =>  ['.csv File entry',
+            '<p>First prepare your .csv File. This can be from a tag reader, or a file can be generated from 
+             a market list of tag reads. <br> To do this latter, scan the document with \'OCR\' and save it as a text 
+             (.txt) file. Then open the file in e.g. notepad. <br> To load correctly the file must have NO 
+             lines above the tag list, so adjust this accordingly. <br> Each line must contain all 
+             the tag data, and is followed by a line break<br>like this:- <br> 826 012312300051<br>826 012312300053<br> 826 012312300088<br> 826 012312300151
+             <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
+             with all zeros to be loaded. </p>
+             The default date is today, change this if you want to.<br>Enter the holding number and/or name 
+             of the destination for the sheep.<br>Select your previously prepared and saved file, and use the 
+             \'check\' button to generate a list <br>which you can use to see whether your file is being read 
+             correctly.</p>
+             If you are satisfied with the list, press the backspace button and then the \'load\' button.<br> Now the 
+             list will be loaded into your Sheep List -> Ewes.<br>'],
         'batch'     =>  ['Batch of Sheep onto Holding',',<p>Change the default date if relevant.<br> 
             Enter the details of a batch of sheep where the tag series is continuous with no gaps. <br> 
             If you have a gap, go up to the gap first, and then start a new batch from after the gap.<br></p> '],
