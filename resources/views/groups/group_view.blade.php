@@ -13,6 +13,9 @@
 @stop
 @section('content')
     <div style="width:60%;margin-left:20%;">
+        <div class="no-screen">
+            <h4>{!! Auth::user()->getBusiness() !!} &nbsp;&nbsp;&nbsp;&nbsp;{!! Auth::user()->getAddress() !!}<br> Holding No:{!! Auth::user()->getHolding() !!}</h4>
+        </div>
         <h4>{{$group_name}}</h4>
         <h5>{{$title}}</h5>
         {!! $group->description !!} {!! $group->info !!}
@@ -35,7 +38,7 @@
                     <td>{!! $member->getTagColour() !!}</td>
                     <td>{!! $date_on !!}</td>
                     <td>{!! $date_off !!}</td>
-                    <td><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs no-print">Remove from Group</a></td>
+                    <td class="no-print"><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove from Group</a></td>
                 </tr>
             @endforeach
         </table>
