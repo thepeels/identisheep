@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Domain\FileHandling\ExcelHandler;
 use App\Domain\FileHandling\FileHandler;
 use App\Domain\Sheep\SheepOffService;
 use App\Domain\Sheep\TagNumber;
@@ -54,18 +55,15 @@ class BatchController extends Controller {
         $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
+        //dd($type);
         if(stripos($type,'text' )!==False){
         $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
         $ewelist = $process_file->mappedFile();
     }
-        if(stripos($type,'corrupt' )!==False){
-            Session::flash('alert-class','alert-danger');
-            Session::flash('message','cannot process Excel file, please choose a .csv file'.PHP_EOL.
-                'Tru-test software setting - "CSV EID only" under "Tools -> data link options"');
-            return Redirect::back()->withInput();
-            $process_file = new ExcelHandler(file(Input::file('file_raw')));
-            $ewelist = $process_file->excelFile();
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
+            $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
+            $ewelist = $process_file->returnTagNumbers();
 
         };
         $request->flash();
@@ -73,7 +71,7 @@ class BatchController extends Controller {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
-                'heading'       => $process_file->originalName(),
+                'heading'       => 'heading',//$process_file->getClientOriginalName(),
                 'tag_list'      => $tag_list
             ]);
         }
@@ -109,7 +107,7 @@ class BatchController extends Controller {
                 }
             }
         }
-        Session::flash('message', $processed .' Tags processed, Sheep now in Off List.' . PHP_EOL . $added . ' Sheep Added.');
+        Session::flash('message', $processed .' Tags processed, '. $added . ' Sheep Added.' . PHP_EOL . 'Sheep now in Off List.');
         return Redirect::to('batch/batchops');
     }
 
@@ -140,13 +138,10 @@ class BatchController extends Controller {
 
             $ewelist = $process_file->mappedFile();
         }
-        if(stripos($type,'corrupt' )!==False){
-            Session::flash('alert-class','alert-danger');
-            Session::flash('message','cannot process Excel file, please choose a .csv file'.PHP_EOL.
-                'Tru-test software setting - "CSV EID only" under "Tools -> data link options"');
-            return Redirect::back()->withInput();
-            $process_file = new ExcelHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
-            $ewelist = $process_file->excelFile();
+
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
+            $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
+            $ewelist = $process_file->returnTagNumbers();
 
         };
         $request->flash();

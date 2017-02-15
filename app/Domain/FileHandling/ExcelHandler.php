@@ -3,13 +3,16 @@
  * Created by PhpStorm.
  * User: John
  * Date: 15/02/2017
- * Time: 08:34
+ * Time: 17:45
  */
 
 namespace App\Domain\FileHandling;
 
 
-class FileHandler
+use App\Domain\Sheep\TagNumber;
+use Maatwebsite\Excel\Facades\Excel;
+
+class ExcelHandler
 {
     /**
      * FileHandler constructor.
@@ -18,24 +21,18 @@ class FileHandler
      */
     public function __construct($process_file,$original_filename)
     {
-        $this->ewelist = str_replace(array("\r\n","\n\r","\n", "\r", "¶"), "", $process_file);
         $this->original_name = $original_filename;
+        $this->loaded_file = Excel::load($process_file,function($decode){
+        $this->results = $decode->get();
+        });
     }
 
-    /**
-     * @return array
-     */
-    public function mappedFile()
+    public function excelFile()
     {
-        return $this->ewelist;
-    }
-
-    /**
-     * @return string
-     */
-    public function originalName()
-    {
-        return $this->original_name;
+        foreach($this->results as $row){
+            echo ($row->eid."<br>");
+        };
+        dd('done');
     }
 
     /**
@@ -47,8 +44,8 @@ class FileHandler
     {
         $i = 0;
         $tag_list = [];
-        foreach ($this->ewelist as $ewe) {
-            $tag = new TagNumber($ewe);
+        foreach ($this->results as $ewe) {
+            $tag = new TagNumber($ewe->eid);
             if ($tag->getSerialNumber() != 0) {
                 $i++;
                 $tag_list[$i][0] = $i;
@@ -56,5 +53,19 @@ class FileHandler
             }
         }
         return $tag_list;
+    }
+
+    /**
+     * @return array
+     */
+    public function returnTagNumbers()
+    {
+        $i = 0;
+        $ewe_list = [];
+        foreach ($this->results as $ewe) {
+            $i++;
+            $ewe_list[$i] = $ewe->eid;
+        }
+        return $ewe_list;
     }
 }

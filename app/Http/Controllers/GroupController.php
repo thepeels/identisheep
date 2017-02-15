@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\FileHandling\ExcelHandler;
 use App\Domain\FileHandling\FileHandler;
 use App\Domain\Sheep\TagNumber;
 use App\Models\Group;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -17,6 +19,14 @@ use Illuminate\Support\Facades\View;
 
 class GroupController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        /*if (Auth::guest()) {
+            return Redirect::to('../login');
+        }*/
+        $this->middleware('subscribed');
+    }
     /**
      * @return mixed
      */
@@ -63,14 +73,26 @@ class GroupController extends Controller
 
     /**
      * @param Request $request
+     * @return mixed
      */
     public function postAdd(Request $request)
     {
         $group = $this->loadGroup($request);
 
         $csv_file = $request->csv_file;
-        $process_file = new FileHandler(file($csv_file),$request->csv_file->getClientOriginalName());
-        $ewe_list = $process_file->mappedFile();
+
+        $type =($request->csv_file->getMimeType());//$request->file_raw->getClientOriginalName().' '.
+        if(stripos($type,'text' )!==False){
+            $process_file = new FileHandler(file(Input::file('csv_file')),$request->csv_file->getClientOriginalName());
+
+            $ewe_list = $process_file->mappedFile();
+        }
+
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
+            $process_file = new ExcelHandler((Input::file('csv_file')),$request->csv_file->getClientOriginalName());
+            $ewe_list = $process_file->returnTagNumbers();
+        }
+
         $this->addIntoGroup($ewe_list,$group->getId()); //array of tag numbers, group number
 
         return $this->loadGroupView($group);
