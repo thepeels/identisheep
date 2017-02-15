@@ -10,6 +10,11 @@ div.scrolling-area{height: 800px;overflow: auto;}
 .narrow{width:30%;}
 .medium-width{width:50%;}
 .medium-to-wide{width:62.5%;}
+@media screen and (max-width: 1280px){
+    .narrow{width:50%;}
+    .medium-width{width:85%;}
+    .medium-to-wide{width:100%;}
+}
 label{min-width:40px;}
 .bolder{font-size: larger;
 font-weight: 400;}
