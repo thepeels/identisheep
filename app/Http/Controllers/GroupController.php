@@ -112,6 +112,11 @@ class GroupController extends Controller
                 $ewe = Sheep::where([
                     'flock_number' => $tag->getFlockNumber(),
                     'serial_number'=> $tag->getSerialNumber()])->first();
+                if($ewe == NULL){
+                    Session::flash('alert-class','alert-danger');
+                    Session::flash('message','You can not add sheep to a group that you have not added to the flock previously.');
+                    return Redirect::back();
+                }
                 if(!$ewe->groups->contains($group->getId())) {
                     $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
                     $i++;

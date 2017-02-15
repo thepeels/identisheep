@@ -71,7 +71,7 @@ class BatchController extends Controller {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
-                'heading'       => 'heading',//$process_file->getClientOriginalName(),
+                'heading'       => $request->file_raw->getClientOriginalName(),
                 'tag_list'      => $tag_list
             ]);
         }
@@ -149,7 +149,7 @@ class BatchController extends Controller {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
-                'heading'       => $process_file->originalName(),
+                'heading'       => $request->file_raw->getClientOriginalName(),
                 'tag_list'      => $tag_list
             ]);
         }
