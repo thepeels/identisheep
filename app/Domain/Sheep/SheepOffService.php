@@ -45,7 +45,9 @@ class SheepOffService
     public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex, $owner, $colour_of_tag = "")
     {
         $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
-        $ewe = $this->sheepOffAction($tagNumber, $dateOfMovement, $destination, $owner);
+        if($sheep_exists) {
+            $ewe = $this->sheepOffAction($tagNumber, $dateOfMovement, $destination, $owner);
+        }
         if(!$sheep_exists) {
             $this->isNewSheepOffAction($tagNumber, $sex, $colour_of_tag, $ewe);
         }
