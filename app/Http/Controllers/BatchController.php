@@ -60,6 +60,7 @@ class BatchController extends Controller {
         $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
         $ewelist = $process_file->mappedFile();
+
     }
         if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
@@ -91,6 +92,7 @@ class BatchController extends Controller {
                         'serial_number' => $tag->getSerialNumber()]);
                     //dd($ewe->exists());
                     $ewe->setOwner($owner);
+                    $ewe->setCountryCode($tag->getCountryCode());
                     $ewe->setFlockNumber($tag->getFlockNumber());
                     $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
                     $ewe->setSupplementarySerialNumber($tag->getSerialNumber());
@@ -133,15 +135,18 @@ class BatchController extends Controller {
         $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
+       //dd($type);
         if(stripos($type,'text' )!==False){
             $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
             $ewelist = $process_file->mappedFile();
+
         }
 
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){//dd($type);
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
+            //$some_thing = $process_file->excelFile();
 
         };
         $request->flash();
@@ -158,6 +163,7 @@ class BatchController extends Controller {
             $added = 0;
             foreach ($ewelist as $ewe) {
                 $tag = new TagNumber($ewe);
+                //dd($tag->getCountryCode());
                 $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
                 if($tag->getSerialNumber() != 0) {
                     if (!$sheep_exists) {
@@ -169,6 +175,7 @@ class BatchController extends Controller {
                         ]);
                         $ewe->setOwner($owner);
                         $ewe->setLocalId($l);
+                        $ewe->setCountryCode($tag->getCountryCode());
                         $ewe->setFlockNumber($tag->getFlockNumber());
                         $ewe->setSupplementaryTagFlockNumber($tag->getFlockNumber());
                         $ewe->setSupplementarySerialNumber($tag->getSerialNumber());
@@ -222,6 +229,7 @@ class BatchController extends Controller {
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
         $colour_of_tag  = Input::get('colour_of_tag');
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
+        $country_code   = 'UK0';
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -240,6 +248,7 @@ class BatchController extends Controller {
 
                         $ewe->setLocalId($local_id);
                         $ewe->setOwner($owner);
+                        $ewe->setCountryCode($country_code);
                         $ewe->setFlockNumber($flock_number);
                         $ewe->setOriginalFlockNumber($flock_number);
                         $ewe->setSupplementaryTagFlockNumber($flock_number);

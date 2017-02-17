@@ -9,11 +9,13 @@
 namespace App\Domain\FileHandling;
 
 
+use App\Domain\Sheep\TagNumber;
+
 class FileHandler
 {
     /**
      * FileHandler constructor.
-     * @param $process_file
+     * @param string $process_file
      * @param string $original_filename
      */
     public function __construct($process_file,$original_filename)
