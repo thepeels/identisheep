@@ -64,6 +64,10 @@ class Sheep extends Model
      */
     protected $destination;
     /**
+     * @var string
+     */
+    protected $country_code;
+    /**
      * @var int
      */
     protected $serial_number;
@@ -405,6 +409,23 @@ class Sheep extends Model
     {
         $this->attributes['alive'] = $alive;
     }
+
+    /**
+     * @param string $country_code
+     */
+    public function setCountryCode($country_code)
+    {
+        $this->attributes['country_code'] = $country_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountryCode()
+    {
+        return $this->attributes['country_code'];
+    }
+
     
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

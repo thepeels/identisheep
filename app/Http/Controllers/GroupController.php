@@ -139,7 +139,7 @@ class GroupController extends Controller
         if ($validation->fails()) {
             return $this->getSingleToGroup()->withErrors($validation->messages());
         }
-        $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
+        $tag = new TagNumber('UK)' . $request->e_flock . sprintf('%05d',$request->e_tag));
         try {
             $ewe = Sheep::where([
                 'flock_number' => $tag->getFlockNumber(),
@@ -152,9 +152,7 @@ class GroupController extends Controller
         if(!$ewe->groups->contains($group->getId())) {
             $ewe->groups()->attach($group->getId(), ['owner_id' => $this->owner()]);
         }
-        Session::flash('message','Sheep ' .$tag->getFlockNumber()
-                    .' '.sprintf('%05d',$tag->getSerialNumber()). ' added to '
-                    . $group->getName() .'.');
+        Session::flash('message','Sheep ' .$tag->getShortTagNumber() . ' added to ' . $group->getName() .'.');
 
         return $this->getSingleToGroup();
 
@@ -176,7 +174,7 @@ class GroupController extends Controller
             return $this->loadGroupView($group)->withErrors($validation->messages());
         }
 
-        $tag = new TagNumber('UK)' . $request->e_flock . $request->e_tag);
+        $tag = new TagNumber('UK0' . $request->e_flock . sprintf('%05d',$request->e_tag));
             try {
                 $ewe = Sheep::where([
                     'flock_number' => $tag->getFlockNumber(),

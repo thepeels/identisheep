@@ -62,6 +62,7 @@ class SheepOffService
      */
     private function isNewSheepOffAction(TagNumber $tagNumber, Sex $sex, $colour_of_tag, $ewe)
     {
+        $ewe->setCountryCode($tagNumber->getCountryCode());
         $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
         $ewe->setOriginalSerialNumber($tagNumber->getSerialNumber());
         $ewe->setFlockNumber($tagNumber->getFlockNumber());

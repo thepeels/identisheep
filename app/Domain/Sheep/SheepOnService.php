@@ -34,6 +34,7 @@ class SheepOnService
         ]);
         $ewe->setOwner($owner);
         $ewe->setLocalId($local_index);
+        $ewe->setCountryCode($tagNumber->getCountryCode());
         $ewe->setFlockNumber($tagNumber->getFlockNumber());
         $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
         $ewe->setSupplementaryTagFlockNumber($tagNumber->getFlockNumber());
