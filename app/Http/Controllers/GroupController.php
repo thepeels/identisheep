@@ -88,7 +88,7 @@ class GroupController extends Controller
             $ewe_list = $process_file->mappedFile();
         }
 
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd.ms-office' )!==False){
             $process_file = new ExcelHandler((Input::file('csv_file')),$request->csv_file->getClientOriginalName());
             $ewe_list = $process_file->returnTagNumbers();
         }
