@@ -56,17 +56,8 @@ class BatchController extends Controller {
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
         //dd($type);
-        if(stripos($type,'text' )!==False){
-        $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
+        list($process_file, $ewelist) = $this->detectAndProcessMimeType($request, $type);
 
-        $ewelist = $process_file->mappedFile();
-
-    }
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){
-            $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
-            $ewelist = $process_file->returnTagNumbers();
-
-        };
         $request->flash();
         if(Input::get('check')) {
             $tag_list = $process_file->extractTagNumbers();
@@ -143,7 +134,7 @@ class BatchController extends Controller {
 
         }
 
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd' )!==False){//dd($type);
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd.ms-office' )!==False){//dd($type);
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
             //$some_thing = $process_file->excelFile();
@@ -429,6 +420,27 @@ class BatchController extends Controller {
             'title'=>'Home Bred Sheep, EID Tags Applied (total = '.$count.')',
             'tags'  => $tags
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $type
+     * @return array
+     */
+    public function detectAndProcessMimeType(Request $request, $type)
+    {
+        if (stripos($type, 'text') !== False) {
+            $process_file = new FileHandler(file(Input::file('file_raw')), $request->file_raw->getClientOriginalName());
+
+            $ewelist = $process_file->mappedFile();
+
+        }
+        if (stripos($type, 'corrupt') !== False || stripos($type, 'excel') !== False || stripos($type, 'vnd.ms-office') !== False) {
+            $process_file = new ExcelHandler((Input::file('file_raw')), $request->file_raw->getClientOriginalName());
+            $ewelist = $process_file->returnTagNumbers();
+
+        };
+        return array($process_file, $ewelist);
     }
 
     /**

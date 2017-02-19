@@ -26,7 +26,7 @@ class Help extends Model {
              a market list of tag reads. <br> To do this latter, scan the document with \'OCR\' and save it as a text 
              (.txt) file. Then open the file in e.g. notepad. <br> To load correctly the file must have NO 
              lines above the tag list, so adjust this accordingly. <br> Each line must contain all 
-             the tag data, and is followed by a line break<br>like this:- <br> 826 012312300051<br>UK012312300053<br> UK012312300088<br> 826 012312300151
+             the tag data, and is followed by a line break<br>like this:- <br>826 012312300051<br>826 012312300151<br>or this:-<br>UK012312300053<br> UK012312300088
              <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
              with all zeros to be loaded. </p>
              The default date is today, change this if you want to.<br>Enter the holding number and/or name 
@@ -41,7 +41,7 @@ class Help extends Model {
              a market list of tag reads. <br> To do this latter, scan the document with \'OCR\' and save it as a text 
              (.txt) file. Then open the file in e.g. notepad. <br> To load correctly the file must have NO 
              lines above the tag list, so adjust this accordingly. <br> Each line must contain all 
-             the tag data, and is followed by a line break<br>like this:- <br> 826 012312300051<br>UK012312300053<br> UK012312300088<br> 826 012312300151
+             the tag data, and is followed by a line break<br>like this:- <br>826 012312300051<br>826 012312300151<br>or this:-<br>UK012312300053<br> UK012312300088
              <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
              with all zeros to be loaded. </p>
              The default date is today, change this if you want to.<br>Enter the holding number and/or name 
