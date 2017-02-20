@@ -54,8 +54,11 @@ class TagNumber
                 break;
             case ((preg_match("/^[0-9]{3}[0-7]{1}[0-9]{11}$/", $tagNumberString) == 0) &&
                 (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 0)) :
-                throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. e.g. UK012345600001 or
-                all digits with 3 digit country code e.g. 826 012345600001');
+                throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. 
+                e.g. UK012345600001 or all digits with 3 digit country code e.g. 826 012345600001
+                You need to edit your input file. 
+                CSV file must have no headings - tag numbers on separate lines, 
+                Excel file - tag numbers in "EID" column.');
         }
 
 
