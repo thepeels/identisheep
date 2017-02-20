@@ -1,7 +1,11 @@
 <?php namespace App\Exceptions;
 
+use App\Domain\DomainException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\SessionInterface;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class Handler extends ExceptionHandler {
 
@@ -40,6 +44,13 @@ class Handler extends ExceptionHandler {
 		{
 			return $this->renderHttpException($e);
 		}
+        if($e instanceof DomainException)
+        {
+            Session::flash('alert-class','alert-danger');
+            Session::flash('message',$e->getMessage());
+
+            return Redirect::back()->withInput();
+        }
 		else
 		{
 			return parent::render($request, $e);

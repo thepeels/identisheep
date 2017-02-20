@@ -50,6 +50,7 @@ class FileHandler
         $i = 0;
         $tag_list = [];
         foreach ($this->ewelist as $ewe) {
+            //dd($ewe);
             $tag = new TagNumber($ewe);
             if ($tag->getSerialNumber() != 0) {
                 $i++;
