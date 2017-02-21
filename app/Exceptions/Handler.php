@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\SessionInterface;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler {
 
@@ -31,16 +32,19 @@ class Handler extends ExceptionHandler {
 		return parent::report($e);
 	}
 
-	/**
-	 * Render an exception into an HTTP response.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Exception  $e
-	 * @return \Illuminate\Http\Response
-	 */
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $e
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     */
 	public function render($request, Exception $e)
 	{
-		if ($this->isHttpException($e))
+
+        if($e instanceof NotFoundHttpException)
+        {
+            return Redirect::to('home');
+        }
+        if ($this->isHttpException($e))
 		{
 			return $this->renderHttpException($e);
 		}
@@ -51,10 +55,10 @@ class Handler extends ExceptionHandler {
 
             return Redirect::back()->withInput();
         }
-		else
-		{
-			return parent::render($request, $e);
-		}
-	}
+        else
+        {
+            return parent::render($request, $e);
+        }
+    }
 
 }
