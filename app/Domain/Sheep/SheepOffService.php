@@ -42,14 +42,17 @@ class SheepOffService
      * @param $owner
      * @param $colour_of_tag
      */
-    public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex, $owner, $colour_of_tag = "")
+    public function recordMovement(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, Sex $sex,
+                                   $owner, $colour_of_tag = "")
     {
         $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         if($sheep_exists) {
+
             $ewe = $this->sheepOffAction($tagNumber, $dateOfMovement, $destination, $owner);
         }
         if(!$sheep_exists) {
-            $this->isNewSheepOffAction($tagNumber, $sex, $colour_of_tag, $ewe);
+
+            $ewe = $this->isNewSheepOffAction($tagNumber, $dateOfMovement, $sex, $colour_of_tag, $destination, $owner);
         }
         $ewe->save();
     }
@@ -58,10 +61,14 @@ class SheepOffService
      * @param \App\Domain\Sheep\TagNumber $tagNumber
      * @param \App\Domain\Sheep\Sex $sex
      * @param $colour_of_tag
-     * @param \App\Models\Sheep $ewe
+     * @param \DateTime $dateOfMovement
+     * @param $destination
+     * @param $owner
+     * @return Sheep
      */
-    private function isNewSheepOffAction(TagNumber $tagNumber, Sex $sex, $colour_of_tag, $ewe)
+    private function isNewSheepOffAction(TagNumber $tagNumber, $dateOfMovement, Sex $sex, $colour_of_tag, $destination, $owner)
     {
+        $ewe = new Sheep;
         $ewe->setCountryCode($tagNumber->getCountryCode());
         $ewe->setOriginalFlockNumber($tagNumber->getFlockNumber());
         $ewe->setOriginalSerialNumber($tagNumber->getSerialNumber());
@@ -71,14 +78,20 @@ class SheepOffService
         $ewe->setSupplementarySerialNumber($tagNumber->getSerialNumber());
         $ewe->setTagColour($colour_of_tag);
         $ewe->setSex($sex);
+        $ewe->setDestination($destination);
+        $ewe->setOwner($owner);
+        $ewe->setAlive(FALSE);
+        $ewe->setMoveOff($dateOfMovement->format('Y-m-d'));
+        return $ewe;
     }
 
     /**
      * @param \App\Domain\Sheep\TagNumber $tagNumber
      * @param \DateTime $dateOfMovement
+     * @param \DateTime $dateOfMovement
      * @param $destination
      * @param $owner
-     * @return static
+     * @return Sheep
      */
     private function sheepOffAction(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, $owner)
     {
