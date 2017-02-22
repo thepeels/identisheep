@@ -42,6 +42,9 @@ class Handler extends ExceptionHandler {
 
         if($e instanceof NotFoundHttpException)
         {
+            Session::flash('alert-class','alert-danger');
+            Session::flash('message','Error - the page you are looking for does not exist.');
+
             return Redirect::to('home');
         }
         if ($this->isHttpException($e))

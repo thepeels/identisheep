@@ -67,7 +67,10 @@ class Help extends Model {
             Change the date range to filter results to perhaps only the last 12 months.</p>'],
         'singleoff' => ['Single Batch Tags','<p>Here record the application of singleton EID batch tags to slaughter.<br> 
             Use the correct date and the list will then correspond with your movement records.</p><p>These should normally be
-            your home flock number, change this if not.</p>']
+            your home flock number, change this if not.</p>'],
+        'replace-a-tag' => ['Tag Replacement','<p>In this context a New sheep is one which has not been entered into the database 
+            yet, <br> this can be done here automatically at the same time as entering the new and old tag numbers.</p>'],
+
     ];
 
 
