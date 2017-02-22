@@ -49,7 +49,8 @@ class TagReplacementService
                     Session::flash('message', 'Sheep UK0 ' . $tagNumber->getFlockNumber() . ' '
                         . $tagNumber->getSerialNumber() . ' updated.');
                 } else {
-                    Session::flash('message','Tags Input Error - no Action.');
+                    Session::flash('alert-class','alert-danger');
+                    Session::flash('message','Tags Input Error - no Action. Did you enter the new numbers in the old numbers box?');
                 }
             } else { // original fields are blank....
                 if(!$original_check) { //new tag numbers are not present as originals

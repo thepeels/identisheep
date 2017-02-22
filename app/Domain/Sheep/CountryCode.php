@@ -11,9 +11,9 @@ namespace App\Domain\Sheep;
 
 class CountryCode
 {
-    public function convert($code)
+    public function convert($country_id)
     {
-        $code = $this->codes[$code];
+        $code = $this->codes[$country_id];
         return $code;
     }
 

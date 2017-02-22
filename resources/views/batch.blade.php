@@ -26,6 +26,7 @@
 
         @if($home_bred == 'false')
             {!!Form::label('text','UK 0 ')!!}
+                {{--Form::input('text','country_code',NULL,['class'=>'new_class input-xs','placeholder'=>'UK0','size' => '2'])--}}
             {!!Form::input('text','flock_number',NULL,['class'=>'new_class input-xs','placeholder'=>'EID Flock Number'])!!}<br>
             {!!$errors->first('flock_number','<small style="color:#f00">:message</small>')!!}<br>
         @else

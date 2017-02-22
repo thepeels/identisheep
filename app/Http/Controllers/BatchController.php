@@ -220,7 +220,7 @@ class BatchController extends Controller {
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
         $colour_of_tag  = Input::get('colour_of_tag');
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
-        $country_code   = 'UK0';
+        $country_code   = Input::get('country_code')?:'UK0';
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -316,11 +316,12 @@ class BatchController extends Controller {
         $colour_of_tag  = Input::get('colour_of_tag');
         $destination    = Input::get('destination');
         $sex            = new Sex('Female');
+        $country_code   = Input::get('country_code')?:'UK0';
         if ($start_tag <= $end_tag){
             $i = $start_tag;
             $home_bred_count = 0;
             while ($i <= $end_tag){
-                $tagNumber = new TagNumber('UK0' . Input::get('flock_number') . sprintf('%05d',$i));
+                $tagNumber = new TagNumber($country_code . Input::get('flock_number') . sprintf('%05d',$i));
                 $sheep = new SheepOffService();
                 $sheep->recordMovement($tagNumber,$dateOfMovement,$destination,$sex,$owner,$colour_of_tag);
                 $home_bred_count ++;

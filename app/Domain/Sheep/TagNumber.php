@@ -45,9 +45,9 @@ class TagNumber
                 $this->serialNumber = (int)substr($tagNumberString, 9, 5);
                 break;
             case (preg_match("/^[0-9]{3}[0-7]{1}[0-9]{11}$/", $tagNumberString) == 1) :
-                $code = substr($tagNumberString, 0, 3);
-                $decode = new CountryCode();
-                $this->countryCode = $decode->convert($code);
+                $country_id = substr($tagNumberString, 0, 3);
+                $code = new CountryCode();
+                $this->countryCode = $code->convert($country_id);
                 $this->replacedCode = substr($tagNumberString, 3, 1);
                 $this->flockNumber = (int)substr($tagNumberString, 4, 6);
                 $this->serialNumber = (int)substr($tagNumberString, 10, 5);
