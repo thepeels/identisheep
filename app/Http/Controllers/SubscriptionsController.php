@@ -51,7 +51,7 @@ class SubscriptionsController extends Controller
     {
         $owner = $this->owner();
         $subscribed = $owner->subscribed('Annual');
-        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addDays(3)->toFormattedDateString('d M Y');
+        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addYears(1)->toFormattedDateString('d M Y');
         if(!$subscribed){
             /**ToDo: flash a message no subscription and/or you have already cancelled. perhaps this route is not possible
             * unless browser open through expiry time
@@ -119,8 +119,8 @@ class SubscriptionsController extends Controller
     public function getInvoice(Request $request)
     {
         $owner = $this->owner();
-        $test = new EmailService($owner->email);
-        $test->sendInvoiceByEmail();
+        //$test = new EmailService($owner->email); //don't know how to do this
+        //$test->sendInvoiceByEmail();
         $invoices = $owner->invoicesIncludingPending();
         //$invoiceId = $invoice[0]->id;
         //return $owner->downloadInvoice($invoiceId ,[

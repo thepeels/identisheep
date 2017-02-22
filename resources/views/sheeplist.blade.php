@@ -43,7 +43,7 @@
         <table class="table table-striped table-bordered table-sm table-condensed print" >
             <thead>
             <tr>
-                <th class="no-print">local</th>
+                <th class="no-print">Ref</th>
                 <th>Tag Number</th>
                 <th>Original Tags</th>
                 <th class="no-print">Old Tags</th>
