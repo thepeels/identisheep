@@ -3,6 +3,7 @@
 use App\Domain\FileHandling\ExcelHandler;
 use App\Domain\FileHandling\FileHandler;
 use App\Domain\Sheep\SheepOffService;
+use App\Domain\Sheep\SheepOnService;
 use App\Domain\Sheep\TagNumber;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,13 +26,16 @@ class BatchController extends Controller {
 
     /**
      * BatchController constructor.
-     *
-     * Filtered by Auth() before usage.
+     * filtered by Auth
      */
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('subscribed');
     }
+
+    /**
+     * @return mixed
+     */
     public static function user(){
         return Auth::user()->id;
     }
@@ -42,6 +46,12 @@ class BatchController extends Controller {
             'subtitle' => '- Sheep Off Holding'
         ]);
     }
+
+    /**
+     * post a batch movement OFF with a .csv or .xls file
+     * @param Request $request
+     * @return mixed
+     */
     public function  postCsvload(Request $request)
     {
         $rules1 = Sheep::$rules['dates'];
@@ -111,6 +121,12 @@ class BatchController extends Controller {
             'subtitle' => '- Sheep Onto Holding'
         ]);
     }
+
+    /**
+     * post a batch movement ON with a .csv or .xls file
+     * @param Request $request
+     * @return mixed
+     */
     public function  postCsvloadon(Request $request)
     {
         $rules = Sheep::$rules['dates'];
@@ -183,12 +199,11 @@ class BatchController extends Controller {
         Session::flash('message', $added .' Tags processed, Sheep Added.');
         return Redirect::to('batch/batchopson');
     }
+
     /**
-     * Load Batch entry form
-     *
-     * @param none
-     *
-     * @return view
+     * Show home bred batch entry form
+     * @param $home_bred
+     * @return mixed
      */
     public function getBatch($home_bred)
     {
@@ -201,9 +216,8 @@ class BatchController extends Controller {
     }
 
     /**
-     * Post batch entry
-     *
-     *
+     * Post batch entry ON
+     * @return mixed
      */
     public function postBatch()
     {
@@ -221,6 +235,7 @@ class BatchController extends Controller {
         $colour_of_tag  = Input::get('colour_of_tag');
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $country_code   = Input::get('country_code')?:'UK0';
+        $sex            = new Sex(Input::get('sex')?:'female');
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -234,24 +249,9 @@ class BatchController extends Controller {
                         $local_id ++;
                         $home_bred_count ++;
                         $added ++;
-
-                        $ewe = new Sheep();
-
-                        $ewe->setLocalId($local_id);
-                        $ewe->setOwner($owner);
-                        $ewe->setCountryCode($country_code);
-                        $ewe->setFlockNumber($flock_number);
-                        $ewe->setOriginalFlockNumber($flock_number);
-                        $ewe->setSupplementaryTagFlockNumber($flock_number);
-                        $ewe->setSerialNumber($i);
-                        $ewe->setOriginalSerialNumber($i);
-                        $ewe->setSupplementarySerialNumber($i);
-                        $ewe->setMoveOn($move_on);
-                        $ewe->setTagColour($colour_of_tag);
-                        $ewe->setSex('female');
-
-                        $ewe->save();
-
+                        $tag = new Tagnumber($country_code . $flock_number . sprintf('%05d',$i));
+                        $sheep = new SheepOnService();
+                        $sheep->movementOn($tag, $move_on, $colour_of_tag, $sex, $owner, $local_id);
                     }
                 }
                 $i++;
@@ -293,10 +293,10 @@ class BatchController extends Controller {
             'home_bred'=>$home_bred
         ]);
     }
+
     /**
      * Post batch entry
-     *
-     *
+     * @return mixed
      */
     public function postBatchoff()
     {
@@ -348,12 +348,10 @@ class BatchController extends Controller {
                 'colour_of_tag' =>$colour_of_tag
             ]);
     }
+
     /**
      * Load Batch entry form
-     *
-     * @param none
-     *
-     * @return view
+     * @return mixed
      */
     public function getSingleoff()
     {
@@ -362,10 +360,10 @@ class BatchController extends Controller {
             'title' => 'Enter Movement to Slaughter'
         ]);
     }
+
     /**
-     * Post batch entry
-     *
-     *
+     * Post batch tag entry
+     * @return mixed
      */
     public function postSingleoff()
     {
@@ -400,6 +398,9 @@ class BatchController extends Controller {
             ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function getSinglelist()
     {
         $batches = Single::view($this->user());
@@ -410,6 +411,10 @@ class BatchController extends Controller {
             'title' => 'Batch tag Applications'
         ]);
     }
+
+    /**
+     * @return mixed
+     */
     public function getHomebredlist()
     {
         $count  = Homebred::howmany($this->user());

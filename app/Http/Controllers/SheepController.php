@@ -358,13 +358,10 @@ class SheepController extends Controller
             $count = 1;
             $sheep_service = new SheepOnService();
             $sheep_service->movementOn($tagNumber, $move_on, $colour_of_tag, $sex, $owner, $local_index);
-            $ewe = new Sheep();
 
             if ($home_bred != FALSE) {
-                $home_bred_number = new TagNumber('UK0' . $home_bred . Input::get('e_tag'));
-                $count = 1;
-                $tag = new SheepOnService();
-                $tag->homeBredOn($home_bred_number, $move_on, $count, $owner);
+                $home_bred_number = $tagNumber;
+                $sheep_service->homeBredOn($home_bred_number, $move_on, $count, $owner);
             }
         }
         if ($count != 1) {

@@ -46,9 +46,11 @@ class SheepOnService
         $ewe->setTagColour($colour_of_tag);
         $ewe->setSex($sex);
         $ewe->save();
+
     }
 
     /**
+     * Home bred addition for postAddEwe() in SheepController
      * @param \App\Domain\Sheep\TagNumber $tagNumber
      * @param \DateTime $move_on
      * @param int $count
@@ -56,7 +58,7 @@ class SheepOnService
      */
     public function homeBredOn(TagNumber $tagNumber, \DateTime $move_on, $count, $owner)
     {
-        $ewe = new HomeBred();
+        $ewe = new Homebred();
         $ewe->setFlockNumber($tagNumber->getFlockNumber());
         $ewe->setCount($count);
         $ewe->setUserId($owner);
