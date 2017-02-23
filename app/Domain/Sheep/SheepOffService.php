@@ -29,7 +29,7 @@ class SheepOffService
         $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         $ewe = $this->sheepOffAction($tagNumber, $dateOfDeath, 'died' . $reasonForDeath, $owner);
         if(!$sheep_exists){
-            $this->isNewSheepOffAction($tagNumber, $sex, $colour_of_tag, $ewe);
+            $this->isNewSheepOffAction($tagNumber, $dateOfDeath, $sex, $colour_of_tag, 'died' . $reasonForDeath, $owner);
         }
         $ewe->save();
     }
