@@ -40,7 +40,7 @@
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/ewes/screen">Ewes</a></li>
 							<li><a href="/sheep/tups/screen">Tups</a></li>
-							<li><a href="/sheep/noneid/screen">Non-EID</a></li>
+							{{--<li><a href="/sheep/noneid/screen">Non-EID</a></li>--}}
 							<li><a href="/sheep/replaced/screen">Replaced Tags</a></li>
 							<li><a href="/batch/singlelist">Single Batch Tags Used</a></li>
 							<li><a href="/batch/homebredlist">Home Bred Tags</a></li>
@@ -86,7 +86,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Custom Dates<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/date-setter" target="_blank">Select Date Range</a></li>
-							<!--<li><a href="/sheep/ewes-list-by-date/screen">Ewes by Date Range</a></li>-->
+							{{--<li><a href="/sheep/ewes-list-by-date/screen">Ewes by Date Range</a></li>--}}
 							<li><a href="/list/customisation">Create Customise Lists</a></li>
 						</ul>
 					</li>
