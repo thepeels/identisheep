@@ -100,7 +100,6 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::offList($this->user());
         }
-        //dd($ewes->total());
 
         return view('sheeplist')->with([
             'ewes' => $ewes,
@@ -115,7 +114,6 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::dead($this->user());
         }
-        //$ewes = Sheep::dead($this->user());
 
         return view('sheeplist')->with([
             'ewes' => $ewes,
@@ -243,8 +241,6 @@ class SheepController extends Controller
         $serial_number = Input::get('e_tag');
         /**@var $ewe Sheep */
         $ewe = $this->getByEarNumbers($flock_number, $serial_number);
-        //$ewe = Sheep::getByEarNumbers($flock_number,$serial_number);
-        //above as 'Sheep::getByEarNumbers()'returns empty model instead of NULL ???
         if ($ewe == NULL) {
             Session::put('find_error', 'Sheep not found, check numbers and re-try.');
             return Redirect::to('sheep/seek')->withInput();
@@ -259,7 +255,6 @@ class SheepController extends Controller
                 'colour_flock' => $ewe->getSupplementaryTagFlockNumber(),
             ]);
         }
-        //**@var $ewe Sheep*/
         if (Input::get('view')) {
             return View::make('sheepview')->with([
                 'id' => $ewe->getId(),

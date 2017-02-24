@@ -1,4 +1,10 @@
 .no-print{display:none;}
-table.print{font-size:10px;cell-padding:0px}
+table.print{font-size:8pt;line-height: 8pt; cell-padding:0px}
 h4.print{margin-top:100px}
 .no-screen{display:unset;}
+.table-condensed tr td {
+    padding: 0px;
+}
+/*@media print{
+    .no-screen{display:inline-block;}
+}*/
