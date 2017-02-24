@@ -32,9 +32,9 @@
                 @if($elements[sizeof($elements)-1]!='print')
                     {!! $ewes->render() !!}<br>
                     <a href="../../{{$print}}"
-                       class="btn btn-default btn-xs"
+                       class="btn btn-info btn-inverse btn-xs"
                        style="margin-bottom:-1px;"
-                       title="printable version of whole list">Printable Version
+                       title="printable version of whole list">Printable Version - All rows on one page
                     </a>
                 @endif
             </div>
@@ -56,12 +56,15 @@
                 @else
                     <th>Date of last changes</th>
                 @endif
+                {{--<th class="no-screen">Row No.</th>--}}
             </tr>
             </thead>
             <tbody>
+            <?$row_no = 0;?>
             @foreach ($ewes as $ewe)
                 <?$date_on = (date('Y',strtotime($ewe->move_on))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_on)));
-                $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_off)));?>
+                $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_off)));
+                $row_no++;?>
                 <tr>
                     <td class="no-print">
                         {{$ewe->local_id}}
@@ -104,6 +107,7 @@
                         </td>
                     
                     @endif
+                    {{--<td class="no-screen">{{$row_no}}</td>--}}
                 </tr>
             
             @endforeach
