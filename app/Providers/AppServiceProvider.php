@@ -6,9 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Requests\Request;
+use Illuminate\Support\Facades\Request;
 use Laravel\Cashier\Cashier;
-use \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider {
 			'App\Services\Registrar'
 		);
         if ($this->app->environment() == ('local')) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
 	}
 
