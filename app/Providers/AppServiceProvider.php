@@ -6,8 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Request;
+use App\Http\Requests\Request;
 use Laravel\Cashier\Cashier;
+use \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
 
