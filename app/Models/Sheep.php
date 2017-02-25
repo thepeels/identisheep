@@ -10,7 +10,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Redirect,Auth,Collection;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -126,7 +128,8 @@ class Sheep extends Model
         'colour_tag_1',
         'colour_tag_2',
         'sex',
-        'tag_colour'
+        'tag_colour',
+        'deleted_at'
     ];
     protected $dates = ['deleted_at'];
 
@@ -426,6 +429,22 @@ class Sheep extends Model
         return $this->attributes['country_code'];
     }
 
+    /**
+     * @param \DateTime $deleted_at
+     */
+    public function setDeletedAt($deleted_at)
+    {
+        $this->attributes['deleted_at'] = $deleted_at;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->attributes['deleted_at'];
+    }
+
     
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -665,9 +684,12 @@ class Sheep extends Model
     }
     public function scopeRemoveOld($query,$id,$date)
     {
-        return $query->where('owner',$id)
-            ->where('move_on','<=',$date)
-            ->delete();
+        $query = Sheep::where('owner',$id)->where('move_on','<=',$date)->get();
+        foreach($query as $sheep) {
+            //$sheep->setDeletedAt(Carbon::now());
+            //$sheep->save();
+            $sheep->delete();
+        }
     }
     private function dateRange()
     {
