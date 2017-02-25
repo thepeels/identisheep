@@ -41,9 +41,8 @@ class SheepController extends Controller
     }
     /**todo: secondary tag needs to be complete in editing options or probably excluded */
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * Index
+     * @return mixed
      */
     public function getIndex()
     {
@@ -51,6 +50,7 @@ class SheepController extends Controller
     }
 
     /**
+     * User
      * @return mixed
      */
     private static function user()
@@ -59,6 +59,7 @@ class SheepController extends Controller
     }
 
     /**
+     * Owner
      * @return mixed
      */
     private static function owner()
@@ -66,6 +67,11 @@ class SheepController extends Controller
         return Auth::user()->id;
     }
 
+    /**
+     * get Ewes
+     * @param string $print
+     * @return mixed
+     */
     public function getEwes($print = 'screen')
     {
         if ($print == 'print') {
@@ -80,6 +86,11 @@ class SheepController extends Controller
         ]);
     }
 
+    /**
+     * get Tups
+     * @param string $print
+     * @return mixed
+     */
     public function getTups($print = 'screen')
     {
         if ($print == 'print') {
@@ -93,6 +104,11 @@ class SheepController extends Controller
         ]);
     }
 
+    /**
+     * get Off List
+     * @param $print
+     * @return mixed
+     */
     public function getOfflist($print)
     {
         if ($print == 'print') {
@@ -107,6 +123,11 @@ class SheepController extends Controller
         ]);
     }
 
+    /**
+     * get Dead List
+     * @param $print
+     * @return mixed
+     */
     public function getDeadlist($print)
     {
         if ($print == 'print') {
@@ -122,9 +143,8 @@ class SheepController extends Controller
     }
 
     /**
-     * Show the form for deleting records.
-     *
-     * @return Response
+     * show Form for delete Old records
+     * @return mixed
      */
     public function getDelete()
     {
@@ -137,6 +157,10 @@ class SheepController extends Controller
         ]);
     }
 
+    /**
+     * Delete Old Records
+     * @return mixed
+     */
     public function postDelete()
     {
         $rules = Sheep::$rules['old_dates'];
@@ -147,16 +171,19 @@ class SheepController extends Controller
         $year = Input::get('year');
         $date = Carbon::create($year, 11, 30, 23, 59, 59, 'UTC');
         $date = $date->toDateTimeString();
+        /*$to_delete = Sheep::where('owner',$this->user())->where('move_on','<=',$date)->get();
+        foreach($to_delete as $sheep) {
+            $sheep->setDeletedAt(Carbon::now());
+            $sheep->save();
+        }*/
         Sheep::removeOld($this->user(), $date);
 
         return Redirect::to('sheep/ewes/screen');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  none
-     * @return Response
+     * post Change Tags
+     * @return mixed
      */
     public function postChangetags()
     {
@@ -211,6 +238,7 @@ class SheepController extends Controller
     }
 
     /**
+     * possible Complete edit facility - Admin only?
      * @param $flock_old
      * @param $flock_new
      * @return mixed
@@ -228,6 +256,7 @@ class SheepController extends Controller
     }
 
     /**
+     * Seek by Full Tag number
      * @return mixed
      */
     public function postSeek()
