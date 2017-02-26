@@ -4,6 +4,7 @@ use App\Domain\DomainException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\SessionInterface;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -42,15 +43,23 @@ class Handler extends ExceptionHandler {
 
         if($e instanceof NotFoundHttpException)
         {
-            Session::flash('alert-class','alert-danger');
+            Session::flash('alert-class','alert-danger alert-narrower');
             Session::flash('message','Error - the page you are looking for does not exist.');
 
             return Redirect::to('home');
         }
+
+        if($e instanceof TokenMismatchException){
+            Session::flash('message','Your session timed out, please login again.');
+
+            return Redirect::to('home');
+        }
+
         if ($this->isHttpException($e))
 		{
 			return $this->renderHttpException($e);
 		}
+
         if($e instanceof DomainException)
         {
             Session::flash('alert-class','alert-danger');
@@ -58,6 +67,7 @@ class Handler extends ExceptionHandler {
 
             return Redirect::back()->withInput();
         }
+
         else
         {
             return parent::render($request, $e);

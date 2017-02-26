@@ -67,7 +67,7 @@
                     <td>
                         {{date('Y-m-d',strtotime($ewe->updated_at))}}
                     </td>
-                </tr>env('BASE_DATE')
+                </tr>
 
             </tbody>
         </table>

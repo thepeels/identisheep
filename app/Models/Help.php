@@ -70,7 +70,10 @@ class Help extends Model {
             your home flock number, change this if not.</p>'],
         'replace-a-tag' => ['Tag Replacement','<p>In this context a New sheep is one which has not been entered into the database 
             yet, <br> this can be done here automatically at the same time as entering the new and old tag numbers.</p>'],
-
+        'ewes' => ['Ewes','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
+        'tups' => ['Tups','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
+        'offlist' => ['Sheep Off','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
+        'deadlist' => ['Deaths','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
     ];
 
 
