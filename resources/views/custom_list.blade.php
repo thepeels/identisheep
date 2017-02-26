@@ -34,8 +34,8 @@
         <tbody>
         
         @foreach ($list as $ewe)
-            <?$date_on = (date('Y',strtotime($ewe->move_on))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_on)));
-            $date_off = (date('Y',strtotime($ewe->move_off))==env('BASE_DATE')?"":date('d-M-Y',strtotime($ewe->move_off)));?>
+            <?$date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_on)));
+            $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_off)));?>
             <tr>
                 <td class="no-print">
                     {{$ewe->local_id}}
