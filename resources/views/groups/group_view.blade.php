@@ -30,8 +30,8 @@
             </thead>
             @foreach($group->sheep as $member)
                 <?$counter++;?>
-                <?$date_on = (date('Y',strtotime($member->getMoveOn()))==env('BASE_DATE')?"":date('d-M-Y',strtotime($member->getMoveOn())));
-                $date_off = (date('Y',strtotime($member->getMoveOff()))==env('BASE_DATE')?"":date('d-M-Y',strtotime($member->getMoveOff())));?>
+                <?$date_on = (date('Y',strtotime($member->getMoveOn()))==config('app.base_date')?"":date('d-M-Y',strtotime($member->getMoveOn())));
+                $date_off = (date('Y',strtotime($member->getMoveOff()))==config('app.base_date')?"":date('d-M-Y',strtotime($member->getMoveOff())));?>
                 <tr>
                     <td>{!! $member->getLocalId() !!}</td>
                     <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
