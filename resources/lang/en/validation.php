@@ -118,7 +118,8 @@ return [
         'destination'   =>  'Destination',
         'tag'           =>  'Serial Number',
         'original_flock'=>  'Original Flock Number',
-        'original_tag'  =>  'Original Tag Number'
+        'original_tag'  =>  'Original Tag Number',
+        'file_raw'      =>  'File Name'
 
     ],
 

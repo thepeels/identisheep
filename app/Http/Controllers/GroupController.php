@@ -77,6 +77,11 @@ class GroupController extends Controller
      */
     public function postAdd(Request $request)
     {
+        $rules = Group::$rules['post_add'];
+        $validation = Validator::make($request->all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
         $group = $this->loadGroup($request);
 
         $csv_file = $request->csv_file;

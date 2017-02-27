@@ -56,7 +56,8 @@ class BatchController extends Controller {
     {
         $rules1 = Sheep::$rules['dates'];
         $rules2 = Sheep::$rules['where_to'];
-        $validation = Validator::make(Input::all(), $rules1 + $rules2);
+        $rules3 = Sheep::$rules['file_raw'];
+        $validation = Validator::make($request->all(), $rules1 + $rules2 + $rules3);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
@@ -129,8 +130,9 @@ class BatchController extends Controller {
      */
     public function  postCsvloadon(Request $request)
     {
-        $rules = Sheep::$rules['dates'];
-        $validation = Validator::make(Input::all(), $rules);
+        $rules1 = Sheep::$rules['dates'];
+        $rules3 = Sheep::$rules['file_raw'];
+        $validation = Validator::make(Input::all(), $rules1 + $rules3);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }

@@ -15,6 +15,8 @@ return [
 
 	'debug' => env('APP_DEBUG'),
     'base_date' => env('BASE_DATE'),
+    'stripe_key'=> env('STRIPE_KEY'),
+    'stripe_secret' => env('STRIPE_SECRET'),
 
 	/*
 	|--------------------------------------------------------------------------

@@ -57,6 +57,9 @@ class Help extends Model {
             records up to the end of a year.<br>The default year is ten years ago, but this can be changed if you wish.</p>'],
         'death'     =>  ['Recording a death','<p>This action removes a sheep from the \'Sheep\' lists, 
             but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number</p>'],
+        'deathsearch'     =>  ['Recording a death','<p>This action removes the selected sheep from the \'Sheep\' lists, 
+            but pushes it into the \'Off\' lists.<br>  It can still be found by searching for the Tag serial number.<br>
+            Change the date if you don\'t want to use today\'s date.</p>'],
         'date-setter'     =>  ['Setting custom dates','<p>Setting a date range will filter the results shown in the ready made lists -   
             those under the \'Sheep Lists\' and \'Off Lists\' menu items. <br> This can be useful to narrow the field when looking for a
             tag or when preparing a list for printing.<br> 
@@ -74,6 +77,8 @@ class Help extends Model {
         'tups' => ['Tups','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
         'offlist' => ['Sheep Off','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
         'deadlist' => ['Deaths','<p>If Numbers appear to be missing here check you Date Range selection - (Under your Name, menu right hand side).</p>'],
+        'edit' => ['Changing Tags','<p>Clearly this page is for changing tags on a sheep, where you know its previous identity, and
+            are giving it new tags.</p>'],
     ];
 
 
