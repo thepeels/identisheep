@@ -125,4 +125,13 @@ class Group extends Model
     {
         return $this->belongsTo('app\User');
     }
+    /**
+     * @var array
+     */
+    public static $rules = [
+        'post_add' => [
+            'group'     => 'required',
+            'csv_file'  => 'required',
+        ]
+    ];
 }

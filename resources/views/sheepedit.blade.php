@@ -9,7 +9,7 @@
 ?>
 @extends('app')
 @section('title')
-    <title>{!! $title !!}'Here'</title>
+    <title>{!! $title !!}</title>
 @stop
 @section('content')
 <div style="width:60%;margin-left:20%;">

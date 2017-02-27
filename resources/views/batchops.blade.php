@@ -30,6 +30,7 @@
             {!!$errors->first('destination','<small style="color:#f00">:message</small>')!!}<br>
             {!! Form::label('name','Select .csv file') !!}
             {!! Form::file('file_raw',old('file_raw')) !!}
+            {!!$errors->first('file_raw','<small style="color:#f00">:message</small>')!!}<br>
         </div>
         <div class="form-group">
             {!! Form::submit('Check',['name'=>'check','class' => 'btn btn-primary']) !!}
