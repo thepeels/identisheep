@@ -26,7 +26,7 @@
             @foreach($tag_list as $tag)
                 <tr>
                     <td>{{$tag[0]}}</td>
-                    <td>{{$tag[1]}}</td>
+                    <td>{{$tag[1]}} {{$tag[2]}}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -55,7 +55,8 @@ class FileHandler
             if ($tag->getSerialNumber() != 0) {
                 $i++;
                 $tag_list[$i][0] = $i;
-                $tag_list[$i][1] = $tag->getShortTagNumber();
+                $tag_list[$i][1] = $tag->getCountryCode();
+                $tag_list[$i][2] = $tag->getShortTagNumber();
             }
         }
         return $tag_list;

@@ -34,7 +34,7 @@
                 $date_off = (date('Y',strtotime($member->getMoveOff()))==config('app.base_date')?"":date('d-M-Y',strtotime($member->getMoveOff())));?>
                 <tr>
                     <td>{!! $member->getLocalId() !!}</td>
-                    <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
+                    <td>{!! $member->getCountryCode() !!} {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
                     <td>{!! $date_on !!}</td>
                     <td>{!! $date_off !!}</td>

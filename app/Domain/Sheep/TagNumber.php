@@ -34,8 +34,9 @@ class TagNumber
      */
     public function __construct($tagNumberString)
     {
-        //dd($tagNumberString);
         $tagNumberString = $this->typoCorrections($tagNumberString);
+
+        //dd($tagNumberString);
 
         switch (true) {
             case (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 1):
@@ -44,15 +45,15 @@ class TagNumber
                 $this->flockNumber = (int)substr($tagNumberString, 3, 6);
                 $this->serialNumber = (int)substr($tagNumberString, 9, 5);
                 break;
-            case (preg_match("/^[0-9]{3}[0-7]{1}[0-9]{11}$/", $tagNumberString) == 1) :
-                $country_id = substr($tagNumberString, 0, 3);
-                $code = new CountryCode();
+            case (preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 1) :
+                $country_id = mb_substr($tagNumberString, 1, 3);
+                $code = new CountryCode($country_id);
                 $this->countryCode = $code->convert($country_id);
                 $this->replacedCode = substr($tagNumberString, 3, 1);
-                $this->flockNumber = (int)substr($tagNumberString, 4, 6);
-                $this->serialNumber = (int)substr($tagNumberString, 10, 5);
+                $this->flockNumber = mb_substr($tagNumberString, 5, 6);
+                $this->serialNumber = mb_substr($tagNumberString, 11, 5);
                 break;
-            case ((preg_match("/^[0-9]{3}[0-7]{1}[0-9]{11}$/", $tagNumberString) == 0) &&
+            case ((preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 0) &&
                 (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 0)) :
                 throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. 
                 e.g. UK012345600001 or all digits with 3 digit country code e.g. 826 012345600001
@@ -111,10 +112,14 @@ class TagNumber
      */
     public function typoCorrections($tagNumberString)
     {
-        $tagNumberString = preg_replace('/\s/', '', strtoupper($tagNumberString));
+        $tagNumberString = preg_replace('/\s+/', '',$tagNumberString);
+        $tagNumberString = mb_strtoupper($tagNumberString);
         $tagNumberString = str_replace(array(",\r\n", "\r\n", "\n\r", ",\n\r", ",\n", ",\r", ", ", ",¶"), "", $tagNumberString);
+        /** if too international will need to split off country code section first*/
         $tagNumberString = str_replace(array("L", "I"), "1", $tagNumberString);
+        $tagNumberString = str_replace(array("A", "S"), ["4","5"], $tagNumberString);
         $tagNumberString = str_replace(array("O"), "0", $tagNumberString);
+        /** ***********/
         return $tagNumberString;
     }
 }
