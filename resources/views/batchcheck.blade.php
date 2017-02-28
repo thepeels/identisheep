@@ -14,7 +14,7 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <h4>{{$title}}</h4>
-        <h5>{{$heading}}</h5>
+        <h5>{{$heading}} {{$source}}</h5>
         <table class="table table-striped table-bordered table-sm table-condensed print narrow" >
             <thead>
                 <tr>
