@@ -368,20 +368,21 @@ class SheepController extends Controller
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
         $owner = $this->user();
-        $home_bred = Input::get('home_bred');
-        $colour_of_tag = Input::get('colour_of_tag');
-        $sex = new Sex(Input::get('sex'));
-        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . sprintf('%05d',Input::get('e_tag')));
-        $move_on = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $local_index = DB::table('sheep')->where('owner', $owner)->max('local_id');
-        $count = 0;
-        $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
+        $home_bred      = Input::get('home_bred');
+        $colour_of_tag  = Input::get('colour_of_tag');
+        $sex            = new Sex(Input::get('sex'));
+        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . sprintf('%05d',Input::get('e_tag')));
+        $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $local_index    = DB::table('sheep')->where('owner', $owner)->max('local_id');
+        $count          = 0;
+        $source         = Input::get('source');
+        $sheep_exists   = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         //dd($sheep_exists);
         if (!$sheep_exists) {
             $local_index++;
             $count = 1;
             $sheep_service = new SheepOnService();
-            $sheep_service->movementOn($tagNumber, $move_on, $colour_of_tag, $sex, $owner, $local_index);
+            $sheep_service->movementOn($tagNumber, $move_on, $colour_of_tag, $sex, $owner, $local_index, $source);
 
             if ($home_bred != FALSE) {
                 $home_bred_number = $tagNumber;

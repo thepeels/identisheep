@@ -20,12 +20,13 @@ class SheepOnService
     /**
      * @param TagNumber $tagNumber
      * @param \DateTime $move_on
-     * @param $colour_of_tag
+     * @param string $colour_of_tag
      * @param Sex $sex
-     * @param $owner
-     * @param $local_index
+     * @param int $owner
+     * @param int $local_index
+     * @param string $source
      */
-    public function movementOn(TagNumber $tagNumber, \DateTime $move_on, $colour_of_tag, Sex $sex, $owner, $local_index)
+    public function movementOn(TagNumber $tagNumber, \DateTime $move_on, $colour_of_tag, Sex $sex, $owner, $local_index, $source)
     {
         $ewe = Sheep::firstOrNew([
             'flock_number' => $tagNumber->getFlockNumber(),
@@ -45,6 +46,7 @@ class SheepOnService
         $ewe->setMoveOn($move_on);
         $ewe->setTagColour($colour_of_tag);
         $ewe->setSex($sex);
+        $ewe->setSource($source);
         $ewe->save();
 
     }

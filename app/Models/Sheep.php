@@ -68,6 +68,10 @@ class Sheep extends Model
     /**
      * @var string
      */
+    protected $source;
+    /**
+     * @var string
+     */
     protected $country_code;
     /**
      * @var int
@@ -117,6 +121,7 @@ class Sheep extends Model
         'alive',
         'move_off',
         'destination',
+        'source',
         'flock_number',
         'original_flock_number',
         'supplementary_tag_flock_number',
@@ -338,9 +343,26 @@ class Sheep extends Model
     /**
      * @param string $destination
      */public function setDestination($destination)
-{
-    $this->attributes['destination'] = $destination;
-}
+    {
+        $this->attributes['destination'] = $destination;
+    }
+
+    /**
+     * @param string $source
+     */
+    public function setSource($source)
+    {
+        $this->attributes['source'] = $source;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->attributes['source'];
+    }
+
     /**
      * @return string
      */

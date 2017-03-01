@@ -25,6 +25,10 @@
                 {!! $errors->first('month','<small style="color:#f00">:message</small>') !!}
                 {!! $errors->first('year','<small style="color:#f00">:message</small>') !!}<br>
     
+                {!! Form::label('text','Source Holding') !!}
+                {!! Form::input('text','source',old('source'),['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
+                {!! $errors->first('source','<small style="color:#f00">:message</small>') !!}<br>
+    
                 {!! Form::label('name','Select .csv file') !!}
                 {!! Form::file('file_raw') !!}<br>
                 {!! $errors->first('file_raw','<small style="color:#f00">:message</small>') !!}<br>

@@ -49,6 +49,7 @@
                 <th class="no-print">Old Tags</th>
                 <th class="no-print">Older Tags</th>
                 <th>Move on</th>
+                <th>Sourced from</th>
                 @if(in_array($elements[sizeof($elements)-2],$second_filter))
                     <th>Move Off</th>
                     <th>How moved off</th>
@@ -83,6 +84,9 @@
                     </td>
                     <td>
                         {{$date_on}}
+                    </td>
+                    <td>
+                        {{$ewe->source}}
                     </td>
                     @if(in_array($elements[sizeof($elements)-2],$second_filter))
                         <td class="move-off">

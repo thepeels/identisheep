@@ -64,6 +64,7 @@ class BatchController extends Controller {
         $destination    = Input::get('destination');
         $owner           = Auth::user()->id;
         $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
+        $source_or_destination = $destination;
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
         //dd($type);
@@ -75,6 +76,7 @@ class BatchController extends Controller {
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
                 'heading'       => $request->file_raw->getClientOriginalName(),
+                'source'        => $source_or_destination?'&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;Sheep to '.$source_or_destination:'',
                 'tag_list'      => $tag_list
             ]);
         }
@@ -142,6 +144,8 @@ class BatchController extends Controller {
         $y              = Input::get('year');
         $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
+        $source         = $request->source;
+        $source_or_destination = $source;
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
        //dd($type);
@@ -164,6 +168,7 @@ class BatchController extends Controller {
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
                 'heading'       => $request->file_raw->getClientOriginalName(),
+                'source'        => $source_or_destination?'&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;Sheep from '.$source_or_destination:'',
                 'tag_list'      => $tag_list
             ]);
         }
@@ -192,6 +197,7 @@ class BatchController extends Controller {
                         $ewe->setSerialNumber($tag->getSerialNumber());
                         $ewe->setOriginalSerialNumber($tag->getSerialNumber());
                         $ewe->setMoveOn($move_on);
+                        $ewe->setSource($source);
 
                         $ewe->save();
                     }
@@ -238,6 +244,7 @@ class BatchController extends Controller {
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $country_code   = Input::get('country_code')?:'UK0';
         $sex            = new Sex(Input::get('sex')?:'female');
+        $source         = Input::get('source')?:'';
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -253,7 +260,7 @@ class BatchController extends Controller {
                         $added ++;
                         $tag = new Tagnumber($country_code . $flock_number . sprintf('%05d',$i));
                         $sheep = new SheepOnService();
-                        $sheep->movementOn($tag, $move_on, $colour_of_tag, $sex, $owner, $local_id);
+                        $sheep->movementOn($tag, $move_on, $colour_of_tag, $sex, $owner, $local_id, $source);
                     }
                 }
                 $i++;

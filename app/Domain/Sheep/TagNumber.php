@@ -46,12 +46,12 @@ class TagNumber
                 $this->serialNumber = (int)substr($tagNumberString, 9, 5);
                 break;
             case (preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 1) :
-                $country_id = mb_substr($tagNumberString, 1, 3);
+                $country_id = mb_substr($tagNumberString, 0, 3);
                 $code = new CountryCode($country_id);
                 $this->countryCode = $code->convert($country_id);
                 $this->replacedCode = substr($tagNumberString, 3, 1);
-                $this->flockNumber = mb_substr($tagNumberString, 5, 6);
-                $this->serialNumber = mb_substr($tagNumberString, 11, 5);
+                $this->flockNumber = mb_substr($tagNumberString, 4, 6);
+                $this->serialNumber = mb_substr($tagNumberString, 10, 5);
                 break;
             case ((preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 0) &&
                 (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 0)) :

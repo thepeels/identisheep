@@ -30,11 +30,15 @@
 
         {!!Form::input('hidden','id',$id)!!}
         {!!Form::input('hidden','sex',$sex)!!}
-        {!!Form::input('hidden','home_bred',$home_bred)!!}<br>
+        {!!Form::input('hidden','home_bred',$home_bred)!!}
         @if($home_bred == FALSE)
-            {!!Form::label('text','Flock and Individual Number')!!}<br>
-            {!!Form::label('text','UK 0')!!}
-            {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
+                {!! Form::label('text','Source Holding') !!}
+                {!! Form::input('text','source',old('source'),['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
+                {!! $errors->first('source','<small style="color:#f00">:message</small>') !!}<br>
+            
+                {!!Form::label('text','Flock and Individual Number')!!}<br>
+                {!!Form::label('text','UK 0')!!}
+                {!!Form::input('text','e_flock',old('e_flock'),['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
             @else
                 {!!Form::label('text','UK 0 '.$home_bred,['class'=>'bolder'])!!}
                 {!!Form::input('hidden','e_flock',$home_bred,['class'=>'new_class input-xs','placeholder'=>'Flock Number'])!!}
@@ -43,7 +47,7 @@
             {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}{!!$errors->first('e_tag','<small style="color:#f00">:message</small>')!!}<br>
             {!!Form::label('text','Tag Colour')!!}<br>
             {!!Form::label('text','&nbsp;')!!}
-        {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}
+        {!!Form::input('text','colour_of_tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Colour'])!!}<br> <br>
 
         {!!Form::submit($title,['class'=>'btn btn-info btn-xs'])!!}
 
