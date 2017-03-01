@@ -244,6 +244,7 @@ class BatchController extends Controller {
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $country_code   = Input::get('country_code')?:'UK0';
         $sex            = new Sex(Input::get('sex')?:'female');
+        $source         = Input::get('source')?:'';
 
         if ($start_tag <= $end_tag){
             $i = $start_tag;
@@ -259,7 +260,7 @@ class BatchController extends Controller {
                         $added ++;
                         $tag = new Tagnumber($country_code . $flock_number . sprintf('%05d',$i));
                         $sheep = new SheepOnService();
-                        $sheep->movementOn($tag, $move_on, $colour_of_tag, $sex, $owner, $local_id);
+                        $sheep->movementOn($tag, $move_on, $colour_of_tag, $sex, $owner, $local_id, $source);
                     }
                 }
                 $i++;
