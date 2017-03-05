@@ -375,7 +375,10 @@ class SheepController extends Controller
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
         $local_index    = DB::table('sheep')->where('owner', $owner)->max('local_id');
         $count          = 0;
-        $source         = Input::get('source');
+        //dd($home_bred);
+        if($home_bred != ""){$source = 'Home-bred';} //$home_bred is boolean false => "" ??!
+        else{$source         = Input::get('source')?:'';}
+        //dd($source);
         $sheep_exists   = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
         //dd($sheep_exists);
         if (!$sheep_exists) {
