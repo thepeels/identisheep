@@ -148,7 +148,8 @@ class BatchController extends Controller {
         $source_or_destination = $source;
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
-       //dd($type);
+        //dd($request->file_raw->getClientOriginalName());
+
         if(stripos($type,'text' )!==False){
             $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
@@ -156,13 +157,15 @@ class BatchController extends Controller {
 
         }
 
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False || stripos($type,'vnd.ms-office' )!==False){//dd($type);
+        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False ||
+            stripos($type,'vnd.ms-office' )!==False || stripos($type,'vnd.openxml')!==False){//dd($type);
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
             //$some_thing = $process_file->excelFile();
 
         };
         $request->flash();
+        ($type);
         if(Input::get('check')) {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
@@ -244,8 +247,8 @@ class BatchController extends Controller {
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $country_code   = Input::get('country_code')?:'UK0';
         $sex            = new Sex(Input::get('sex')?:'female');
-        $source         = Input::get('source')?:'';
-
+        if($home_bred != 'false'){$source = 'Home-bred';} //$home_bred is a string!
+        else{$source         = Input::get('source')?:'';}
         if ($start_tag <= $end_tag){
             $i = $start_tag;
 
@@ -265,7 +268,7 @@ class BatchController extends Controller {
                 }
                 $i++;
             }
-            if($home_bred !== 'false'){
+            if($home_bred != 'false'){
                 $batch_of_tags = new Homebred();
                     $batch_of_tags->setFlockNumber($home_bred);
                     $batch_of_tags->setDateApplied($move_on);
@@ -316,7 +319,7 @@ class BatchController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
 
-        $owner        = Input::get('id');
+        $owner          = Input::get('id');
         $home_bred      = Input::get('home_bred');
         $flock_number   = Input::get('flock_number');
         $start_tag      = Input::get('start_tag');

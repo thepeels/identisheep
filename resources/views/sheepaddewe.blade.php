@@ -14,7 +14,7 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         @if($home_bred == 'false')
-        <?$home_bred = FALSE;?>
+        <?$home_bred = false;?>
             <h4>{!! $title !!}</h4>
         @else
             <h4>{!! $alt_title !!}</h4>
@@ -31,7 +31,7 @@
         {!!Form::input('hidden','id',$id)!!}
         {!!Form::input('hidden','sex',$sex)!!}
         {!!Form::input('hidden','home_bred',$home_bred)!!}
-        @if($home_bred == FALSE)
+        @if($home_bred == false)
                 {!! Form::label('text','Source Holding') !!}
                 {!! Form::input('text','source',old('source'),['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>
                 {!! $errors->first('source','<small style="color:#f00">:message</small>') !!}<br>

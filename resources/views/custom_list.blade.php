@@ -25,6 +25,7 @@
             <th>Tag Number</th>
             <th>Original Tags</th>
             <th>Move on</th>
+            <th>Source</th>
             <th>Move Off</th>
             <th>How moved off</th>
             <th>Sex</th>
@@ -49,11 +50,15 @@
                 <td>
                     {{$date_on}}
                 </td>
-                    <td class="move-off">
+                <td>
+                    {{$ewe->source}}
+                </td>
+    
+                <td class="move-off">
                         {{$date_off}}
                     </td>
                     <td>
-                        {{$ewe->destination}}
+                    {{$ewe->destination}}
                     </td>
                     <td>
                         {{$ewe->sex}}
