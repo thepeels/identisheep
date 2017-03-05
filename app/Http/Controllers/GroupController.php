@@ -144,7 +144,8 @@ class GroupController extends Controller
         if ($validation->fails()) {
             return $this->getSingleToGroup()->withErrors($validation->messages());
         }
-        $tag = new TagNumber('UK)' . $request->e_flock . sprintf('%05d',$request->e_tag));
+        //dd('UK0' . $request->e_flock . sprintf('%05d',$request->e_tag));
+        $tag = new TagNumber('UK0' . $request->e_flock . sprintf('%05d',$request->e_tag));
         try {
             $ewe = Sheep::where([
                 'flock_number' => $tag->getFlockNumber(),
