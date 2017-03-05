@@ -119,6 +119,9 @@ class ListController extends Controller
         return Redirect::action('GroupController@getViewGroup');
     }
 
+    /**
+     * @return array
+     */
     private function datePair()
     {
         $date_pair  = ListDates::firstOrNew(['owner' => $this->owner()]);

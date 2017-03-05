@@ -248,7 +248,7 @@ public function getValue(){
     public function makeList()
     {
         $this->setAlive(1);
-        if($this->getIncludeDead() == TRUE){$this->setAlive(-1);}
+        if($this->getIncludeDead() == FALSE){$this->setAlive(-1);}
         $move_type = 'move_'.$this->getMove();
         $ewes = Sheep::where('owner',$this->owner())
             ->whereDate($move_type,'>=',$this->getDateStart())
@@ -263,7 +263,7 @@ public function getValue(){
     public function makeGroup($group_name)
     {
         $this->setAlive(1);
-        if($this->getIncludeDead() == TRUE){$this->setAlive(-1);}
+        if($this->getIncludeDead() == FALSE){$this->setAlive(-1);}
         $move_type = 'move_'.$this->getMove();
         $ewes = Sheep::where('owner',$this->owner())
             ->whereDate($move_type,'>=',$this->getDateStart())
