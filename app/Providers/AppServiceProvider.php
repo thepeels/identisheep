@@ -63,8 +63,8 @@ class AppServiceProvider extends ServiceProvider {
 
             });
         Cashier::useCurrency('gbp', '£');
-        Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::now())));
-        Session::put('date_from', date('Y-m-d H:i:s', strtotime(Carbon::now()->subYears(10))));
+        //Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::now())));
+        //Session::put('date_from', date('Y-m-d H:i:s', strtotime(Carbon::now()->subYears(10))));
 	}
 	/**
 	 * Register any application services.

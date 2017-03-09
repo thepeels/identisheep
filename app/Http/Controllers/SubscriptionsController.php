@@ -40,7 +40,7 @@ class SubscriptionsController extends Controller
             $owner->newSubscription('Annual', 'Annual')->create($token);
         }
         Session::flash('message','You are now subscribed, you will be able to download '.PHP_EOL .
-                        'your Invoice under your User Name -> Invoice Downloads.');
+                        'your Invoice under your User Name -> Invoice History.');
         /**ToDo: make new email for with invoice download link (subs/single-invoice) */
         //$email = new EmailService($this->owner()->email);
         //$email->sendInvoiceByEmail();
