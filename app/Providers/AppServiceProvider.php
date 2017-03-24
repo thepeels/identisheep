@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider {
                     'print' => $print,
                     'elements' => $elements,
                     'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>',
-                    'base_date' => env('BASE_DATE')
+                    'base_date' => config('app.base_date')
                 ]);
 
             });
