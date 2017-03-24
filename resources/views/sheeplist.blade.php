@@ -14,7 +14,6 @@
         <h4><p class="no-screen"> {{Auth::user()->getBusiness()}}, {{Auth::user()->getAddress()}}</p><br>
             <p class="no-screen">Holding Number {{Auth::user()->getHolding()}}</p><br>
             {{$title}}
-            
             @if(in_array($elements[sizeof($elements)-2],$filtered_pages))
                 - <span class="pages">(number of records =
                     @if($elements[sizeof($elements)-1]=='print'){{$ewes->count()}})
@@ -22,8 +21,8 @@
                     @endif</span>
             @endif
             @if(in_array($elements[sizeof($elements)-2],$second_filter))
-                <span class="date-range">dates between {{date('d M Y',strtotime(Session::get('date_from')))}}
-                    and {{date('d M Y',strtotime(Session::get('date_to')))}}
+                <span class="date-range">dates between {{date('d M Y',strtotime(Session::get('date_from')?:config('dates.from')))}}
+                    and {{date('d M Y',strtotime(Session::get('date_to')?:config('dates.to')))}}
                 </span>
             @endif
         </h4>
