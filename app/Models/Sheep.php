@@ -720,8 +720,8 @@ class Sheep extends Model
     }
     private function dateRange()
     {
-        $date_from = Null !=(Session::get('date_from'))?Session::get('date_from'):Carbon::now()->subYears(10);
-        $date_to = Null !=  (Session::get('date_to'))?Session::get('date_to'):Carbon::now();
+        $date_from = Null !=(Session::get('date_from'))?Session::get('date_from'):Carbon::now()->subYears(10)->toDateString();
+        $date_to = Null !=  (Session::get('date_to'))?Session::get('date_to'):Carbon::now()->toDateString();
         return [$date_from,$date_to];
     }
 

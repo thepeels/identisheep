@@ -26,6 +26,7 @@
             <th>Older Tags</th>
             <th>Secondary Tag</th>
             <th>Move on</th>
+            <th>Sourced from</th>
             <th>Move Off</th>
             <th>Sex</th>
                 <th>Date of last changes</th>
@@ -56,6 +57,9 @@
                 </td>
                 <td>
                     {{$date_on}}
+                </td>
+                <td>
+                    {{$ewe->source}}
                 </td>
                     <td class="move-off">
                         {{$date_off}}
