@@ -14,14 +14,14 @@
 
 @section("content")
     <div style ="width:60%;margin:50px 0 0 20%;">
-        <h4>Subscribe to <span class="red">Identi</span><span class="blue">Sheep</span> for £10 + VAT / year</h4><br> <br>
+        <h4>Subscribe to <span class="red">Identi</span><span class="blue">Sheep</span> for £{!! $price !!} + VAT / year</h4><br> <br>
         
         {!! Form::open(array('url'=>'/subs/store','style'=>'margin-left:15%;')) !!}
             <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-label="Pay £<?=$price*$vat_rate?>.00 by Card"
+                    data-label="Pay £<?=$price*config('app.vat_rate')?>.00 by Card"
                     data-key="<?=config('services.stripe.key')?>"
-                    data-amount="1000"
+                    data-amount="<?=$price*config('app.vat_rate')*100?>"
                     data-name="IdentiSheep"
                     data-description="Annual"
                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"

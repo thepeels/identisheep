@@ -61,9 +61,9 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $destination    = Input::get('destination');
-        $owner           = Auth::user()->id;
-        $move_off       = new \DateTime(Input::get('year').'-'.Input::get('month').'-'.Input::get('day').' '.'00:00:00');
+        $destination    = $request->destination;
+        $owner          = Auth::user()->id;
+        $move_off       = new \DateTime($request->year.'-'.$request->month.'-'.$request->day.' '.'00:00:00');
         $source_or_destination = $destination;
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
@@ -71,7 +71,7 @@ class BatchController extends Controller {
         list($process_file, $ewelist) = $this->detectAndProcessMimeType($request, $type);
 
         $request->flash();
-        if(Input::get('check')) {
+        if($request->check) {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
@@ -81,7 +81,7 @@ class BatchController extends Controller {
             ]);
         }
 
-        if(Input::get('load')) {
+        if($request->load) {
 
             $added = 0;
             $processed = 0;
@@ -138,11 +138,11 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $owner          = Auth::user()->id;
-        $d              = Input::get('day');
-        $m              = Input::get('month');
-        $y              = Input::get('year');
-        $move_on       = $y.'-'.$m.'-'.$d.' '.'00:00:00';
+        $owner          = $this->user();
+        $d              = $request->day;
+        $m              = $request->month;
+        $y              = $request->year;
+        $move_on        = $y.'-'.$m.'-'.$d.' '.'00:00:00';
         $l              = DB::table('sheep')->where('owner',$owner)->max('local_id');
         $source         = $request->source;
         $source_or_destination = $source;
@@ -166,7 +166,7 @@ class BatchController extends Controller {
         };
         $request->flash();
         ($type);
-        if(Input::get('check')) {
+        if($request->check) {
             $tag_list = $process_file->extractTagNumbers();
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
@@ -175,11 +175,11 @@ class BatchController extends Controller {
                 'tag_list'      => $tag_list
             ]);
         }
-        if(Input::get('load')) {
+        if($request->load) {
 
             $added = 0;
-            foreach ($ewelist as $ewe) {
-                $tag = new TagNumber($ewe);
+            foreach ($ewelist as $number) {
+                $tag = new TagNumber($number);
                 //dd($tag->getCountryCode());
                 $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
                 if($tag->getSerialNumber() != 0) {
@@ -228,27 +228,28 @@ class BatchController extends Controller {
 
     /**
      * Post batch entry ON
+     * @param Request $request
      * @return mixed
      */
-    public function postBatch()
+    public function postBatch(Request $request)
     {
         $rules = Sheep::$rules['batch'];
         $validation = Validator::make(Input::all(), $rules);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $owner          = Input::get('id');
-        $home_bred      = Input::get('home_bred');
-        $flock_number   = Input::get('flock_number');
-        $start_tag      = Input::get('start_tag');
-        $end_tag        = Input::get('end_tag');
-        $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day') .' '.'00:00:00');
-        $colour_of_tag  = Input::get('colour_of_tag');
+        $owner          = $request->id;
+        $home_bred      = $request->home_bred;
+        $flock_number   = $request->flock_number;
+        $start_tag      = $request->start_tag;
+        $end_tag        = $request->end_tag;
+        $move_on        = new \DateTime($request->year . '-' . $request->month . '-' . $request->day .' '.'00:00:00');
+        $colour_of_tag  = $request->colour_of_tag;
         $local_id       = DB::table('sheep')->where('owner',$owner)->max('local_id');
-        $country_code   = Input::get('country_code')?:'UK0';
-        $sex            = new Sex(Input::get('sex')?:'female');
+        $country_code   = $request->country_code?:'UK0';
+        $sex            = new Sex($request->sex?:'female');
         if($home_bred != 'false'){$source = 'Home-bred';} //$home_bred is a string!
-        else{$source         = Input::get('source')?:'';}
+        else{$source         = $request->source?:'';}
         if ($start_tag <= $end_tag){
             $i = $start_tag;
 
@@ -282,9 +283,9 @@ class BatchController extends Controller {
         Session::flash('message', $added .' Tags processed, Sheep Added.');
         return Redirect::back()->withInput(
             [
-                'day'           => Input::get('day'),
-                'month'         => Input::get('month'),
-                'year'          => Input::get('year'),
+                'day'           => $request->day,
+                'month'         => $request->month,
+                'year'          => $request->year,
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);
@@ -308,9 +309,10 @@ class BatchController extends Controller {
 
     /**
      * Post batch entry
+     * @param Request $request
      * @return mixed
      */
-    public function postBatchoff()
+    public function postBatchoff(Request $request)
     {
         $rules1 = Sheep::$rules['batch'];
         $rules2 = Sheep::$rules['where_to'];
@@ -319,21 +321,21 @@ class BatchController extends Controller {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
 
-        $owner          = Input::get('id');
-        $home_bred      = Input::get('home_bred');
-        $flock_number   = Input::get('flock_number');
-        $start_tag      = Input::get('start_tag');
-        $end_tag        = Input::get('end_tag');
-        $dateOfMovement = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $colour_of_tag  = Input::get('colour_of_tag');
-        $destination    = Input::get('destination');
+        $owner          = $request->id;
+        $home_bred      = $request->home_bred;
+        $flock_number   = $request->flock_number;
+        $start_tag      = $request->start_tag;
+        $end_tag        = $request->end_tag;
+        $dateOfMovement = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
+        $colour_of_tag  = $request->colour_of_tag;
+        $destination    = $request->destination;
         $sex            = new Sex('Female');
-        $country_code   = Input::get('country_code')?:'UK0';
+        $country_code   = $request->country_code?:'UK0';
         if ($start_tag <= $end_tag){
             $i = $start_tag;
             $home_bred_count = 0;
             while ($i <= $end_tag){
-                $tagNumber = new TagNumber($country_code . Input::get('flock_number') . sprintf('%05d',$i));
+                $tagNumber = new TagNumber($country_code . $request->flock_number . sprintf('%05d',$i));
                 $sheep = new SheepOffService();
                 $sheep->recordMovement($tagNumber,$dateOfMovement,$destination,$sex,$owner,$colour_of_tag);
                 $home_bred_count ++;
@@ -353,9 +355,9 @@ class BatchController extends Controller {
 
         return Redirect::back()->withInput(
             [
-                'day'           => Input::get('day'),
-                'month'         => Input::get('month'),
-                'year'          => Input::get('year'),
+                'day'           => $request->day,
+                'month'         => $request->month,
+                'year'          => $request->year,
                 'flock_number'  =>$flock_number,
                 'colour_of_tag' =>$colour_of_tag
             ]);
@@ -375,9 +377,10 @@ class BatchController extends Controller {
 
     /**
      * Post batch tag entry
+     * @param request $request
      * @return mixed
      */
-    public function postSingleoff()
+    public function postSingleoff(Request $request)
     {
         $rules1 = Sheep::$rules['single'];
         $rules2 = Sheep::$rules['where_to'];
@@ -386,11 +389,11 @@ class BatchController extends Controller {
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $owner          = Input::get('owner');
-        $flock_number   = Input::get('flock_number');
-        $destination    = Input::get('destination');
-        $count          = Input::get('count');
-        $date_applied   = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $owner          = $request->owner;
+        $flock_number   = $request->flock_number;
+        $destination    = $request->destination;
+        $count          = $request->count;
+        $date_applied   = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
 
                 $tags = New Single;
                 $tags->setUserId($owner);
@@ -402,9 +405,9 @@ class BatchController extends Controller {
 
         return Redirect::back()->withInput(
             [
-                'day'           => Input::get('day'),
-                'month'         => Input::get('month'),
-                'year'          => Input::get('year'),
+                'day'           => $request->day,
+                'month'         => $request->month,
+                'year'          => $request->year,
                 'flock_number'  =>$flock_number,
                 'destination'   =>$destination
             ]);

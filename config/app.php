@@ -17,7 +17,7 @@ return [
     'base_date' => env('BASE_DATE'),
     'stripe_key'=> env('STRIPE_KEY'),
     'stripe_secret' => env('STRIPE_SECRET'),
-
+    'vat_rate'  => 1.2,
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL

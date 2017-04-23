@@ -134,7 +134,8 @@ class Sheep extends Model
         'colour_tag_2',
         'sex',
         'tag_colour',
-        'deleted_at'
+        'deleted_at',
+        'inventory'
     ];
     protected $dates = ['deleted_at'];
 
@@ -465,6 +466,22 @@ class Sheep extends Model
     public function getDeletedAt()
     {
         return $this->attributes['deleted_at'];
+    }
+
+    /**
+     * @param bool $inventory
+     */
+    public function setInventory($inventory)
+    {
+        $this->attributes['inventory'] = $inventory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getInventory()
+    {
+        return $this->attributes['inventory'];
     }
 
     
