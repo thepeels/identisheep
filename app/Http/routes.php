@@ -43,6 +43,8 @@ Route::controller('group','GroupController');
 
 Route::controller('inventory','InventoryController');
 
+Route::controller('edit','EditController');
+
 Route::get('detach/{sheep_id}/{group_id}','GroupController@getDetach');
 
 Route::controller('list','ListController');

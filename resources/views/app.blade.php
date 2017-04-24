@@ -82,6 +82,12 @@
 									<li><a href="/inventory/view">View Inventory</a></li>
 								</ul>
 							</li>
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Editor<span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="/edit/full">Full Edit</a></li>
+								</ul>
+							</li>
 							@endif
 						@endif
 					@endif
