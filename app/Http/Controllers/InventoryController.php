@@ -174,4 +174,26 @@ class InventoryController extends Controller
             'males'         => $males
         ]);
     }
+
+    public function getViewNotIn()
+    {
+        $females = Sheep::where([
+            'owner'     => $this->owner(),
+            'sex'       => 'female',
+            'inventory' => false,
+            'alive'     => true
+        ])->get();
+        $males = Sheep::where([
+            'owner'     => $this->owner(),
+            'sex'       => 'male',
+            'inventory' => false,
+            'alive'     => true
+        ])->get();
+
+        return View::make('inventory/list-not-in')->with([
+            'title'         => 'Sheep existing but not in the Inventory',
+            'females'       => $females,
+            'males'         => $males
+        ]);
+    }
 }

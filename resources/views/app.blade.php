@@ -80,6 +80,7 @@
 									<li><a href="/inventory/add-list">.csv File to Inventory</a></li>
 									<li><a href="/inventory/add-single">Single to Inventory</a></li>
 									<li><a href="/inventory/view">View Inventory</a></li>
+									<li><a href="/inventory/view-not-in">Not Inventoried</a></li>
 								</ul>
 							</li>
 							<li>

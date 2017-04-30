@@ -48,7 +48,7 @@
             <div class="form-group">
                 {!!Form::label('text','Colour Tag Serial Number',['class' => 'col-sm-3 control-label'])!!}
                 <div class="col-sm-2">
-                    {!!Form::input('text','supp_serial',$ewe->serial_number,['class'=>'form-control','placeholder'=>$ewe->serial_number])!!}
+                    {!!Form::input('text','supp_serial',$ewe->supplementary_serial_number,['class'=>'form-control','placeholder'=>$ewe->supplementary_serial_number])!!}
                 </div>
             </div>
             <div class="form-group">
@@ -61,6 +61,12 @@
                 {!!Form::label('text','Source',['class' => 'col-sm-3 control-label'])!!}
                 <div class="col-sm-2">
                     {!!Form::input('text','source',$ewe->source,['class'=>'form-control','placeholder'=>$ewe->source])!!}
+                </div>
+            </div>
+            <div class="form-group">
+                {!!Form::label('text','Include in Inventory',['class' => 'col-sm-3 control-label'])!!}
+                <div class="col-sm-offset-3">
+                    {!!Form::checkbox('inventory',null,$inv,['class'=>'form-control form-check-input','style'=>'width:33px;'])!!}
                 </div>
             </div>
             
