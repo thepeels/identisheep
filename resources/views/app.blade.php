@@ -72,6 +72,24 @@
 								<li><a href="/group/delete">Delete</a></li>
 							</ul>
 						</li>
+							@if(Auth::user()->id == 1)
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Inventory<span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="/inventory/clear-inventory">Clear Inventory</a></li>
+									<li><a href="/inventory/add-list">.csv File to Inventory</a></li>
+									<li><a href="/inventory/add-single">Single to Inventory</a></li>
+									<li><a href="/inventory/view">View Inventory</a></li>
+									<li><a href="/inventory/view-not-in">Not Inventoried</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Editor<span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="/edit/full">Full Edit</a></li>
+								</ul>
+							</li>
+							@endif
 						@endif
 					@endif
 					<li>

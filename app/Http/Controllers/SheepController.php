@@ -587,10 +587,13 @@ class SheepController extends Controller
             Session::put('find_error', 'Sheep not found, check number and re-try.');
             return Redirect::to('sheep/search')->withInput();
         }
+        $full_edit = 'no';
+        if (Auth::user()->id == 1)$full_edit = 'yes';
 
         return View::make('searchresult')->with([
-            'ewes' => $ewes,
-            'title' => 'Search Results for Tag ' . $tag
+            'ewes'      => $ewes,
+            'title'     => 'Search Results for Tag ' . $tag,
+            'full_edit' => $full_edit
         ]);
     }
 

@@ -16,6 +16,7 @@ div.scrolling-area{height: 800px;overflow: auto;}
     .medium-to-wide{width:100%;}
 }
 label{min-width:40px;}
+input[type="checkbox"].form-check-input{margin-top:0px;margin-left:14px;}
 .bolder{font-size: larger;
 font-weight: 400;}
 .no-screen{display:none;}

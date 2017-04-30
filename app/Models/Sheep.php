@@ -134,7 +134,8 @@ class Sheep extends Model
         'colour_tag_2',
         'sex',
         'tag_colour',
-        'deleted_at'
+        'deleted_at',
+        'inventory'
     ];
     protected $dates = ['deleted_at'];
 
@@ -467,7 +468,54 @@ class Sheep extends Model
         return $this->attributes['deleted_at'];
     }
 
-    
+    /**
+     * @param bool $inventory
+     */
+    public function setInventory($inventory)
+    {
+        $this->attributes['inventory'] = $inventory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getInventory()
+    {
+        return $this->attributes['inventory'];
+    }
+
+    /**
+     * @param string $colour_tag_1
+     */
+    public function setColourTag1($colour_tag_1)
+    {
+        $this->attributes['colour_tag_1'] = $colour_tag_1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColourTag1()
+    {
+        return $this->attributes['colour_tag_1'];
+    }
+
+    /**
+     * @param string $colour_tag_2
+     */
+    public function setColourTag2($colour_tag_2)
+    {
+        $this->attributes['colour_tag_2'] = $colour_tag_2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColourTag2()
+    {
+        return $this->attributes['colour_tag_2'];
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -644,7 +692,10 @@ class Sheep extends Model
     public function scopeSearchByTag($query,$id,$tag)
     {
         $query = (DB::select(DB::raw("select * FROM `sheep` WHERE `owner`= $id 
-                and (`serial_number`= $tag or `original_serial_number`= $tag or `old_serial_number`= $tag or`older_serial_number` = $tag)")));
+                and (`serial_number`= $tag or `original_serial_number`= $tag 
+                or `old_serial_number`= $tag or`older_serial_number` = $tag 
+                or `colour_tag_1`= $tag or`colour_tag_2` = $tag 
+                or`supplementary_serial_number` = $tag)")));
         $ewes = collect($query);
         return $ewes;
     }
