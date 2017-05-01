@@ -30,7 +30,7 @@
     </div>
     @if(count($not_added)>=1)
         <div style="width:60%;margin-left:20%;">
-            <h5>Sheep not added as not in database yet:</h5>
+            <h5>Sheep not added as not in database yet: {{ count($not_added) }} </h5>
         @foreach($not_added as $sheep)
                 {{ $sheep }} <br>
         @endforeach
