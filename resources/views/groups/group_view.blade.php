@@ -52,4 +52,8 @@
         {!! $errors->first('e_flock','<small style="color:#f00">:message</small>') !!}{!! $errors->first('e_tag','<small style="color:#f00">:message</small>') !!}<br>
         {!!Form::submit('Add to group',['class'=>'btn btn-info btn-xs'])!!}
     </div>
+    <div style="width:60%;margin-left:20%;margin-top:30px;">
+        <a href="../inventory/add-group/{{ $group->id }}" class="btn btn-default btn-xs">Add Live Group Members to Inventory</a>
+    </div>
+    
 @stop

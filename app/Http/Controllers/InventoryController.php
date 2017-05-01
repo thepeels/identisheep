@@ -9,6 +9,7 @@
 namespace app\Http\Controllers;
 
 use App\Models\Sheep;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -125,6 +126,7 @@ class InventoryController extends Controller
         };
         $request->flash();
         ($type);
+        $processed = 0;
         $added = 0;
         $not_added = [];
         foreach ($ewelist as $number) {
@@ -133,21 +135,22 @@ class InventoryController extends Controller
             $sheep_exists = Sheep::check($tag->getFlockNumber(), $tag->getSerialNumber(), $owner);
             if ($tag->getSerialNumber() != 0) {
                 if ($sheep_exists) {
-                    $added++;
                     $ewe = Sheep::where([
                         'flock_number' => $tag->getFlockNumber(),
                         'serial_number' => $tag->getSerialNumber()
                     ])->first();
+                    $added +=  (1 - $ewe->getInventory());
                     $ewe->setInventory(true);
                     $ewe->save();
+                    $processed++;
                 }else{
                     array_push($not_added,$tag->getFlockNumber().' - '.$tag->getSerialNumber());
                     //dd($not_added);
-                    $added++;
+                    $processed++;
                 }
             }
         }
-        Session::flash('message', $added .' Tags processed, Sheep Added to Inventory.');
+        Session::flash('message', $processed .' Tags processed, ' . $added . ' sheep Added to Inventory.');
         return View::make('inventory/list')->with([
             'not_added' => $not_added,
             'title'     => 'Select a file to add sheep to inventory'
@@ -196,4 +199,25 @@ class InventoryController extends Controller
             'males'         => $males
         ]);
     }
+
+    /**
+     * @param $id
+     */
+    public function getAddGroup($id)
+    {
+        $added = 0;
+        $processed = 0;
+        $group = Group::where('id',$id)->first();
+        foreach($group->sheep as $member){
+            if($member->getAlive()==true){
+                $added += $member->getInventory();
+                $member->setInventory(true);
+                $member->save();
+                $processed++;
+            }
+        }
+        Session::flash('message',$processed . ' sheep processed, ' . $added . ' added to inventory');
+        return Redirect::back();
+    }
+    /*ToDo add 'add a group to inventory and custom list?*/
 }
