@@ -88,6 +88,13 @@
                title="Edit this Sheep">Enter Death of this Sheep
             </a>
         @endif
+        @if(Auth::user()->id ==1)
+        <a href="../../edit/pass-through/{{$ewe->id}}"
+           class="btn btn-danger btn-xs"
+           style="margin-bottom:-1px;"
+           title="Full Edit of this Sheep">Full Edit Sheep
+        </a>
+        @endif
     </div>
 @stop
 
