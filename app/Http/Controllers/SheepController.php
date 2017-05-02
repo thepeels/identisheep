@@ -228,6 +228,7 @@ class SheepController extends Controller
     public function getEdit($id)
     {
         $ewe = Sheep::getById($id);
+        dd($id);
 
         return View::make('sheepedit')->with([
             'id' => $id,

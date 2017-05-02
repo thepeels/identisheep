@@ -210,7 +210,7 @@ class InventoryController extends Controller
         $group = Group::where('id',$id)->first();
         foreach($group->sheep as $member){
             if($member->getAlive()==true){
-                $added += $member->getInventory();
+                $added += (1 - $member->getInventory());
                 $member->setInventory(true);
                 $member->save();
                 $processed++;
