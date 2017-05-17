@@ -36,8 +36,6 @@ class TagNumber
     {
         $tagNumberString = $this->typoCorrections($tagNumberString);
 
-        //dd($tagNumberString);
-
         switch (true) {
             case (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 1):
                 $this->countryCode = substr($tagNumberString, 0, 2);
@@ -53,8 +51,8 @@ class TagNumber
                 $this->flockNumber = mb_substr($tagNumberString, 4, 6);
                 $this->serialNumber = mb_substr($tagNumberString, 10, 5);
                 break;
-            case ((preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 0) &&
-                (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 0)) :
+            case ((preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) != 1) &&
+                (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) != 1)) :
                 throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. 
                 e.g. UK012345600001 or all digits with 3 digit country code e.g. 826 012345600001
                 You need to edit your input file. 

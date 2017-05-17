@@ -12,7 +12,7 @@
     <title>{!! $title !!}</title>
 @stop
 @section('content')
-    <div style="width:60%;margin-left:20%;">
+    <div style="width:70%;margin-left:20%;">
         <h4>{{$title}}</h4>
         <h5>{{$heading}} {{$source}}</h5>
         <table class="table table-striped table-bordered table-sm table-condensed print narrow" >
@@ -32,9 +32,9 @@
             </tbody>
         </table>
         Total {{count($tag_list)}} tags<br> <br>
-        
+        <div class="no-print">
         If these appear correct, use your browser "Back <- " button, and select the load option on the previous page.
-        
+        </div>
         
     </div>
 <script>

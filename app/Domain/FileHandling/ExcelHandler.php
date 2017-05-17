@@ -15,9 +15,9 @@ use Maatwebsite\Excel\Facades\Excel;
 class ExcelHandler
 {
     /**
-     * FileHandler constructor.
+     * ExcelHandler constructor.
      * @param $process_file
-     * @param string $original_filename
+     * @param $original_filename
      */
     public function __construct($process_file,$original_filename)
     {
@@ -27,12 +27,15 @@ class ExcelHandler
         });
     }
 
+    /**
+     *
+     */
     public function excelFile()
     {
         foreach($this->results as $row){
             echo ($row->eid."<br>");
         };
-        dd('done');
+
     }
 
     /**
@@ -44,8 +47,8 @@ class ExcelHandler
     {
         $i = 0;
         $tag_list = [];
-        foreach ($this->results as $ewe) {
-            $tag = new TagNumber($ewe->eid);
+        foreach ($this->results as $row) {
+            $tag = new TagNumber($row->eid);
             if ($tag->getSerialNumber() != 0) {
                 $i++;
                 $tag_list[$i][0] = $i;
@@ -53,6 +56,7 @@ class ExcelHandler
                 $tag_list[$i][2] = $tag->getShortTagNumber();
             }
         }
+
         return $tag_list;
     }
 
@@ -63,10 +67,12 @@ class ExcelHandler
     {
         $i = 0;
         $ewe_list = [];
-        foreach ($this->results as $ewe) {
+
+        foreach ($this->results as $row) {
             $i++;
-            $ewe_list[$i] = $ewe->eid;
+            $ewe_list[$i] = $row->eid;
         }
+
         return $ewe_list;
     }
 }

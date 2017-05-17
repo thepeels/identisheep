@@ -450,17 +450,20 @@ class BatchController extends Controller {
      */
     public function detectAndProcessMimeType(Request $request, $type)
     {
+        //dd($type);
         if (stripos($type, 'text') !== False) {
             $process_file = new FileHandler(file(Input::file('file_raw')), $request->file_raw->getClientOriginalName());
 
             $ewelist = $process_file->mappedFile();
 
         }
-        if (stripos($type, 'corrupt') !== False || stripos($type, 'excel') !== False || stripos($type, 'vnd.ms-office') !== False) {
+        if (stripos($type, 'corrupt') !== False || stripos($type, 'excel') !== False ||
+            stripos($type, 'vnd.ms-office') !== False || stripos($type,'vnd.openxmlformats-officedocument.spreadsheetml')!==False) {
             $process_file = new ExcelHandler((Input::file('file_raw')), $request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
 
         };
+
         return array($process_file, $ewelist);
     }
 
