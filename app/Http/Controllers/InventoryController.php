@@ -118,10 +118,12 @@ class InventoryController extends Controller
         }
 
         if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False ||
-            stripos($type,'vnd.ms-office' )!==False || stripos($type,'vnd.openxml')!==False){//dd($type);
+            stripos($type,'vnd.ms-office' )!==False || stripos($type,'vnd.openxml')!==False
+            || stripos($type,'vnd.openxmlformats-officedocument.spreadsheetml')!==False){//dd($type);
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
             //$some_thing = $process_file->excelFile();
+            //dd($ewelist);
 
         };
         $request->flash();
