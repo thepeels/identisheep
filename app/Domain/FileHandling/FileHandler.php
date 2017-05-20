@@ -50,6 +50,8 @@ class FileHandler
         $i = 0;
         $tag_list = [];
         foreach ($this->ewelist as $ewe) {
+            if(strlen($ewe)>= 15); //for rfidlog.dat file
+            $ewe = substr($ewe,-15);
             //dd($ewe);
             $tag = new TagNumber($ewe);
             if ($tag->getSerialNumber() != 0) {

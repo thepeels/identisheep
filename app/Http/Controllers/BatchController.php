@@ -68,6 +68,19 @@ class BatchController extends Controller {
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
         //dd($type);
+        /****************************************
+        $file = $request->file_raw;
+
+
+        $file_info = new \finfo(FILEINFO_MIME);	// object oriented approach!
+        $mime_type = $file_info->buffer(file_get_contents($file));  // e.g. gives "image/jpeg"
+
+        switch($mime_type) {
+            case "image/jpeg":
+                // your actions go here...
+        }
+
+        *********************************************/
         list($process_file, $ewelist) = $this->detectAndProcessMimeType($request, $type);
 
         $request->flash();
