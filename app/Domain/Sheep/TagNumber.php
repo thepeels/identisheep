@@ -35,15 +35,15 @@ class TagNumber
     public function __construct($tagNumberString)
     {
         $tagNumberString = $this->typoCorrections($tagNumberString);
-
+        //dd(preg_match("/^[A-Z]{2} *[0-9]{1}[0-9]{11}$/", $tagNumberString));
         switch (true) {
-            case (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) == 1):
+            case (preg_match("/^[A-Z]{2} *[0-9]{1}[0-9]{11}$/", $tagNumberString) == 1):
                 $this->countryCode = substr($tagNumberString, 0, 2);
                 $this->replacedCode = substr($tagNumberString, 2, 1);
                 $this->flockNumber = (int)substr($tagNumberString, 3, 6);
                 $this->serialNumber = (int)substr($tagNumberString, 9, 5);
                 break;
-            case (preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) == 1) :
+            case (preg_match("/[0-9]{3} *[0-9]{1}[0-9]{11}/", $tagNumberString) == 1) :
                 $country_id = mb_substr($tagNumberString, 0, 3);
                 $code = new CountryCode($country_id);
                 $this->countryCode = $code->convert($country_id);
@@ -51,13 +51,14 @@ class TagNumber
                 $this->flockNumber = mb_substr($tagNumberString, 4, 6);
                 $this->serialNumber = mb_substr($tagNumberString, 10, 5);
                 break;
-            case ((preg_match("/[0-9]{3}[0-9]{1}[0-9]{11}/", $tagNumberString) != 1) &&
-                (preg_match("/^[A-Z]{2}0[0-9]{11}$/", $tagNumberString) != 1)) :
+            case ((preg_match("/[0-9]{3} *[0-9]{1}[0-9]{11}/", $tagNumberString) != 1) &&
+                (preg_match("/^[A-Z]{2} *[0-9]{1}[0-9]{11}$/", $tagNumberString) != 1)) :
                 throw new DomainException('Tag number supplied must be of the format UK0*********** where * are digits. 
                 e.g. UK012345600001 or all digits with 3 digit country code e.g. 826 012345600001
                 You need to edit your input file. 
                 CSV file must have no headings - tag numbers on separate lines, 
-                Excel file - tag numbers in "EID" column.');
+                Excel file - tag numbers in "EID" column.
+                Excel cells formatted as text i.e. NOT as "8.26011E+14"');
         }
 
 
@@ -114,9 +115,9 @@ class TagNumber
         $tagNumberString = mb_strtoupper($tagNumberString);
         $tagNumberString = str_replace(array(",\r\n", "\r\n", "\n\r", ",\n\r", ",\n", ",\r", ", ", ",¶"), "", $tagNumberString);
         /** if too international will need to split off country code section first*/
-        $tagNumberString = str_replace(array("L", "I"), "1", $tagNumberString);
-        $tagNumberString = str_replace(array("A", "S"), ["4","5"], $tagNumberString);
-        $tagNumberString = str_replace(array("O"), "0", $tagNumberString);
+        //$tagNumberString = str_replace(array("L", "I"), "1", $tagNumberString);
+        //$tagNumberString = str_replace(array("A", "S"), ["4","5"], $tagNumberString);
+        //$tagNumberString = str_replace(array("O"), "0", $tagNumberString);
         /** ***********/
         return $tagNumberString;
     }

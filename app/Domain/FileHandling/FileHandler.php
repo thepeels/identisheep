@@ -20,7 +20,7 @@ class FileHandler
      */
     public function __construct($process_file,$original_filename)
     {
-        $this->ewelist = str_replace(array("\r\n","\n\r","\n", "\r", "¶"), "", $process_file);
+        $this->ewelist = str_replace(array("\r\n","\n\r","\n", "\r", "¶"," "), "", $process_file);
         $this->original_name = $original_filename;
     }
 

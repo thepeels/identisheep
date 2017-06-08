@@ -132,6 +132,7 @@ class Single extends Model {
         return $query->where('user_id',$id)
             ->where('date_applied','>=',$dates[0])
             ->where('date_applied','<=',$dates[1])
+            ->orderBy('date_applied','DESC')
             ->paginate(20);
     }
     private function dateRange()

@@ -162,25 +162,30 @@ class BatchController extends Controller {
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
         //dd($request->file_raw->getClientOriginalName());
+        //f(stripos($type,'text' )==False)dd('False');
+        //dd($type);
 
         if(stripos($type,'text' )!==False){
             $process_file = new FileHandler(file(Input::file('file_raw')),$request->file_raw->getClientOriginalName());
 
             $ewelist = $process_file->mappedFile();
+            //dd('got to here');
 
         }
 
-        if(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False ||
+        elseif(stripos($type,'corrupt' )!==False || stripos($type,'excel' )!==False ||
             stripos($type,'vnd.ms-office' )!==False || stripos($type,'vnd.openxml')!==False){//dd($type);
             $process_file = new ExcelHandler((Input::file('file_raw')),$request->file_raw->getClientOriginalName());
             $ewelist = $process_file->returnTagNumbers();
             //$some_thing = $process_file->excelFile();
+            //dd($ewelist);
 
         };
         $request->flash();
         ($type);
         if($request->check) {
             $tag_list = $process_file->extractTagNumbers();
+            //dd($tag_list);
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
                 'heading'       => $request->file_raw->getClientOriginalName(),
@@ -189,7 +194,6 @@ class BatchController extends Controller {
             ]);
         }
         if($request->load) {
-
             $added = 0;
             foreach ($ewelist as $number) {
                 $tag = new TagNumber($number);
@@ -416,6 +420,7 @@ class BatchController extends Controller {
                 $tags->setDateApplied($date_applied);
                 $tags->save();
 
+        Session::flash('message','Application of ' . $count . ' tags recorded');
         return Redirect::back()->withInput(
             [
                 'day'           => $request->day,
