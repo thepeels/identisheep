@@ -18,13 +18,14 @@
         </div>
         <h4>{{$group_name}}</h4>
         <h5>{{$title}}</h5>
-        {!! $group->description !!} {!! $group->info !!}
         <? $counter = 0;?>
+        {!! $group->description !!} {!! $group->info !!}
         <table class="table table-striped table-bordered table-sm table-condensed print medium-to-wide" >
             <thead>
             <th>Ref</th>
             <th>Number</th>
             <th>Colour</th>
+            <th>Source Holding</th>
             <th>Moved On</th>
             <th>Moved Off</th>
             </thead>
@@ -36,6 +37,7 @@
                     <td>{!! $member->getLocalId() !!}</td>
                     <td>{!! $member->getCountryCode() !!} {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
+                    <td>{!! $member->getSource() !!}</td>
                     <td>{!! $date_on !!}</td>
                     <td>{!! $date_off !!}</td>
                     <td class="no-print"><a href = "../../../group/detach/{{$member->id}}/{{$group->id}}" class="btn btn-default btn-xs">Remove from Group</a></td>
@@ -52,8 +54,10 @@
         {!! $errors->first('e_flock','<small style="color:#f00">:message</small>') !!}{!! $errors->first('e_tag','<small style="color:#f00">:message</small>') !!}<br>
         {!!Form::submit('Add to group',['class'=>'btn btn-info btn-xs'])!!}
     </div>
-    <div style="width:60%;margin-left:20%;margin-top:30px;">
+    @if(Auth::user()->id == 1)
+    <div style="width:60%;margin-left:20%;margin-top:30px;" class="no-print">
         <a href="../inventory/add-group/{{ $group->id }}" class="btn btn-default btn-xs">Add Live Group Members to Inventory</a>
     </div>
+    @endif
     
 @stop

@@ -27,7 +27,7 @@ class SubscriptionsController extends Controller
         return View::make('subs/card_details')->with([
             'title'         => 'Subscribe',
             'receipt_email' => $email,
-            'price'         => 10,
+            'price'         => 20,
             'vat_rate'      => 1.2
         ]);
     }

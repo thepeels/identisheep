@@ -101,12 +101,14 @@
            title="Edit this Sheep">Enter Death of this Sheep
         </a>
         @endif
-        @if($full_edit == 'yes')
-            <a href="../edit/pass-through/{{$ewe->id}}"
-               class="btn btn-danger btn-xs"
-               style="margin-bottom:-1px;"
-               title="Full Edit of this Sheep">Full Edit Sheep
-            </a>
+        @if(Auth::user()->id == 1)
+            @if($full_edit == 'yes')
+                <a href="../edit/pass-through/{{$ewe->id}}"
+                   class="btn btn-danger btn-xs"
+                   style="margin-bottom:-1px;"
+                   title="Full Edit of this Sheep">Full Edit Sheep
+                </a>
+            @endif
         @endif
             
     </div>
