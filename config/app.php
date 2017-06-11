@@ -18,6 +18,7 @@ return [
     'stripe_key'=> env('STRIPE_KEY'),
     'stripe_secret' => env('STRIPE_SECRET'),
     'vat_rate'  => 1.2,
+    'price' => 10,
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL

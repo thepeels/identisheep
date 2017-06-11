@@ -31,14 +31,14 @@
                     <li>Deaths or Movements Off (individually or as batches as above) will be entered into the database if
                         they do not already exist.</li>
                 </ol></li>
-            <li>Tags cannot be added into the database if they are already present, so if you enter a list of sheep
+            <li>Tags will not be added into the database if they are already present, so if you enter a list of sheep
                 twice over by mistake, or you have two lists from different days with some sheep present in both lists,
                 the sheep already in will not be added again. This last point is very useful
                 in the start up period, because gradually the correct sheep will get entered, even if you have
                 overlapping lists.</li>
             <li>With some effort to be methodical, a list of all your sheep will get compiled, and will at least be
                 close enough to avoid a Cross Compliance Breach.</li>
-            <li>Use of the website is free for 6 months, and thereafter an Annual fee of £20 (a nice pub lunch) is charged.
+            <li>Use of the website is free for 6 months, and thereafter an Annual fee of £{{config('app.price')}} (a nice pub lunch) is charged.
                 Good value to keep your payments safe and much much less than the extravagant software associated with
                 some tag reading equipment.</li>
             <li style="list-style-type: none"><br> So go on give it a try, beg or borrow a stick reader, or dig out your

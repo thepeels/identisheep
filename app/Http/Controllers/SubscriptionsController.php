@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Sheep\EmailService;
+use App\Models\Subscriptions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Carbon\Carbon;
 use App\User;
@@ -15,6 +17,9 @@ use Laravel\Cashier\Subscription;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\Subscription as Sub;
 
 
 class SubscriptionsController extends Controller
@@ -27,8 +32,53 @@ class SubscriptionsController extends Controller
         return View::make('subs/card_details')->with([
             'title'         => 'Subscribe',
             'receipt_email' => $email,
-            'price'         => 20,
-            'vat_rate'      => 1.2
+            'price'         => config('app.price'),
+            'vat_rate'      => config('app.vat_rate')
+        ]);
+    }
+
+    public function getPremium()
+    {
+        //object(Stripe_Customer);
+        $owner  = $this->owner();
+        $email  = $this->owner()->getEmail();
+        $now    = Carbon::now();
+
+
+        switch (true){
+            case ($owner->onGenericTrial()):
+
+                return view('subs/card_details_premium')->with([
+                    'title'         => 'Subscribe',
+                    'receipt_email' => $email,
+                    'price'         => config('app.price')*2,
+                    'vat_rate'      => config('app.vat_rate')
+                ]);
+
+            case ($owner->subscribed('Premium')):
+                Session::flash('message','You are already subscribed to the Premium service');
+
+                return view('home');
+
+            case ($owner->subscribed('Annual')&&!$owner->subscribed('Premium')):
+                $row = DB::table('subscriptions')->where('user_id',$owner->id)->get();
+                foreach ($row as $subscription) {
+                    $stripe_id = $subscription->stripe_id;
+                }
+                Stripe::setApiKey(config('services.stripe.secret'));
+
+                $sub    = Sub::retrieve($stripe_id);//Sub ~ Stripe/Subscription
+                $end    = (Carbon::createFromTimestamp($sub->current_period_end));
+                $start  = (Carbon::createFromTimestamp($sub->current_period_start));
+                $difference = $end->diff($now)->days;
+                $price = round((config('app.price')*$difference/364),2);
+        }
+
+        return View::make('subs/card_details_premium')->with([
+            'title'         => 'Subscribe',
+            'receipt_email' => $email,
+            'price'         => $price,
+            'vat_rate'      => config('app.vat_rate')
         ]);
     }
 
@@ -46,32 +96,75 @@ class SubscriptionsController extends Controller
         //$email->sendInvoiceByEmail();
         return view('home');
     }
+    public function postStorePremium(Request $request)
+    {
+        $owner = $this->owner();
+        $token = $request->stripeToken;
+        if(!$owner->subscribed('Premium')) {
+            if ($owner->subscribed('Annual')) {
+                $owner->subscription('Annual')->swap('Premium','Premium');
+            }
+            if (!$owner->subscribed('Annual')) {
+                $owner->newSubscription('Premium', 'Premium')->create($token);
+            }
+            $owner->setSuperuser(1);
+            $owner->save();
+            Session::flash('message', 'You are now subscribed to the premium service, you will be able to download ' . PHP_EOL .
+                'your Invoice under your User Name -> Invoice History.');
+            /**ToDo: make new email for with invoice download link (subs/single-invoice) */
+            //$email = new EmailService($this->owner()->email);
+            //$email->sendInvoiceByEmail();
+            return view('home');
+        }
+        if($owner->subscribed('Premium')){
+            Session::flash('message','You are already subscribed to the Premium service');
+            return view('home');
+        }
+    }
 
     public function getCancel()
     {
         $owner = $this->owner();
-        $subscribed = $owner->subscribed('Annual');
-        $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addYears(1)->toFormattedDateString('d M Y');
-        if(!$subscribed){
+        switch (true){
+            case $owner->subscribed('Annual'):
+                $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addYears(1)->toFormattedDateString('d M Y');
+                //dd(!$owner->subscribed('Annual'));
+                return View::make('subs/cancel')->with([
+                    'title'         => 'Cancel subscription',
+                    'subscribed_to' => 'Annual Subscription',
+                    'until'         => $until
+                ]);
+            case $owner->subscribed('Premium'):
+                $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Premium')->created_at)->addYears(1)->toFormattedDateString('d M Y');
+                return View::make('subs/cancel')->with([
+                    'title'         => 'Cancel subscription',
+                    'subscribed_to' => 'Premium Subscription',
+                    'until'         => $until
+                ]);
+            case !$owner->subscribed('Annual')&&!$owner->subscribed('Premium'):
+            //if(!$subscribed){
             /**ToDo: flash a message no subscription and/or you have already cancelled. perhaps this route is not possible
             * unless browser open through expiry time
              */
-            Session::flash('message','subscription ended already');
+            Session::flash('message','subscription in free trial period or else ended already');
+                return Redirect::back();
         }
 
-        return View::make('subs/cancel')->with([
-            'title'         => 'Cancel subscription',
-            'subscribed_to' => 'Annual Subscription',
-            'until'         => $until
-        ]);
-    }
+        }
     public function getCancelhere()
     {
         $owner = $this->owner();
-        $owner->subscription('Annual')->cancel();
 
-        Session::flash('message','We have cancelled your subscription,
+        if($owner->subscribed('Annual')){
+            $owner->subscription('Annual')->cancel();
+            Session::flash('message','We have cancelled your subscription,
                 but you remain a member until '.date_format($owner->subscription('Annual')->ends_at,'d M Y'));
+        }
+        if($owner->subscribed('Premium')){
+            $owner->subscription('Premium')->cancel();
+            Session::flash('message','We have cancelled your subscription,
+                but you remain a member until '.date_format($owner->subscription('Premium')->ends_at,'d M Y'));
+        }
 
         return Redirect::to('home');
     }
@@ -119,15 +212,21 @@ class SubscriptionsController extends Controller
     public function getInvoice(Request $request)
     {
         $owner = $this->owner();
+        //dd($owner);
         //$test = new EmailService($owner->email); //don't know how to do this
         //$test->sendInvoiceByEmail();
+        if(carbon::now()<=$owner->getTrialEndsAt()){
+            Session::flash('alert-class','alert-danger');
+            Session::flash('message','You are currently on your free trial, so no invoices are available.');
+            return Redirect::back();
+        }
         $invoices = $owner->invoicesIncludingPending();
         //$invoiceId = $invoice[0]->id;
         //return $owner->downloadInvoice($invoiceId ,[
         return View::make('receipt_selector')->with([
             'title'     => 'Select Invoice from List',
             'vendor'    => 'IdentiSheep',
-            'product'   => 'Annual Membership',
+            'product'   => $owner->subscription('Annual')->id,
             'vat'       => 'Vat Number - UK 499 7886 39',
             'number'    => $owner->subscription('Annual')->id,
             'invoices'  => $invoices,
@@ -155,7 +254,7 @@ class SubscriptionsController extends Controller
         return $owner->downloadInvoice($invoiceId ,[
             //return View::make('cashier/receipt')->with([
             'vendor'    => 'IdentiSheep',
-            'product'   => 'Annual Membership',
+            'product'   => $owner->subscription('Annual')->stripe_plan . ' Membership',
             'vat'       => 'Vat Number - UK 499 7886 39',
             'number'    => $owner->subscription('Annual')->id
         ]);

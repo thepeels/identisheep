@@ -143,6 +143,15 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
+     * @param int $superuser
+     */
+    public function setSuperuser($superuser)
+    {
+        $this->attributes['superuser'] = $superuser;
+    }
+
+
+    /**
      * @param string $email
      */
     public function setEmail($email)

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Laravel\Cashier\Cashier;
 
 class Subscribed
@@ -27,8 +28,10 @@ class Subscribed
     {
         $owner = Auth::user();
         /**ToDo: change here and controller post store method to Annual */
-        if(!$owner->subscribed('Annual')&&!$owner->subscribed('Test')) {
+        if(!$owner->subscribed('Annual')&&!$owner->subscribed('Premium')) {
             if (!$owner->onGenericTrial()) {
+                Session::flash('alert-class','alert-danger');
+                Session::flash('message','Your free trial is ended, please subscribe to continue using this site.');
                 return Redirect::to('subs/details');
             }
         }
