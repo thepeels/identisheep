@@ -9,6 +9,9 @@
 namespace app\Models;
 
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class Subscriptions
 {
     /**
@@ -37,5 +40,27 @@ class Subscriptions
      */
     protected $ends_at;
 
+    public static function stripe_plan()
+    {
+        $plan = DB::table('subscriptions')->where('user_id',Auth::user()->id)->first();
+        return $plan->stripe_plan;
+
+}
+
+    /**
+     * @param string $stripe_id
+     */
+    public function setStripeId($stripe_id)
+    {
+        $this->attributes['stripe_id'] = $stripe_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStripeId()
+    {
+        return $this->attributes['stripe_id'];
+    }
 
 }

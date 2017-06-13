@@ -1,5 +1,6 @@
 <?php namespace App\Providers;
 
+use App\Models\Subscriptions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -26,8 +27,10 @@ class AppServiceProvider extends ServiceProvider {
 
             if (Auth::check()) {
                     $home_flock = Auth::user()->getFlock();
+                    $plan = Subscriptions::stripe_plan();
                 } else {
                     $home_flock = 'false';
+                    $plan = "";
                 }
                 /* *********** logic from app.blade *********** */
                 $url = Request::path();
@@ -57,7 +60,7 @@ class AppServiceProvider extends ServiceProvider {
                     'second_filter' => $second_filter,
                     'print' => $print,
                     'elements' => $elements,
-                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span>',
+                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span> '.$plan,
                     'base_date' => config('app.base_date')
                 ]);
 

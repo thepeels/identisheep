@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Stripe\Stripe;
 use Stripe\Customer;
+use Stripe\InvoiceItem;
 use Stripe\Subscription as Sub;
 
 
@@ -55,23 +56,33 @@ class SubscriptionsController extends Controller
                     'vat_rate'      => config('app.vat_rate')
                 ]);
 
-            case ($owner->subscribed('Premium')):
-                Session::flash('message','You are already subscribed to the Premium service');
-
-                return view('home');
-
             case ($owner->subscribed('Annual')&&!$owner->subscribed('Premium')):
                 $row = DB::table('subscriptions')->where('user_id',$owner->id)->get();
                 foreach ($row as $subscription) {
                     $stripe_id = $subscription->stripe_id;
                 }
                 Stripe::setApiKey(config('services.stripe.secret'));
-
+                $customer = Customer::retrieve($owner->stripe_id); // the stripe customer to create invoice below
+                //dd($customer);
                 $sub    = Sub::retrieve($stripe_id);//Sub ~ Stripe/Subscription
                 $end    = (Carbon::createFromTimestamp($sub->current_period_end));
                 $start  = (Carbon::createFromTimestamp($sub->current_period_start));
                 $difference = $end->diff($now)->days;
+                //dd($difference);
                 $price = round((config('app.price')*$difference/364),2);
+                //dd($price);
+                InvoiceItem::create([ //because stripe does not apply vat to prorated subscription
+                    'customer'      => $customer,
+                    'amount'        => round($price*(config('app.vat_rate')-1)*100,0,PHP_ROUND_HALF_DOWN),
+                    'currency'      => 'gbp',
+                    'description'   => 'V.A.T. @ '. (config('app.vat_rate')-1)*100 .'%'
+                ]);
+                break;
+
+            case ($owner->subscribed('Premium')):
+                Session::flash('message','You are already subscribed to the Premium service');
+
+                return view('home');
         }
 
         return View::make('subs/card_details_premium')->with([
