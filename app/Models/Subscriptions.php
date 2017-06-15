@@ -40,12 +40,6 @@ class Subscriptions
      */
     protected $ends_at;
 
-    public static function stripe_plan()
-    {
-        $plan = DB::table('subscriptions')->where('user_id',Auth::user()->id)->first();
-        return $plan->stripe_plan;
-
-}
 
     /**
      * @param string $stripe_id
@@ -62,5 +56,8 @@ class Subscriptions
     {
         return $this->attributes['stripe_id'];
     }
+
+
+
 
 }

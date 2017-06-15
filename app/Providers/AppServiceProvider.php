@@ -1,6 +1,5 @@
 <?php namespace App\Providers;
 
-use App\Models\Subscriptions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use Laravel\Cashier\Cashier;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use App\User;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -20,50 +20,48 @@ class AppServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot()
+
 	{
         view()->composer('*', function($view)
         {
-
-
             if (Auth::check()) {
-                    $home_flock = Auth::user()->getFlock();
-                    $plan = Subscriptions::stripe_plan();
-                } else {
-                    $home_flock = 'false';
-                    $plan = "";
-                }
-                /* *********** logic from app.blade *********** */
-                $url = Request::path();
-                $elements = explode('/', $url);
-                if (Request::path() === ('home')
-                    || Request::path() === ('get-started')
-                    || Request::path() === ('homeabout')
-                    || Request::path() === ('contact')
-                    || Request::path() === ('about')) {
-                    $help_page = $elements[0];
-                } else {
-                    $help_page = $elements[1];
-                }
-                /* ************ */
+            $home_flock = Auth::user()->getFlock();
+            $plan = Auth::user()->subscription('Annual')->stripe_plan;
+        } else {
+            $home_flock = 'false';
+            $plan = '';
+        }
+            /* *********** logic from app.blade *********** */
+            $url = Request::path();
+            $elements = explode('/', $url);
+            if (Request::path() === ('home')
+            || Request::path() === ('get-started')
+            || Request::path() === ('homeabout')
+            || Request::path() === ('contact')
+            || Request::path() === ('about')) {
+            $help_page = $elements[0];
+        } else {
+            $help_page = $elements[1];
+        }
+            /* ************ */
 
-                /* ******** logic from list pages ********** */
-                $string = array_slice($elements, 0, -1);
-                $print = implode("/", $string) . '/print';
-                $filtered_pages = array('ewes', 'tups', 'replaced', 'deadlist', 'offlist');
-                $second_filter = array('deadlist', 'offlist', 'eweslistbydate');
-                /* ********* */
+            /* ******** logic from list pages ********** */
+            $string = array_slice($elements, 0, -1);
+            $print = implode("/", $string) . '/print';
+            $filtered_pages = array('ewes', 'tups', 'replaced', 'deadlist', 'offlist');
+            $second_filter = array('deadlist', 'offlist', 'eweslistbydate');
+            /* ********* */
 
-                $view->with([
-                    'home_flock' => $home_flock,
-                    'help_page' => $help_page,
-                    'filtered_pages' => $filtered_pages,
-                    'second_filter' => $second_filter,
-                    'print' => $print,
-                    'elements' => $elements,
-                    'styled_logo'=>'<span class="red">Identi</span><span class="blue">Sheep</span> '.$plan,
-                    'base_date' => config('app.base_date')
+            $view->with([
+                    'home_flock'        => $home_flock,
+                    'help_page'         => $help_page,
+                    'filtered_pages'    => $filtered_pages,
+                    'second_filter'     => $second_filter,
+                    'print'             => $print,
+                    'elements'          => $elements,
+                    'styled_logo'       => '<span class="red">Identi</span><span class="blue">Sheep</span> '.$plan,
+                    'base_date'         => config('app.base_date'),
                 ]);
-
             });
         Cashier::useCurrency('gbp', '£');
         //Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::now())));

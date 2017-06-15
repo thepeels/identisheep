@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Psy\Util\String;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Cashier;
+use app\Models\Subscriptions;
 
 class User extends Dumbo implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -188,6 +189,9 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('app\Models\Sheep');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function group()
     {
         return $this->hasMany('app\Models\Group');
@@ -200,6 +204,7 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasOne('app\Models\ListDates');
     }
+
 
     /**
      * @return int

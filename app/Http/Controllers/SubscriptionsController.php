@@ -56,7 +56,7 @@ class SubscriptionsController extends Controller
                     'vat_rate'      => config('app.vat_rate')
                 ]);
 
-            case ($owner->subscribed('Annual')&&!$owner->subscribed('Premium')):
+            case ($owner->subscribed('Annual','Annual')):
                 $row = DB::table('subscriptions')->where('user_id',$owner->id)->get();
                 foreach ($row as $subscription) {
                     $stripe_id = $subscription->stripe_id;
@@ -79,7 +79,7 @@ class SubscriptionsController extends Controller
                 ]);
                 break;
 
-            case ($owner->subscribed('Premium')):
+            case ($owner->subscribed('Annual','Premium')):
                 Session::flash('message','You are already subscribed to the Premium service');
 
                 return view('home');
@@ -111,7 +111,7 @@ class SubscriptionsController extends Controller
     {
         $owner = $this->owner();
         $token = $request->stripeToken;
-        if(!$owner->subscribed('Premium')) {
+        if(!$owner->subscribed('Annual','Premium')) {
             if ($owner->subscribed('Annual')) {
                 $owner->subscription('Annual')->swap('Premium','Premium');
             }
@@ -131,13 +131,15 @@ class SubscriptionsController extends Controller
             Session::flash('message','You are already subscribed to the Premium service');
             return view('home');
         }
+        Session::flash('message','Error, unable to subscribe you to the Premium service');
+        return Redirect::back();
     }
 
     public function getCancel()
     {
         $owner = $this->owner();
         switch (true){
-            case $owner->subscribed('Annual'):
+            case $owner->subscribed('Annual','Annual'):
                 $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addYears(1)->toFormattedDateString('d M Y');
                 //dd(!$owner->subscribed('Annual'));
                 return View::make('subs/cancel')->with([
@@ -145,14 +147,14 @@ class SubscriptionsController extends Controller
                     'subscribed_to' => 'Annual Subscription',
                     'until'         => $until
                 ]);
-            case $owner->subscribed('Premium'):
-                $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Premium')->created_at)->addYears(1)->toFormattedDateString('d M Y');
+            case $owner->subscribed('Annual','Premium'):
+                $until = Carbon::createFromFormat('Y-m-d H:i:s',$owner->subscription('Annual')->created_at)->addYears(1)->toFormattedDateString('d M Y');
                 return View::make('subs/cancel')->with([
                     'title'         => 'Cancel subscription',
                     'subscribed_to' => 'Premium Subscription',
                     'until'         => $until
                 ]);
-            case !$owner->subscribed('Annual')&&!$owner->subscribed('Premium'):
+            case !$owner->subscribed('Annual','Annual')&&!$owner->subscribed('Annual','Premium'):
             //if(!$subscribed){
             /**ToDo: flash a message no subscription and/or you have already cancelled. perhaps this route is not possible
             * unless browser open through expiry time
@@ -166,15 +168,15 @@ class SubscriptionsController extends Controller
     {
         $owner = $this->owner();
 
-        if($owner->subscribed('Annual')){
+        if($owner->subscribed('Annual','Annual')){
             $owner->subscription('Annual')->cancel();
-            Session::flash('message','We have cancelled your subscription,
+            Session::flash('message','We have cancelled your Annual subscription,
                 but you remain a member until '.date_format($owner->subscription('Annual')->ends_at,'d M Y'));
         }
-        if($owner->subscribed('Premium')){
-            $owner->subscription('Premium')->cancel();
-            Session::flash('message','We have cancelled your subscription,
-                but you remain a member until '.date_format($owner->subscription('Premium')->ends_at,'d M Y'));
+        if($owner->subscribed('Annual','Premium')){
+            $owner->subscription('Annual')->cancel();
+            Session::flash('message','We have cancelled your Premium subscription,
+                but you remain a Premium member until '.date_format($owner->subscription('Annual')->ends_at,'d M Y'));
         }
 
         return Redirect::to('home');
@@ -189,10 +191,16 @@ class SubscriptionsController extends Controller
             return Redirect::to('home');
             /**ToDo: flash a message you are subscribed. */
         }
-        if($owner->subscription('Annual')->onGracePeriod())
+        if($owner->subscription('Annual','Annual')->onGracePeriod())
         return View::make('subs/resume')->with([
             'title'     => 'Resume subscription',
             'subscribed_to'=> 'Annual Subscription',
+            'subscribed_until'=> date_format($owner->subscription('Annual')->ends_at,'d M Y')
+        ]);
+        if($owner->subscription('Annual','Premium')->onGracePeriod())
+        return View::make('subs/resume')->with([
+            'title'     => 'Resume subscription',
+            'subscribed_to'=> 'Premium Subscription',
             'subscribed_until'=> date_format($owner->subscription('Annual')->ends_at,'d M Y')
         ]);
     }
@@ -226,7 +234,7 @@ class SubscriptionsController extends Controller
         //dd($owner);
         //$test = new EmailService($owner->email); //don't know how to do this
         //$test->sendInvoiceByEmail();
-        if(carbon::now()<=$owner->getTrialEndsAt()){
+        if(Carbon::now()<=$owner->getTrialEndsAt()){
             Session::flash('alert-class','alert-danger');
             Session::flash('message','You are currently on your free trial, so no invoices are available.');
             return Redirect::back();
