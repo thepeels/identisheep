@@ -26,10 +26,10 @@ class AppServiceProvider extends ServiceProvider {
         {
             if (Auth::check()) {
             $home_flock = Auth::user()->getFlock();
-            $plan = Auth::user()->subscription('Annual')->stripe_plan;
+            //$plan = Auth::user()->subscription('Annual')->stripe_plan;
         } else {
             $home_flock = 'false';
-            $plan = '';
+            //$plan = '';
         }
             /* *********** logic from app.blade *********** */
             $url = Request::path();
@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider {
                     'second_filter'     => $second_filter,
                     'print'             => $print,
                     'elements'          => $elements,
-                    'styled_logo'       => '<span class="red">Identi</span><span class="blue">Sheep</span> '.$plan,
+                    'styled_logo'       => '<span class="red">Identi</span><span class="blue">Sheep</span>',
                     'base_date'         => config('app.base_date'),
                 ]);
             });

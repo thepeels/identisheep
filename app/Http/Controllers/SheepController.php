@@ -448,11 +448,12 @@ class SheepController extends Controller
     public function getDeath()
     {
         return View::make('sheepdeath')->with([
-            'title' => 'Record a Death',
-            'id' => $this->user(),
-            'sex' => 'female',
-            'e_flock' => NULL,
-            'e_tag' => NULL
+            'title'     => 'Record a Death',
+            'id'        => $this->user(),
+            'sex'       => 'female',
+            'e_flock'   => NULL,
+            'e_tag'     => NULL,
+            'disposal'  => Auth::user()->getDisposal(),
         ]);
     }
 

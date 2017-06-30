@@ -37,7 +37,8 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
         'business',
         'holding',
         'super_user',
-        'trial_ends_at'
+        'trial_ends_at',
+        'disposal'
 
     ];
     /**
@@ -80,6 +81,11 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      * @var 
      */
     protected $cardUpFront = false;
+    /**
+     * @var
+     */
+    protected $disposal;
+
 
     /**
      * @return int 
@@ -178,6 +184,22 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
      */
     public function getTrialEndsAt(){
         return $this->attributes['trial_ends_at'];
+    }
+
+    /**
+     * @param string $disposal
+     */
+    public function setDisposal($disposal)
+    {
+        $this->attributes['disposal'] = $disposal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisposal()
+    {
+        return $this->attributes['disposal'];
     }
 
 
