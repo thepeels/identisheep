@@ -62,6 +62,13 @@
 								<input type="text" class="form-control" name="holding" value="{{ old('holding') }}">
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-md-4 control-label">Dead Animal Disposal Route</label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="disposal" value="{{ old('disposal') }}">
+							</div>
+						</div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Password</label>

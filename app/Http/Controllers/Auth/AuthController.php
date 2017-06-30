@@ -87,6 +87,7 @@ class AuthController extends Controller {
         Session::flash('message','You are now signed up for a 6 month free trial membership.');
         $welcome = new EmailService($data['email']);
         $welcome->sendWelcome();
+        $disposal = $data['disposal']?:"";
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -95,7 +96,8 @@ class AuthController extends Controller {
             'password' => bcrypt($data['password']),
             'address' => $data['address'],
             'business' => $data['business'],
-            'trial_ends_at' => $then
+            'trial_ends_at' => $then,
+            'disposal' => $disposal
         ]);
         /**ToDo: send welcome e-mail*/
 
