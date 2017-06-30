@@ -101,6 +101,11 @@ class Sheep extends Model
      * @var string
      */
     protected $sex;
+    /**
+     * @var 
+     */
+    protected $disposal;
+    
     
     /**
      * The database table used by the model.
@@ -135,7 +140,8 @@ class Sheep extends Model
         'sex',
         'tag_colour',
         'deleted_at',
-        'inventory'
+        'inventory',
+        'disposal'
     ];
     protected $dates = ['deleted_at'];
 
@@ -514,6 +520,22 @@ class Sheep extends Model
     public function getColourTag2()
     {
         return $this->attributes['colour_tag_2'];
+    }
+
+    /**
+     * @param string $disposal
+     */
+    public function setDisposal($disposal)
+    {
+        $this->attributes['disposal'] = $disposal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisposal()
+    {
+        return $this->attributes['disposal'];
     }
 
     /**

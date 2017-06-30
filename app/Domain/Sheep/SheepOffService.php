@@ -22,14 +22,15 @@ class SheepOffService
      * @param $reasonForDeath
      * @param Sex $sex
      * @param $owner
+     * @param $disposal
      * @param $colour_of_tag
      */
-    public function recordDeath(TagNumber $tagNumber, \DateTime $dateOfDeath, $reasonForDeath, Sex $sex, $owner,$colour_of_tag = "")
+    public function recordDeath(TagNumber $tagNumber, \DateTime $dateOfDeath, $reasonForDeath, Sex $sex, $owner, $disposal, $colour_of_tag = "")
     {
         $sheep_exists = Sheep::check($tagNumber->getFlockNumber(), $tagNumber->getSerialNumber(), $owner);
-        $ewe = $this->sheepOffAction($tagNumber, $dateOfDeath, 'died' . $reasonForDeath, $owner);
+        $ewe = $this->sheepOffAction($tagNumber, $dateOfDeath, 'died' . $reasonForDeath, $owner, $disposal);
         if(!$sheep_exists){
-            $this->isNewSheepOffAction($tagNumber, $dateOfDeath, $sex, $colour_of_tag, 'died' . $reasonForDeath, $owner);
+            $this->isNewSheepOffAction($tagNumber, $dateOfDeath, $sex, $colour_of_tag, 'died' . $reasonForDeath, $owner, $disposal);
         }
         $ewe->save();
     }
@@ -64,9 +65,10 @@ class SheepOffService
      * @param \DateTime $dateOfMovement
      * @param $destination
      * @param $owner
+     * @param $disposal
      * @return Sheep
      */
-    private function isNewSheepOffAction(TagNumber $tagNumber, $dateOfMovement, Sex $sex, $colour_of_tag, $destination, $owner)
+    private function isNewSheepOffAction(TagNumber $tagNumber, $dateOfMovement, Sex $sex, $colour_of_tag, $destination, $owner, $disposal = "")
     {
         $ewe = new Sheep;
         $ewe->setCountryCode($tagNumber->getCountryCode());
@@ -80,6 +82,7 @@ class SheepOffService
         $ewe->setSex($sex);
         $ewe->setDestination($destination);
         $ewe->setOwner($owner);
+        $ewe->setDisposal($disposal);
         $ewe->setAlive(FALSE);
         $ewe->setMoveOff($dateOfMovement->format('Y-m-d'));
         return $ewe;
@@ -91,9 +94,10 @@ class SheepOffService
      * @param \DateTime $dateOfMovement
      * @param $destination
      * @param $owner
+     * @param $disposal
      * @return Sheep
      */
-    private function sheepOffAction(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, $owner)
+    private function sheepOffAction(TagNumber $tagNumber, \DateTime $dateOfMovement, $destination, $owner, $disposal = "")
     {
         $ewe = Sheep::firstOrNew([
             'flock_number' => $tagNumber->getFlockNumber(),
@@ -103,6 +107,7 @@ class SheepOffService
         $ewe->setAlive(FALSE);
         $ewe->setMoveOff($dateOfMovement->format('Y-m-d'));
         $ewe->setDestination($destination);
+        $ewe->setDisposal($disposal);
         return $ewe;
     }
 

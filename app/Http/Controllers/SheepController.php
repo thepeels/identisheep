@@ -483,14 +483,16 @@ class SheepController extends Controller
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
-        $tagNumber = new TagNumber('UK0' . Input::get('e_flock') . sprintf('%05d',Input::get('e_tag')));
-        $dateOfDeath = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
-        $reason = ' - ' . Input::get('how_died');
-        $sex = new Sex(Input::get('sex'));
-        $owner = $this->user();
+        $tagNumber      = new TagNumber('UK0' . Input::get('e_flock') . sprintf('%05d',Input::get('e_tag')));
+        $dateOfDeath    = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
+        $reason         = ' - ' . Input::get('how_died');
+        $disposal       = Input::get('disposal');
+        $sex            = new Sex(Input::get('sex'));
+        $owner          = $this->user();
+
 
         $sheepService = new SheepOffService();
-        $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner);
+        $sheepService->recordDeath($tagNumber, $dateOfDeath, $reason, $sex, $owner, $disposal);
 
         Session::flash('message', 'Death of ' . $tagNumber->__toString() . ' recorded');
 

@@ -28,7 +28,7 @@ class Subscribed
     {
         $owner = Auth::user();
         /**ToDo: change here and controller post store method to Annual */
-        if(!$owner->subscribed('Annual')&&!$owner->subscribed('Premium')) {
+        if(!$owner->subscribed('Annual','Annual')&&!$owner->subscribed('Annual','Premium')) {
             if (!$owner->onGenericTrial()) {
                 Session::flash('alert-class','alert-danger');
                 Session::flash('message','Your free trial is ended, please subscribe to continue using this site.');

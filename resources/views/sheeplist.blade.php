@@ -52,6 +52,7 @@
                 @if(in_array($elements[sizeof($elements)-2],$second_filter))
                     <th>Move Off</th>
                     <th>How moved off</th>
+                    <th>Disposal</th>
                     <th>Sex</th>
                 @else
                     <th>Date of last changes</th>
@@ -93,6 +94,9 @@
                         </td>
                         <td>
                             {{$ewe->destination}}
+                        </td>
+                        <td>
+                            {{$ewe->disposal}}
                         </td>
                         <td>
                             {{$ewe->sex}}

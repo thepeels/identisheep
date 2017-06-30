@@ -42,6 +42,8 @@
         {!!Form::radio('sex','Male',$m)!!}<br>
         {!!Form::label('text','How died?') !!}
         {!!Form::input('text','how_died',NULL,['class'=>'new_class input-xs','placeholder'=>'Optional','size' => '10'])!!}<br>
+        {!!Form::label('text','Disposal?') !!}
+        {!!Form::input('text','disposal',NULL,['class'=>'new_class input-xs','placeholder'=>'Disposal','size' => '10'])!!}<br>
         <br>
         {!!Form::submit($title,['class'=>'btn btn-default btn-xs btn-inverse'])!!}
 
