@@ -22,6 +22,8 @@
             <tr>
                 <th>Date of Application</th>
                 <th>Number Deployed</th>
+                <th>Start Number</th>
+                <th>End Number</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +31,8 @@
                 <tr>
                     <td>{{date('d - m - Y',strtotime($tag->date_applied))}}</td>
                     <td>{{$tag->count}}</td>
+                    <td>{{$tag->start}}</td>
+                    <td>{{$tag->finish}}</td>
                 </tr>
             @endforeach
             </tbody>

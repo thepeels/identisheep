@@ -376,6 +376,7 @@ class SheepController extends Controller
         $move_on        = new \DateTime(Input::get('year') . '-' . Input::get('month') . '-' . Input::get('day'));
         $local_index    = DB::table('sheep')->where('owner', $owner)->max('local_id');
         $count          = 0;
+        $start          = Input::get('e_tag');
         //dd($home_bred);
         if($home_bred != ""){$source = 'Home-bred';} //$home_bred is boolean false => "" ??!
         else{$source         = Input::get('source')?:'';}
@@ -390,7 +391,7 @@ class SheepController extends Controller
 
             if ($home_bred != FALSE) {
                 $home_bred_number = $tagNumber;
-                $sheep_service->homeBredOn($home_bred_number, $move_on, $count, $owner);
+                $sheep_service->homeBredOn($home_bred_number, $move_on, $count, $owner,$start);
             }
         }
         if ($count != 1) {

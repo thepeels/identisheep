@@ -36,7 +36,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="/">Home</a></li>
 					<li>
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sheep Lists<span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tag Lists<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="/sheep/ewes/screen">Ewes</a></li>
 							<li><a href="/sheep/tups/screen">Tups</a></li>

@@ -21,7 +21,7 @@
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-label="Pay £<?=number_format($price*config('app.vat_rate'),2)?> by Card"
                     data-key="<?=config('services.stripe.key')?>"
-                    data-amount="<?=$price*100?>"
+                    data-amount="<?=$price*config('app.vat_rate')*100?>"
                     data-name="IdentiSheep"
                     data-description="Premium"
                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"

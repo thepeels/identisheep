@@ -47,7 +47,7 @@ class SubscriptionsController extends Controller
 
 
         switch (true){
-            case ($owner->onGenericTrial()):
+            case ($owner->onGenericTrial() || !$owner->subscribed('Annual')):
 
                 return view('subs/card_details_premium')->with([
                     'title'         => 'Subscribe',
@@ -83,6 +83,7 @@ class SubscriptionsController extends Controller
                 Session::flash('message','You are already subscribed to the Premium service');
 
                 return view('home');
+
         }
 
         return View::make('subs/card_details_premium')->with([
@@ -113,10 +114,11 @@ class SubscriptionsController extends Controller
         $token = $request->stripeToken;
         if(!$owner->subscribed('Annual','Premium')) {
             if ($owner->subscribed('Annual')) {
-                $owner->subscription('Annual')->swap('Premium','Premium');
+                $owner->subscription('Annual')->swap('Premium');
+                //dd('here');
             }
             if (!$owner->subscribed('Annual')) {
-                $owner->newSubscription('Premium', 'Premium')->create($token);
+                $owner->newSubscription('Annual', 'Premium')->create($token);
             }
             $owner->setSuperuser(1);
             $owner->save();
@@ -127,7 +129,7 @@ class SubscriptionsController extends Controller
             //$email->sendInvoiceByEmail();
             return view('home');
         }
-        if($owner->subscribed('Premium')){
+        if($owner->subscribed('Annual','Premium')){
             Session::flash('message','You are already subscribed to the Premium service');
             return view('home');
         }

@@ -32,6 +32,15 @@ class Single extends Model {
      */
     protected $table = 'singles';
     /**
+     * @var 
+     */
+    protected $start;
+    /**
+     * @var 
+     */
+    protected $finish;
+    
+    /**
      * @var array
      */
     protected $fillable = [
@@ -39,7 +48,9 @@ class Single extends Model {
         'count',
         'flock_number',
         'destination',
-        'date_applied'
+        'date_applied',
+        'start',
+        'finish'
     ];
     /**
      * @return int
@@ -121,6 +132,39 @@ class Single extends Model {
     {
         $this->attributes['date_applied'] = $date_applied;
     }
+
+    /**
+     * @param int $start
+     */
+    public function setStart($start)
+    {
+        $this->attributes['start'] = $start;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStart()
+    {
+        return $this->attributes['start'];
+    }
+
+    /**
+     * @param int $finish
+     */
+    public function setFinish($finish)
+    {
+        $this->attributes['finish'] = $finish;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinish()
+    {
+        return $this->attributes['finish'];
+    }
+
     /**
      * @param $query
      * @param $id

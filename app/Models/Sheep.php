@@ -690,7 +690,10 @@ class Sheep extends Model
             'original_tag' => 'sometimes|required_with:original_flock|sometimes:numeric|between:1,99999'
         ],
         'file_raw'=>[
-        'file_raw'      => 'required'
+        'file_raw'      =>  'required'
+        ],
+        'single-start'=>[
+            'start'     =>  'numeric|required|between:1,99999'
         ],
 
 
@@ -704,7 +707,7 @@ class Sheep extends Model
 
         $ewes = $query->where('owner','=',$id)->where('updated_at' ,'>=',$dates[0])->where('updated_at' ,'<=',$dates[1])
             ->whereRaw('`serial_number`!=`original_serial_number`')
-            ->orderBy('updated_at')->paginate(20);
+            ->orderBy('updated_at','DESC')->paginate(20);
         //$count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         //return [$ewes,$count];
         return $ewes;

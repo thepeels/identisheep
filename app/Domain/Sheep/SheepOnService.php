@@ -56,13 +56,16 @@ class SheepOnService
      * @param \App\Domain\Sheep\TagNumber $tagNumber
      * @param \DateTime $move_on
      * @param int $count
+     * @param int $start
      * @param $owner
      */
-    public function homeBredOn(TagNumber $tagNumber, \DateTime $move_on, $count, $owner)
+    public function homeBredOn(TagNumber $tagNumber, \DateTime $move_on, $count, $owner, $start)
     {
         $ewe = new Homebred();
         $ewe->setFlockNumber($tagNumber->getFlockNumber());
         $ewe->setCount($count);
+        $ewe->setStart($start);
+        $ewe->setFinish($start + $count - 1);
         $ewe->setUserId($owner);
         $ewe->setDateApplied($move_on);
         $ewe->setUpdatedAt($move_on);

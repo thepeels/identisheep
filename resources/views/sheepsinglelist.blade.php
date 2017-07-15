@@ -23,6 +23,7 @@
             <th>Date</th>
             <th>Number Used</th>
             <th>Flock Number</th>
+            <th>Serial Numbers</th>
             <th>Destination</th>
         </tr>
         </thead>
@@ -38,6 +39,9 @@
                 </td>
                 <td>
                     UK0 {{$batch->flock_number}}
+                </td>
+                <td>
+                    {{$batch->start}} - {{$batch->finish}}
                 </td>
                 <td>
                     {{$batch->destination}}
