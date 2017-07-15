@@ -292,6 +292,8 @@ class BatchController extends Controller {
                     $batch_of_tags->setDateApplied($move_on);
                     $batch_of_tags->setUserId($owner);
                     $batch_of_tags->setCount($home_bred_count);
+                    $batch_of_tags->setStart($start_tag);
+                    $batch_of_tags->setFinish($end_tag);
                 //dd($home_bred_count);
                 $batch_of_tags->save();
             }
@@ -402,7 +404,8 @@ class BatchController extends Controller {
         $rules1 = Sheep::$rules['single'];
         $rules2 = Sheep::$rules['where_to'];
         $rules3 = Sheep::$rules['dates'];
-        $validation = Validator::make(Input::all(), $rules1 + $rules2 + $rules3);
+        $rules4 = Sheep::$rules['single-start'];
+        $validation = Validator::make(Input::all(), $rules1 + $rules2 + $rules3 + $rules4);
         if ($validation->fails()) {
             return Redirect::back()->withInput()->withErrors($validation->messages());
         }
@@ -410,6 +413,7 @@ class BatchController extends Controller {
         $flock_number   = $request->flock_number;
         $destination    = $request->destination;
         $count          = $request->count;
+        $start          = $request->start;
         $date_applied   = new \DateTime($request->year . '-' . $request->month . '-' . $request->day);
 
                 $tags = New Single;
@@ -418,6 +422,8 @@ class BatchController extends Controller {
                 $tags->setCount($count);
                 $tags->setDestination($destination);
                 $tags->setDateApplied($date_applied);
+                $tags->setStart($start);
+                $tags->setFinish($start + $count - 1);
                 $tags->save();
 
         Session::flash('message','Application of ' . $count . ' tags recorded');

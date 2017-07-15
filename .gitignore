@@ -4,5 +4,10 @@
 .env_local
 .env_orig
 .idea
+.vagrant
+Vagrantfile
+bootstrap.sh
+index.php
+
 
 

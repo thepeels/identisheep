@@ -40,6 +40,8 @@ protected $table = 'homebreds';
 protected $fillable = [
     'user_id',
     'count',
+    'start',
+    'finish',
     'date_applied',
     'e_flock'
 ];
@@ -75,6 +77,38 @@ public function setCount($count)
 {
     $this->attributes['count'] = $count;
 }
+
+    /**
+     * @param int $start
+     */
+    public function setStart($start)
+    {
+        $this->attributes['start'] = $start;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStart()
+    {
+        return $this->attributes['start'];
+    }
+
+    /**
+     * @param int $finish
+     */
+    public function setFinish($finish)
+    {
+        $this->attributes['finish'] = $finish;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinish()
+    {
+        return $this->attributes['finish'];
+    }
 
 /**
  * @return string
@@ -130,7 +164,7 @@ public function scopeNumbers($query,$id)
         return $query->where('user_id',$id)
         ->where('date_applied','>=',$dates[0])
         ->where('date_applied','<=',$dates[1])
-        ->orderBy('date_applied')->get();
+        ->orderBy('date_applied','DESC')->get();
 }
 public function scopeHowmany($query, $id)
 {
