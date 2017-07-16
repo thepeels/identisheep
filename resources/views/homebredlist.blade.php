@@ -32,7 +32,11 @@
                     <td>{{date('d - m - Y',strtotime($tag->date_applied))}}</td>
                     <td>{{$tag->count}}</td>
                     <td>{{$tag->start}}</td>
-                    <td>{{$tag->finish}}</td>
+                    @if($tag->finish > $tag->start)
+                        <td>{{$tag->finish}}</td>
+                    @else
+                        <td>-</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
