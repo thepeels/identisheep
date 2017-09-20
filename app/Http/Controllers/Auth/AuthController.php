@@ -97,7 +97,8 @@ class AuthController extends Controller {
             'address' => $data['address'],
             'business' => $data['business'],
             'trial_ends_at' => $then,
-            'disposal' => $disposal
+            'disposal' => $disposal,
+            'superuser'=> 1 /*for Elliot Taylor*/
         ]);
         /**ToDo: send welcome e-mail*/
 
