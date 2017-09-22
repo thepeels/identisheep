@@ -42,6 +42,7 @@
             </thead>
             <tbody>
             @foreach ($ewes as $ewe)
+                <tr style="color:{{$ewe->tag_colour}};">
                     <td>
                         {{$ewe->local_id}}
                     </td>

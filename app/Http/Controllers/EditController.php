@@ -80,6 +80,7 @@ class EditController extends Controller
      * @param Request $request
      * @return mixed
      */
+    /*ToDo check editing of one tag only*/
     public function postFull(Request $request)
     {
         $rules = Sheep::$rules['death'];
