@@ -42,7 +42,7 @@
             </thead>
             <tbody>
             @foreach ($ewes as $ewe)
-                <tr>
+                <tr style="color:{{($ewe->tag_colour=='White'||$ewe->tag_colour=='white')?'black':$ewe->tag_colour}}">
                     <td>
                         {{$ewe->local_id}}
                     </td>

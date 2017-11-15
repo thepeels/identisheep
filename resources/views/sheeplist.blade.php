@@ -66,7 +66,7 @@
                 <?$date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_on)));
                 $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_off)));
                 $row_no++;?>
-                <tr>
+                <tr> {{-- style="color:{{($ewe->tag_colour=='White')?'black':$ewe->tag_colour}}" --}}
                     <td class="no-print">
                         {{$ewe->local_id}}
                     </td>

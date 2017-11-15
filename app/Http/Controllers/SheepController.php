@@ -648,7 +648,7 @@ class SheepController extends Controller
             $day_to = Input::get('day_to');
 
             Session::put('date_from', date('Y-m-d H:i:s', strtotime(Carbon::createFromDate($year_from, $month_from, $day_from, 'UTC'))));
-            Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC'))));
+            Session::put('date_to', date('Y-m-d H:i:s', strtotime(Carbon::createFromDate($year_to, $month_to, $day_to, 'UTC')->addDay())));
         }
         /*Session::flash('message','The date range between ' . date('d-m-Y', strtotime(Session::get('date_from'))) . '
             and ' . date('d-m-Y', strtotime(Session::get('date_to'))).'. Click \'Finished\' to continue.');*/
