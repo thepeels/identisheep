@@ -35,14 +35,22 @@
         </table>
         Total {{count($tag_list)}} tags<br> <br>
         <div class="no-print">
-        If these appear correct, use your browser "Back <- " button, and select the load option on the previous page.<br>
-        Optionally press Ctrl + P to print this list to include with your movement licence.
+        <p>If these appear correct, Print out the list for inclusion with your movement licence,<br>
+            and then go back to the previous page and load the details into the database.<br>
+        If there are errors you can go back to examine and edit the .csv file in excel or notepad.</p>
+            <button onclick="printFunction()" class="btn btn-info btn-xs btn-inverse">Print this page</button>
+            <button onclick="goBack()" class="btn btn-info btn-xs btn-inverse">Go back</button>
         </div>
         
     </div>
 <script>
     function goBack() {
-            window.history.back()
+        window.history.back()
+    }
+</script>
+<script>
+    function printFunction() {
+        window.print();
     }
 </script>
 @stop

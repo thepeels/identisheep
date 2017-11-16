@@ -190,9 +190,11 @@ class BatchController extends Controller {
             //dd($tag_list);
             return view('batchcheck')->with([
                 'title'         => 'Csv Contents',
+                'print_title'   => Auth::user()->business.' - holding no: '.Auth::user()->holding,
                 'heading'       => $request->file_raw->getClientOriginalName(),
                 'source'        => $source_or_destination?'&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;Sheep from '.$source_or_destination:'',
-                'tag_list'      => $tag_list
+                'tag_list'      => $tag_list,
+                'date'          => date('d-m-Y')
             ]);
         }
         if($request->load) {
