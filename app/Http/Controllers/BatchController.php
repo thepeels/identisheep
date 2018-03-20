@@ -92,7 +92,7 @@ class BatchController extends Controller {
                 'heading'       => $request->file_raw->getClientOriginalName(),
                 'source'        => $source_or_destination?'&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;Sheep to '.$source_or_destination:'',
                 'tag_list'      => $tag_list,
-                'date'          => date('d-m-Y')
+                'date'          => date_format($move_off,'d-m-Y')
             ]);
         }
 
