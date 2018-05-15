@@ -10,7 +10,7 @@
 		"barryvdh/laravel-ide-helper": "^2.2",
 		"doctrine/dbal": "~2.3",
 		"laravel/cashier": "~6.0",
-		"barryvdh/laravel-dompdf": "0.5.*",
+		"barryvdh/laravel-dompdf": "0.8.1",
 		"maatwebsite/excel": "~2.1.0"
 
 	},
