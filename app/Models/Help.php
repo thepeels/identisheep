@@ -30,8 +30,8 @@ class Help extends Model {
              <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
              with all zeros to be loaded. </p>
              <p>Excel Files can also be loaded, the tag numbers need to be in a column with \'EID\' in the first cell. 
-             If you are using a non-microsoft spreadsheet programme, save the file in Excel 97/2000/XP format and it 
-             should work. Any problems send us a message, and we\'ll try to rectify them.</p>
+             If you are using a non-microsoft spreadsheet programme, save the file in <br>Excel 97/2000/XP format and it 
+             should work. Any problems, send us a message, and we\'ll try to rectify them.</p>
              The default date is today, change this if you want to.<br>Enter the holding number and/or name 
              of the destination for the sheep.<br>Select your previously prepared and saved file, and use the 
              \'check\' button to generate a list <br>which you can use to see whether your file is being read 
@@ -48,8 +48,8 @@ class Help extends Model {
              <br>Extra spaces will cause a mis-read, and there is no final comma on the line, it will cause a \'sheep\' 
              with all zeros to be loaded. </p>
              <p>Excel Files can also be loaded, the tag numbers need to be in a column with \'EID\' in the first cell. 
-             If you are using a non-microsoft spreadsheet programme, save the file in Excel 97/2000/XP format and it 
-             should work. Any problems send us a message, and we\'ll try to rectify them.</p>
+             If you are using a non-microsoft spreadsheet programme, save the file in <br>Excel 97/2000/XP format and it 
+             should work. Any problems, send us a message, and we\'ll try to rectify them.</p>
              The default date is today, change this if you want to.<br>Enter the holding number and/or name 
              of the destination for the sheep.<br>Select your previously prepared and saved file, and use the 
              \'check\' button to generate a list <br>which you can use to see whether your file is being read 
