@@ -469,13 +469,14 @@ class SheepController extends Controller
      * @return mixed
      */
     public function getDeathsearch($flock_number, $serial_number, $sex)
-    {
+    { //dd($sex);
         return View::make('sheepdeath')->with([
             'title' => 'Record this Sheep Death (correct date?)',
             'id' => $this->user(),
             'sex' => $sex,
             'e_flock' => $flock_number,
-            'e_tag' => $serial_number
+            'e_tag' => $serial_number,
+            'disposal' => Auth::user()->disposal
         ]);
     }
 

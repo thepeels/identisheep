@@ -373,6 +373,7 @@ class GroupController extends Controller
      */
     public function loadGroupView($group)
     {
+        $group = $this->decodeDates($group);
         return View::make('groups/group_view')->with([
             'group' => $group, //collection dismantled in view with foreach
             'title' => 'Group Members',
@@ -397,5 +398,16 @@ class GroupController extends Controller
         $group->delete();
 
         return $this->getDelete();
+    }
+    public function decodeDates($group)
+    {
+        $number = 1;
+        foreach ($group->sheep as $member){
+            $member->date_on = (date('Y', strtotime($member->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($member->move_on)));
+            $member->date_off = (date('Y', strtotime($member->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($member->move_off)));
+            $member->number = $number;
+            $number ++;
+        }
+        return $group;
     }
 }
