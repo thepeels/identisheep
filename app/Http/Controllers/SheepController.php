@@ -79,6 +79,7 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::stock($this->user(), 'female');
         }
+        $ewes = $this->decodeDates($ewes);
         return view('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'All Female Sheep',
@@ -98,6 +99,7 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::stock($this->user(), 'male');
         }
+        $ewes = $this->decodeDates($ewes);
         return view('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'All Tups ',
@@ -116,7 +118,7 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::offList($this->user());
         }
-
+        $ewes = $this->decodeDates($ewes);
         return view('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'Sheep Moved Off'
@@ -135,7 +137,7 @@ class SheepController extends Controller
         } else {
             $ewes = Sheep::dead($this->user());
         }
-
+        $ewes = $this->decodeDates($ewes);
         return view('sheeplist')->with([
             'ewes' => $ewes,
             'title' => 'Dead List'
@@ -452,6 +454,8 @@ class SheepController extends Controller
             'title'     => 'Record a Death',
             'id'        => $this->user(),
             'sex'       => 'female',
+            'f'        => 1,
+            'm'        => 0,
             'e_flock'   => NULL,
             'e_tag'     => NULL,
             'disposal'  => Auth::user()->getDisposal(),
@@ -522,16 +526,6 @@ class SheepController extends Controller
     /**
      * @return mixed
      */
-    public function getSearch()
-    {
-        return View::make('search')->with([
-            'title' => 'Search for a Tag'
-        ]);
-    }
-
-    /**
-     * @return mixed
-     */
     public function getReplaced()
     {
         $ewes = Sheep::replaced($this->user());
@@ -575,6 +569,16 @@ class SheepController extends Controller
             'sex' => $request->sex
         ]);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSearch()
+    {
+        return View::make('search')->with([
+            'title' => 'Search for a Tag'
+        ]);
+    }
     /**
      * @return mixed
      */
@@ -590,13 +594,13 @@ class SheepController extends Controller
         $ewes = Sheep::searchByTag($this->user(), $tag);
         if ($ewes->isEmpty()) {
             Session::put('find_error', 'Sheep not found, check number and re-try.');
-            return Redirect::to('sheep/search')->withInput();
+        return Redirect::to('sheep/search')->withInput();
         }
         $full_edit = 'no';
         if (Auth::user()->id == 1)$full_edit = 'yes';
+        $ewes = $this->decodeDates($ewes);
 
-        return View::make('searchresult')->with([
-            'ewes'      => $ewes,
+        return View::make('searchresult',compact('ewes'))->with([
             'title'     => 'Search Results for Tag ' . $tag,
             'full_edit' => $full_edit
         ]);
@@ -717,5 +721,12 @@ class SheepController extends Controller
             'title' => 'Customise a List'
         ]);
     }
-
+    public function decodeDates($ewes)
+    {
+        foreach ($ewes as $ewe){
+            $ewe->date_on = (date('Y', strtotime($ewe->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($ewe->move_on)));
+            $ewe->date_off = (date('Y', strtotime($ewe->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($ewe->move_off)));
+        }
+        return $ewes;
+    }
 }

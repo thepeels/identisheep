@@ -34,8 +34,7 @@
         </thead>
         <tbody>
         @foreach ($ewes as $ewe)
-            <?$date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('Y-m',strtotime($ewe->move_on)));
-            $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('Y-m-d',strtotime($ewe->move_off)));?>
+            
             <tr>
                 <td class="no-print">
                     {{$ewe->local_id}}
@@ -56,13 +55,13 @@
                     {{$ewe->supplementary_tag_flock_number.' '.sprintf('%05d',$ewe->supplementary_serial_number)}}
                 </td>
                 <td>
-                    {{$date_on}}
+                    {{$ewe->date_on}}
                 </td>
                 <td>
                     {{$ewe->source}}
                 </td>
                     <td class="move-off">
-                        {{$date_off}}
+                        {{$ewe->date_off}}
                     </td>
                     <td>
                         {{$ewe->sex}}

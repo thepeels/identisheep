@@ -12,9 +12,9 @@
         {!!Form::input('text','tag',NULL,['class'=>'new_class input-xs','placeholder'=>'Number','autofocus'=>TRUE])!!}
         {!!$errors->first('tag','<small style="color:#f00">:message</small>')!!}<br>
 
-        <?if (null !=(Session::get('find_error'))){
-            echo (Session::pull('find_error'));
-        }?><br>
+        @if (null !=(Session::get('find_error')))
+            {!!(Session::pull('find_error'))!!}
+        @endif<br>
         {!!Form::submit('Search',['name'=>'find','class'=>'btn btn-info btn-xs'])!!}<br><br>
 
         {!!Form::close()!!}<br>

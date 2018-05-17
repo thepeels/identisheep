@@ -63,9 +63,7 @@
             <tbody>
             <?$row_no = 0;?>
             @foreach ($ewes as $ewe)
-                <?$date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_on)));
-                $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('d-M-Y',strtotime($ewe->move_off)));
-                $row_no++;?>
+                <?$row_no++;?>
                 <tr> {{-- style="color:{{($ewe->tag_colour=='White')?'black':$ewe->tag_colour}}" --}}
                     <td class="no-print">
                         {{$ewe->local_id}}
@@ -83,14 +81,14 @@
                         {{sprintf('%05d',$ewe->older_serial_number)}}
                     </td>
                     <td>
-                        {{$date_on}}
+                        {{$ewe->date_on}}
                     </td>
                     <td>
                         {{$ewe->source}}
                     </td>
                     @if(in_array($elements[sizeof($elements)-2],$second_filter))
                         <td class="move-off">
-                            {{$date_off}}
+                            {{$ewe->date_off}}
                         </td>
                         <td>
                             {{$ewe->destination}}

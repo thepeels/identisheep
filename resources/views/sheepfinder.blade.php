@@ -14,10 +14,11 @@
         {!!Form::input('int','e_tag',NULL,['class'=>'new_class input-xs','placeholder'=>' Tag Number'])!!}<br>
         {!!$errors->first('e_flock','<small style="color:#f00">:message</small>')!!}
         {!!$errors->first('e_tag','<small style="color:#f00">:message</small>')!!}<br>
-
-        <?if (null !=(Session::get('find_error'))){
-        echo (Session::pull('find_error'));
-        }?><br>
+        
+        @if (null != Session::get('find_error'))
+            {!! Session::pull('find_error')!!}
+        @endif<br>
+        
         {!!Form::submit('Find Sheep to Edit tags',['name'=>'find','class'=>'btn btn-info btn-xs'])!!}<br><br>
         {!!Form::submit('View all details and/or Record Death',['name'=>'view','class'=>'btn btn-danger btn-xs'])!!}<br>
 
