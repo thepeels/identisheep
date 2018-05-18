@@ -145,6 +145,8 @@ class ListController extends Controller
      */
     public function generateView(Request $request, $both_sexes, $move, $list, $date_start, $date_end, $keep_date)
     {
+        $list = $this->decodeDates($list);
+
         return View::make('custom_list')->with([
             'title' => ucfirst($both_sexes) . 's moved ' . strtoupper($move) . ' - ',
             'list' => $list->appends($request->except('page')),
@@ -152,5 +154,13 @@ class ListController extends Controller
             'date_end' => $date_end,
             'keep_date' => $keep_date
         ]);
+    }
+    public function decodeDates($list)
+    {
+        foreach ($list as $ewe){
+            $ewe->date_on = (date('Y', strtotime($ewe->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($ewe->move_on)));
+            $ewe->date_off = (date('Y', strtotime($ewe->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($ewe->move_off)));
+        }
+        return $list;
     }
 }

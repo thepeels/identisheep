@@ -13,7 +13,7 @@
 @stop
 @section('content')
 <div style="width:60%;margin-left:20%;">
-    <h4>{!! $title.' for sheep number '. $e_flock . ' ' . sprintf('%05d',$e_tag) !!}</h4>
+    <h4>{!! $title.' for sheep number '!!}</h4>{{--. $e_flock . ' ' . sprintf('%05d',$e_tag) !!}</h4>--}}
     {!!Form::open(array('url' => '/sheep/changetags','class'=>'form-inline'))!!}
 
     {!!Form::input('hidden','id',$id)!!}
