@@ -373,11 +373,24 @@ class GroupController extends Controller
      */
     public function loadGroupView($group)
     {
-        $group = $this->decodeDates($group);
+        if($group->sheep->count() == 0){
+            //Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', 'There are no sheep in this group "' . $group->name . '"; add some or view a different group');
+            return redirect::back()->withInput();
+        };
+
+        $group      = $this->decodeDates($group);
+        $business   = Auth::user()->getBusiness();
+        $address    = Auth::user()->getAddress();
+        $holding    = Auth::user()->getHolding();
+
         return View::make('groups/group_view')->with([
-            'group' => $group, //collection dismantled in view with foreach
-            'title' => 'Group Members',
-            'group_name' => $group->getName()
+            'group'     => $group, //collection dismantled in view with foreach
+            'title'     => 'Group Members',
+            'business'  => $business,
+            'address'   => $address,
+            'holding'   => $holding,
+            'group_name'=> $group->getName()
         ]);
     }
 

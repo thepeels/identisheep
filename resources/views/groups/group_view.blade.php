@@ -14,7 +14,7 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         <div class="no-screen">
-            <h4>{!! Auth::user()->getBusiness() !!} &nbsp;&nbsp;&nbsp;&nbsp;{!! Auth::user()->getAddress() !!}<br> Holding No:{!! Auth::user()->getHolding() !!}</h4>
+            <h4>{{$business}} &nbsp;&nbsp;&nbsp;&nbsp;{{$address}}<br> Holding No:{{$holding}}</h4>
         </div>
         <h4>{{$group_name}}</h4>
         <h5>{{$title}}</h5>

@@ -160,6 +160,7 @@ class ListController extends Controller
         foreach ($list as $ewe){
             $ewe->date_on = (date('Y', strtotime($ewe->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($ewe->move_on)));
             $ewe->date_off = (date('Y', strtotime($ewe->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($ewe->move_off)));
+            $ewe->updated = (date('d-M-Y', strtotime($ewe->updated_at)));
         }
         return $list;
     }

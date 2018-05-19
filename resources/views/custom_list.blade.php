@@ -53,17 +53,17 @@
                 </td>
     
                 <td class="move-off">
-                        {{$ewe->date_off}}
-                    </td>
-                    <td>
+                    {{$ewe->date_off}}
+                </td>
+                <td>
                     {{$ewe->destination}}
-                    </td>
-                    <td>
-                        {{$ewe->sex}}
-                    </td>
-                    <td>
-                        {{date('d-M-Y',strtotime($ewe->updated_at))}}
-                    </td>
+                </td>
+                <td>
+                    {{$ewe->sex}}
+                </td>
+                <td>
+                    {{$ewe->updated}}
+                </td>
 
             </tr>
 
