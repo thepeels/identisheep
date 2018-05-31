@@ -647,15 +647,15 @@ class Sheep extends Model
      */
     public static $rules = [
         'dates_and_tags' => [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
+            'day'       => 'numeric|required|between:01,31',
+            'month'     => 'dnumeric|required|between:01,12',
             'year'      => 'integer|required|min:2006|max:2025',
             'e_flock'   => 'digits:6|required',
             'e_tag'     => 'numeric|required|between:1,99999',
         ],
         'batch'=> [
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
+            'day'       => 'numeric|required|between:01,31',
+            'month'     => 'numeric|required|between:01,12',
             'year'      => 'integer|required|min:2006|max:2025',
             'flock_number'=> 'digits:6|required',
             'start_tag' => 'digits_between:1,5|required',
@@ -663,9 +663,12 @@ class Sheep extends Model
             'colour_of_tag'=>'required',
         ],
         'dates'=>[
-            'day'       => 'digits:2|required|min:1|max:31',
-            'month'     => 'digits:2|required|min:1|max:12',
-            'year'      => 'integer|required|between:2006,2025'
+            'day'       => 'numeric|required|between:01,31',
+            'month'     => 'numeric|required|between:01,12',
+            'year'      => 'integer|required|between:2006,2025',
+            'end_day'   => 'numeric|required|between:01,31',
+            'end_month' => 'numeric|required|between:01,12',
+            'end_year'  => 'integer|required|between:2006,2025'
         ],
         'old_dates'=>[
             'year'      => 'integer|required|between:2006,2025'

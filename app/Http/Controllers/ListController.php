@@ -55,16 +55,18 @@ class ListController extends Controller
      */
     public function getCustomised(Request $request)
     {
+
+        $rules = Sheep::$rules['dates'];
+
+        $validation = Validator::make($request->all(), $rules);
+        if ($validation->fails()) {
+            return Redirect::back()->withInput()->withErrors($validation->messages());
+        }
         $request->flashExcept('make_group');
         $input_start = new \DateTime($request->get('year') . $request->get('month') . $request->get('day'));
         $input_end   = new \DateTime($request->get('end_year') . $request->get('end_month') . $request->get('end_day'));
         $keep_date  = $request->get('keep_date');
 
-        $rules = Sheep::$rules['dates'];
-        $validation = Validator::make(Input::all(), $rules);
-        if ($validation->fails()) {
-            return Redirect::back()->withInput()->withErrors($validation->messages());
-        }
 
         if($keep_date == TRUE){
             $date_pair = ListDates::where(['owner' => $this->owner()])->first();
@@ -145,7 +147,7 @@ class ListController extends Controller
      */
     public function generateView(Request $request, $both_sexes, $move, $list, $date_start, $date_end, $keep_date)
     {
-        $list = $this->decodeDates($list);
+        $list = $this->preFormat($list);
 
         return View::make('custom_list')->with([
             'title' => ucfirst($both_sexes) . 's moved ' . strtoupper($move) . ' - ',
@@ -155,12 +157,14 @@ class ListController extends Controller
             'keep_date' => $keep_date
         ]);
     }
-    public function decodeDates($list)
+    public function preFormat($list)
     {
         foreach ($list as $ewe){
             $ewe->date_on = (date('Y', strtotime($ewe->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($ewe->move_on)));
             $ewe->date_off = (date('Y', strtotime($ewe->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($ewe->move_off)));
             $ewe->updated = (date('d-M-Y', strtotime($ewe->updated_at)));
+            $ewe->original_serial_number = sprintf('%05d',$ewe->original_serial_number);
+            $ewe->serial_number = sprintf('%05d',$ewe->serial_number);
         }
         return $list;
     }
