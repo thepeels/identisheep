@@ -648,7 +648,7 @@ class Sheep extends Model
     public static $rules = [
         'dates_and_tags' => [
             'day'       => 'numeric|required|between:01,31',
-            'month'     => 'dnumeric|required|between:01,12',
+            'month'     => 'numeric|required|between:01,12',
             'year'      => 'integer|required|min:2006|max:2025',
             'e_flock'   => 'digits:6|required',
             'e_tag'     => 'numeric|required|between:1,99999',
