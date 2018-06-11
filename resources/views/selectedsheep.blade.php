@@ -34,8 +34,6 @@
             <tbody>
 
 
-                <?$date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('Y-m',strtotime($ewe->move_on)));
-                $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('Y-m-d',strtotime($ewe->move_off)));?>
                 <tr>
                     <td class="no-print">
                         {{$ewe->local_id}}
@@ -93,6 +91,11 @@
            class="btn btn-danger btn-xs"
            style="margin-bottom:-1px;"
            title="Full Edit of this Sheep">Full Edit Sheep
+        </a>
+        <a href="../note/{{$ewe->id}}"
+           class="btn btn-info btn-xs"
+           style="margin-bottom:-1px;"
+           title="Add a Note for this Sheep">Add Note
         </a>
         @endif
     </div>

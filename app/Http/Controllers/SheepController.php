@@ -610,10 +610,13 @@ class SheepController extends Controller
     public function getSelect($id)
     {
         $ewe = (Sheep::where('id', $id)->first());
-        //dd($ewes->move_on);
+        $date_on = (date('Y',strtotime($ewe->move_on))==config('app.base_date')?"":date('Y-m',strtotime($ewe->move_on)));
+        $date_off = (date('Y',strtotime($ewe->move_off))==config('app.base_date')?"":date('Y-m-d',strtotime($ewe->move_off)));
         return View::make('selectedsheep')->with([
-            'ewe' => $ewe,
-            'title' => 'Sheep selected for Editing'
+            'ewe'       => $ewe,
+            'title'     => 'Sheep selected for Editing',
+            'date_on'   => $date_on,
+            'date_off'  => $date_off
         ]);
 
     }
