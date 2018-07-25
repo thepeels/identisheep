@@ -407,7 +407,7 @@ class BatchController extends Controller {
     {
         $rules1 = Sheep::$rules['single'];
         $rules2 = Sheep::$rules['where_to'];
-        $rules3 = Sheep::$rules['dates'];
+        $rules3 = Sheep::$rules['simple_dates'];
         $rules4 = Sheep::$rules['single-start'];
         $validation = Validator::make(Input::all(), $rules1 + $rules2 + $rules3 + $rules4);
         if ($validation->fails()) {

@@ -102,11 +102,9 @@ class Sheep extends Model
      */
     protected $sex;
     /**
-     * @var 
+     * @var string
      */
     protected $disposal;
-    
-    
     /**
      * The database table used by the model.
      *
@@ -669,6 +667,11 @@ class Sheep extends Model
             'end_day'   => 'numeric|required|between:01,31',
             'end_month' => 'numeric|required|between:01,12',
             'end_year'  => 'integer|required|between:2006,2025'
+        ],
+        'simple_dates'=>[
+            'day'       => 'numeric|required|between:01,31',
+            'month'     => 'numeric|required|between:01,12',
+            'year'      => 'integer|required|between:2006,2025'
         ],
         'old_dates'=>[
             'year'      => 'integer|required|between:2006,2025'

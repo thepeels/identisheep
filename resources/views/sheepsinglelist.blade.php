@@ -29,10 +29,10 @@
         </thead>
         <tbody>
         @foreach ($batches as $batch)
-            <?$date = (date('Y',strtotime($batch->date_applied))==config('app.base_date')?"":date('d - m - Y',strtotime($batch->date_applied)))?>
+            
             <tr>
                 <td>
-                    {{$date}}
+                    {{date('Y',strtotime($batch->date_applied))==config('app.base_date')?"":date('d - m - Y',strtotime($batch->date_applied))}}
                 </td>
                 <td>
                     {{$batch->count}}
