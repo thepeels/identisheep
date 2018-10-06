@@ -733,8 +733,8 @@ class Sheep extends Model
     {
         $dates = $this->dateRange();
 
-        $ewes = $query->where('owner','=',$id)->where('updated_at' ,'>=',$dates[0])->where('updated_at' ,'<=',$dates[1])
-            ->whereRaw('`serial_number`!=`original_serial_number`')
+        $ewes = $query->where('owner','=',$id)/*->where('updated_at' ,'>=',$dates[0])->where('updated_at' ,'<=',$dates[1])*/
+            ->whereRaw('`serial_number`!=`original_serial_number` OR `edited` = 1')
             ->orderBy('updated_at','DESC')->paginate(20);
         //$count = $query->where('owner',$id)->whereRaw('`serial_number`!=`original_serial_number`')->count();
         //return [$ewes,$count];

@@ -11,7 +11,7 @@
 @section('title')
 <title>{!! $title !!}</title>
 @stop
-<?
+<?php
 $f = 0;$m = 0;
 if (strcasecmp($sex ,'female') == 0) {$f = 1;}
 else {$m =1;}
@@ -19,8 +19,8 @@ else {$m =1;}
 @section('content')
 <div style="width:60%;margin-left:20%;">
     <h4>{{$title}}</h4>
-        <?$flock = isset($e_flock)?$e_flock:NULL ;?>
-        <?$old_flock = isset($old_e_flock)?$old_e_flock:NULL ;?>
+        <?php $flock = isset($e_flock)?$e_flock:NULL ;?>
+        <?php $old_flock = isset($old_e_flock)?$old_e_flock:NULL ;?>
         {!! Form::open(array('url' => '/sheep/replace-tag','class'=>'form-inline')) !!}
     <br>
         {!! Form::label('text', 'Date of Replacement') !!}
@@ -50,7 +50,7 @@ else {$m =1;}
         {!! $errors->first('original_flock','<small style="color:#f00">:message</small>') !!}
         {!! $errors->first('original_tag','<small style="color:#f00">:message</small>') !!}<br>
     
-    <?if (null !=(Session::get('find_error'))){
+    <?php if (null !=(Session::get('find_error'))){
             echo (Session::pull('find_error'));
         }?><br>
         {!! Form::submit('Enter Tag Details',['class'=>'btn btn-info btn-xs']) !!}<br><br>

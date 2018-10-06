@@ -103,15 +103,18 @@ class EditController extends Controller
             $ewe->setColourTag2($ewe->getColourTag1());
             $ewe->setColourTag1($ewe->getSupplementarySerialNumber());
             $ewe->setSupplementarySerialNumber($request->supp_serial);
+            $ewe->setEdited(1);
         };
         /*if ($request->inventory == true)*/$ewe->setInventory($inventory);
         if ($ewe->getFlockNumber() != $request->e_flock){
             $ewe->setFlockNumber($request->e_flock);
+            $ewe->setEdited(1);
         }
         if ($ewe->getSerialNumber() != $request->e_tag){
             $ewe->setOlderSerialNumber($ewe->getOldSerialNumber());
             $ewe->setOldSerialNumber($ewe->getSerialNumber());
             $ewe->setSerialNumber($request->e_tag);
+            $ewe->setEdited(1);
         }
         $ewe->save();
 

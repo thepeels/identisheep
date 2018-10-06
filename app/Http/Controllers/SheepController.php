@@ -727,7 +727,7 @@ class SheepController extends Controller
     }
     public function decodeDates($ewes)
     {
-        foreach ($ewes as $ewe){
+        foreach ($ewes as $ewe) {
             $ewe->date_on = (date('Y', strtotime($ewe->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($ewe->move_on)));
             $ewe->date_off = (date('Y', strtotime($ewe->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($ewe->move_off)));
         }
