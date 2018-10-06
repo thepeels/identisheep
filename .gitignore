@@ -1,8 +1,10 @@
 /vendor
 /node_modules
 .env
-.env_local
-.env_orig
+.env.local
+.env.
+orig
+.env.test
 .idea
 .vagrant
 Vagrantfile

@@ -106,6 +106,11 @@ class Sheep extends Model
      */
     protected $disposal;
     /**
+     * @var boolean
+     */
+    protected $edited;
+
+     /**
      * The database table used by the model.
      *
      * @var string
@@ -139,7 +144,8 @@ class Sheep extends Model
         'tag_colour',
         'deleted_at',
         'inventory',
-        'disposal'
+        'disposal',
+        'edited',
     ];
     protected $dates = ['deleted_at'];
 
@@ -534,6 +540,22 @@ class Sheep extends Model
     public function getDisposal()
     {
         return $this->attributes['disposal'];
+    }
+
+    /**
+     * @param boolean $edited
+     */
+    public function setEdited($edited)
+    {
+        $this->attributes['edited'] = $edited;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getEdited()
+    {
+        return $this->attributes['edited'];
     }
 
     /**
