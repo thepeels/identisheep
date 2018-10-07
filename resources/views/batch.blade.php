@@ -53,7 +53,7 @@
 
         {!!Form::label('text','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')!!}
         {!!Form::submit('Load batch',['class'=>'btn btn-info btn-xs'])!!}<br>
-    <?if (null !=(Session::get('find_error'))){
+    <?php if (null !=(Session::get('find_error'))){
         echo (Session::pull('find_error'));
         } ?>
 

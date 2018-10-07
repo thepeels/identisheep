@@ -14,7 +14,7 @@
 @section('content')
     <div style="width:60%;margin-left:20%;">
         @if($home_bred == 'false')
-        <?$home_bred = false;?>
+        <?php $home_bred = false;?>
             <h4>{!! $title !!}</h4>
         @else
             <h4>{!! $alt_title !!}</h4>

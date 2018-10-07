@@ -6,7 +6,7 @@
 
     <div style="width:60%;margin-left:20%;">
         <h4>{!! $title !!}</h4>
-        <?$flock = isset($e_flock)?$e_flock:NULL ;?>
+        <?php $flock = isset($e_flock)?$e_flock:NULL ;?>
         {!!Form::open(array('url' => '/sheep/seek','class'=>'form-inline'))!!}
 
         {!!Form::label('text','UK 0')!!}
