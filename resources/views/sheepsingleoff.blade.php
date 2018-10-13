@@ -26,9 +26,9 @@
         {!!Form::input('int','count',NULL,['class'=>'new_class','placeholder'=>'Number of Sheep/Lambs'])!!}<br>
         {!!$errors->first('count','<small style="color:#f00">:message</small>')!!}<br>
         
-        {!!Form::label('text','Start Number of tag series')!!}<br>
+        {!!Form::label('text','Start Number of tag series (next in series - '.$start_tag.')')!!}<br>
         {!!Form::label('text','&nbsp;')!!}
-        {!!Form::input('int','start',NULL,['class'=>'new_class','placeholder'=>'Start Number'])!!}<br>
+        {!!Form::input('int','start',NULL,['class'=>'new_class','placeholder'=>'First Tag'])!!}<br>
         {!!$errors->first('start','<small style="color:#f00">:message</small>')!!}<br>
 
         {!!Form::label('text','Destination Holding')!!}

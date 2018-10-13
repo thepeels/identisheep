@@ -394,10 +394,15 @@ class BatchController extends Controller {
     {
         return View::make('sheepsingleoff')->with([
             'owner' => $this->user(),
-            'title' => 'Enter Movement to Slaughter'
+            'title' => 'Enter Movement to Slaughter',
+            'start_tag' => $this->start_tag()
         ]);
     }
 
+    private function start_tag(){
+        $start_tag = Single::where('user_id',$this->user())->max('finish') + 1;
+        return($start_tag);
+    }
     /**
      * Post batch tag entry
      * @param request $request
