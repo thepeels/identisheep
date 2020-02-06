@@ -24,6 +24,7 @@
             {!! $errors->first('day','<small style="color:#f00">:message</small>') !!}
             {!! $errors->first('month','<small style="color:#f00">:message</small>') !!}
             {!! $errors->first('year','<small style="color:#f00">:message</small>') !!}<br>
+            {!! $errors->first('simple_dates','<small style="color:#f00">:message</small>') !!}<br>
 
             {!! Form::label('text','Destination Holding') !!}
             {!! Form::input('text','destination',old('destination'),['class'=>'new_class','placeholder'=>'Number or Name']) !!}<br>

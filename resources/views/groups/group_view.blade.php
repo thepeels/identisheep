@@ -18,7 +18,7 @@
         </div>
         <h4>{{$group_name}}</h4>
         <h5>{{$title}}</h5>
-        <? $counter = 0;?>
+        <?php $counter = 0;?>
         {!! $group->description !!} {!! $group->info !!}
         <table class="table table-striped table-bordered table-sm table-condensed print medium-to-wide" >
             <thead>

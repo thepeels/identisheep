@@ -36,7 +36,7 @@ class ContactController extends Controller
         Mail::send(['text'=>'emails.contact'],['title'=>$title,'content'=>$content], function ($message)
     {
         $message->from(Auth::user()->email,'me');
-        $message->to('john@jjc.me');
+        $message->to('john@corley.co');
         $message->subject('Identisheep Message from Owner No.'. Auth::user()->id);
     });
         Session::flash('message','Thank you for your message.');

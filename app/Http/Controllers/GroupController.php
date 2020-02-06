@@ -241,6 +241,8 @@ class GroupController extends Controller
         foreach($combined as $id) array_push($intersected,$sheep = Sheep::find($id));
         $collection = collect($intersected);
 
+        $collection = $this->decodeDatesAlternative($collection);
+
         return View::make('groups/group_intersect_view')->with([
             'group'     => $collection,
             'title'     => 'Group Members',
@@ -412,10 +414,24 @@ class GroupController extends Controller
 
         return $this->getDelete();
     }
+
     public function decodeDates($group)
     {
+    $number = 1;
+
+    foreach ($group->sheep as $member){
+        $member->date_on = (date('Y', strtotime($member->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($member->move_on)));
+        $member->date_off = (date('Y', strtotime($member->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($member->move_off)));
+        $member->number = $number;
+        $number ++;
+    }
+    return $group;
+}
+    public function decodeDatesAlternative($group)
+    {
         $number = 1;
-        foreach ($group->sheep as $member){
+
+        foreach ($group as $member){
             $member->date_on = (date('Y', strtotime($member->move_on)) == config('app.base_date') ? "" : date('Y-m', strtotime($member->move_on)));
             $member->date_off = (date('Y', strtotime($member->move_off)) == config('app.base_date') ? "" : date('Y-m-d', strtotime($member->move_off)));
             $member->number = $number;

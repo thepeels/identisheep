@@ -28,7 +28,7 @@ return [
 	|
 	*/
 
-	'host' => 'mail.jjc.me',//'smtp.mailgun.org',
+	'host' => 'mail.corley.co',//'smtp.mailgun.org',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => 'john@jjc.me', 'name' => 'IdentiSheep-Admin'],
+	'from' => ['address' => 'john@corley.co', 'name' => 'IdentiSheep-Admin'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
 	|
 	*/
 
-	'username' => 'john@jjc.me',//null,
+	'username' => 'john@corley.co',//null,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
 	|
 	*/
 
-	'password' => 'j0hn',//null,
+	'password' => 'drakestone2019#',//null,
 
 	/*
 	|--------------------------------------------------------------------------

@@ -24,15 +24,13 @@
             <th>Moved Off</th>
             </thead>
             @foreach($group as $member)
-                <?$date_on = (date('Y',strtotime($member->getMoveOn()))==config('app.base_date')?"":date('d-M-Y',strtotime($member->getMoveOn())));
-                $date_off = (date('Y',strtotime($member->getMoveOff()))==config('app.base_date')?"":date('d-M-Y',strtotime($member->getMoveOff())));?>
-        
+                
                 <tr>
                     <td>{!! $member->getLocalId() !!}</td>
                     <td>UK0 {!! $member->getFlockNumber() !!} - {!! sprintf('%05d',$member->getSerialNumber()) !!}</td>
                     <td>{!! $member->getTagColour() !!}</td>
-                    <td>{!! $date_on !!}</td>
-                    <td>{!! $date_off !!}</td>
+                    <td>{!! $member->date_on !!}</td>
+                    <td>{!! $member->date_off !!}</td>
                 </tr>
             @endforeach
         </table>
