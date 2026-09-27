@@ -669,14 +669,14 @@ class Sheep extends Model
         'dates_and_tags' => [
             'day'       => 'numeric|required|between:01,31',
             'month'     => 'numeric|required|between:01,12',
-            'year'      => 'integer|required|min:2006|max:2025',
+            'year'      => 'integer|required|min:2006|max:2050',
             'e_flock'   => 'digits:6|required',
             'e_tag'     => 'numeric|required|between:1,99999',
         ],
         'batch'=> [
             'day'       => 'numeric|required|between:01,31',
             'month'     => 'numeric|required|between:01,12',
-            'year'      => 'integer|required|min:2006|max:2025',
+            'year'      => 'integer|required|min:2006|max:2050',
             'flock_number'=> 'digits:6|required',
             'start_tag' => 'digits_between:1,5|required',
             'end_tag'   => 'digits_between:1,5|required',
@@ -685,18 +685,18 @@ class Sheep extends Model
         'dates'=>[
             'day'       => 'numeric|required|between:01,31',
             'month'     => 'numeric|required|between:01,12',
-            'year'      => 'integer|required|between:2006,2025',
+            'year'      => 'integer|required|between:2006,2050',
             'end_day'   => 'numeric|required|between:01,31',
             'end_month' => 'numeric|required|between:01,12',
-            'end_year'  => 'integer|required|between:2006,2025'
+            'end_year'  => 'integer|required|between:2006,2050'
         ],
         'simple_dates'=>[
             'day'       => 'numeric|required|between:01,31',
             'month'     => 'numeric|required|between:01,12',
-            'year'      => 'integer|required|between:2006,2025'
+            'year'      => 'integer|required|between:2006,2050'
         ],
         'old_dates'=>[
-            'year'      => 'integer|required|between:2006,2025'
+            'year'      => 'integer|required|between:2006,2050'
         ],
 
         'where_to'=>[
