@@ -1,17 +1,30 @@
 /vendor
 /node_modules
+
+# Environment/configuration files
 .env
-.env.local
-.env.
-orig
-.env.test
+.env.*
+!.env.example
+
+# IDE / Vagrant
 .idea
 .vagrant
 Vagrantfile
 bootstrap.sh
+
+# Local files
 index.php
 npm-debug.log
 ssl
+
+# Database dumps
+*.sql
+
+# Certificates / keys
+*.crt
+*.p12
+*.key
+*.pem
 
 
 
