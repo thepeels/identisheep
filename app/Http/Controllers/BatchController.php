@@ -119,6 +119,7 @@ class BatchController extends Controller {
                     $ewe->setMoveOff($move_off);
                     $ewe->setDestination($destination);
                     $ewe->setAlive(FALSE);
+                    $ewe->setInventory(false);
                     if (!$sheep_exists){
                         $added++;
                         $ewe->setOriginalSerialNumber($tag->getSerialNumber());
@@ -147,7 +148,7 @@ class BatchController extends Controller {
      */
     public function  postCsvloadon(Request $request)
     {
-        $rules1 = Sheep::$rules['dates'];
+        $rules1 = Sheep::$rules['simple_dates'];
         $rules3 = Sheep::$rules['file_raw'];
         $validation = Validator::make(Input::all(), $rules1 + $rules3);
         if ($validation->fails()) {
@@ -163,7 +164,7 @@ class BatchController extends Controller {
         $source_or_destination = $source;
 
         $type =($request->file_raw->getMimeType());//$request->file_raw->getClientOriginalName().' '.
-        //dd($request->file_raw->getClientOriginalName());
+        //dd($request->file_raw);
         //f(stripos($type,'text' )==False)dd('False');
         //dd($type);
 
@@ -184,7 +185,7 @@ class BatchController extends Controller {
 
         };
         $request->flash();
-        ($type);
+        //($type);
         if($request->check) {
             $tag_list = $process_file->extractTagNumbers();
             //dd($tag_list);
@@ -197,6 +198,8 @@ class BatchController extends Controller {
                 'date'          => date('d-m-Y')
             ]);
         }
+
+
         if($request->load) {
             $added = 0;
             foreach ($ewelist as $number) {

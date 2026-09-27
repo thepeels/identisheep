@@ -26,6 +26,8 @@ ssl
 *.key
 *.pem
 
+# Local password utility - contains credentials
+/public/heidi.php
 
 
 

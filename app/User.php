@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model as Dumbo;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Psy\Util\String;
+//use Psy\Util\String;  // for php 7.4 consequences not known
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Cashier;
 use app\Models\Subscriptions;
@@ -235,4 +235,5 @@ class User extends Dumbo implements AuthenticatableContract, CanResetPasswordCon
     {
         return 20;
     }
+
 }

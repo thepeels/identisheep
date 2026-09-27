@@ -47,6 +47,7 @@ class SheepOnService
         $ewe->setTagColour($colour_of_tag);
         $ewe->setSex($sex);
         $ewe->setSource($source);
+        $ewe->setInventory(TRUE);
         $ewe->save();
 
     }

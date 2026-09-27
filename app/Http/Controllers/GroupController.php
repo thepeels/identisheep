@@ -10,6 +10,7 @@ use App\Models\Sheep;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -97,7 +98,6 @@ class GroupController extends Controller
             $process_file = new ExcelHandler((Input::file('csv_file')),$request->csv_file->getClientOriginalName());
             $ewe_list = $process_file->returnTagNumbers();
         }
-
         $this->addIntoGroup($ewe_list,$group->getId()); //array of tag numbers, group number
 
         return $this->loadGroupView($group);
@@ -113,7 +113,9 @@ class GroupController extends Controller
         $i = 0;
         foreach ($ewe_list as $ewe) {
             $tag = new TagNumber($ewe);
+            //dd($tag->getSerialNumber());
             if ($tag->getSerialNumber() != 0) {
+                //dd($tag->getSerialNumber());
                 $ewe = Sheep::where([
                     'flock_number' => $tag->getFlockNumber(),
                     'serial_number'=> $tag->getSerialNumber()])->first();

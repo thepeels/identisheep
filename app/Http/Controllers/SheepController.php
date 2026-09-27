@@ -112,8 +112,7 @@ class SheepController extends Controller
      * @return mixed
      */
     public function getOfflist($print)
-    {
-        if ($print == 'print') {
+    {	if ($print == 'print') {
             $ewes = Sheep::offListPrint($this->user());
         } else {
             $ewes = Sheep::offList($this->user());
