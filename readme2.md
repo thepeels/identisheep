@@ -1,1 +1,0 @@
-Git deployment test from PhpStorm
